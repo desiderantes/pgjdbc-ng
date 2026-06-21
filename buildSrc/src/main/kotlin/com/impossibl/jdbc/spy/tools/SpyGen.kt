@@ -375,3 +375,7 @@ val ResolvedReferenceTypeDeclaration.methods: Set<ResolvedMethodDeclaration> get
 
   return methods
 }
+
+private fun String.capitalize(): String =
+  replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+

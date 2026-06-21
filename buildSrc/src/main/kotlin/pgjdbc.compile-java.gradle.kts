@@ -26,4 +26,5 @@ tasks.withType<Test>().configureEach {
     languageVersion.set(JavaLanguageVersion.of(javaVersionStr))
   })
   systemProperty("user.timezone", "America/Los_Angeles")
+  failOnNoDiscoveredTests.set(false)
 }

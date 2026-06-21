@@ -339,7 +339,7 @@ public class Setting<T> {
   @Retention(CLASS)
   public @interface Info {
 
-  String NO_DEFAULT = "$$$NULL$$$";
+    String NO_DEFAULT = "$$$NULL$$$";
 
     /**
      * Primary name of the setting. Must be in dot-dash format

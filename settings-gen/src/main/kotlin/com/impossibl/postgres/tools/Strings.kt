@@ -12,7 +12,7 @@ val abbreviations = mapOf(
 fun String.toTitleCase(): String {
   return this.split(".", "-")
      .map { abbreviations.getOrDefault(it, it) }
-     .joinToString(" ") { if (acronyms.contains(it)) it.toUpperCase() else it.capitalize() }
+     .joinToString(" ") { if (acronyms.contains(it)) it.uppercase() else it.replaceFirstChar { c -> if (c.isLowerCase()) c.titlecase() else c.toString() } }
 }
 
 fun String.replaceTag(tag: String, transform: (MatchResult) -> String): String {
@@ -44,19 +44,19 @@ fun String.escapeAsciiDoc(): String =
    }
 
 fun String.toUpperSnakeCase(): String =
-   this.replace('.', '_').replace('-', '_').toUpperCase()
+   this.replace('.', '_').replace('-', '_').uppercase()
 
 fun String.escapePoet(): String =
    this.replace("$", "$$")
 
 val String.beanPropertyName: String get() {
   val parts = split("-", ".")
-  return (parts.take(1) + parts.drop(1).map { it.capitalize() }).joinToString("")
+  return (parts.take(1) + parts.drop(1).map { it.replaceFirstChar { c -> if (c.isLowerCase()) c.titlecase() else c.toString() } }).joinToString("")
 }
 
 
 fun String.dashesFromSnakeCase(): String {
-  return this.toLowerCase().replace('_', '-')
+  return this.lowercase().replace('_', '-')
 }
 
 private val CAPITALIZED_WORDS_PATTERN = Pattern.compile("[A-Z][^A-Z]*")
@@ -79,7 +79,7 @@ fun String.dashesFromCamelCase(): String {
     else {
       newVal.append('-')
     }
-    newVal.append(group.toLowerCase())
+    newVal.append(group.lowercase())
     first = false
   }
 
@@ -87,5 +87,9 @@ fun String.dashesFromCamelCase(): String {
 }
 
 fun String.markdownAnchor(): String {
-  return this.split("""[^\w]""".toRegex()).joinToString("-").toLowerCase()
+  return this.split("""[^\w]""".toRegex()).joinToString("-").lowercase()
 }
+
+fun String.capitalize(): String =
+  replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+

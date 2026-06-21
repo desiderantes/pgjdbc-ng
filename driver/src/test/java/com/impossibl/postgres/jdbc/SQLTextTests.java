@@ -45,49 +45,49 @@ public class SQLTextTests {
 
       //Input
       "select \"somthing\" -- This is a SQL comment ?WTF?\n" +
-        " from\n" +
-        "   test\n" +
-        " where\n" +
-        "   'a string with a ?' =  ?",
+          " from\n" +
+          "   test\n" +
+          " where\n" +
+          "   'a string with a ?' =  ?",
 
       //Output
       "select \"somthing\" -- This is a SQL comment ?WTF?\n" +
-        " from\n" +
-        "   test\n" +
-        " where\n" +
-        "   'a string with a ?' =  $1"
+          " from\n" +
+          "   test\n" +
+          " where\n" +
+          "   'a string with a ?' =  $1"
     },
     new String[] {
 
       //Input
       "insert into \"somthing\" -- This is a SQL comment ?WTF?\n" +
-        " (a, \"b\", \"c\", \"d\")\n" +
-        " values /* a nested\n" +
-        " /* comment with  */ a ? */" +
-        " (?,'a string with a ?', \"another ?\", ?, ?)",
+          " (a, \"b\", \"c\", \"d\")\n" +
+          " values /* a nested\n" +
+          " /* comment with  */ a ? */" +
+          " (?,'a string with a ?', \"another ?\", ?, ?)",
 
       //Output
       "insert into \"somthing\" -- This is a SQL comment ?WTF?\n" +
-        " (a, \"b\", \"c\", \"d\")\n" +
-        " values /* a nested\n" +
-        " /* comment with  */ a ? */" +
-        " ($1,'a string with a ?', \"another ?\", $2, $3)",
+          " (a, \"b\", \"c\", \"d\")\n" +
+          " values /* a nested\n" +
+          " /* comment with  */ a ? */" +
+          " ($1,'a string with a ?', \"another ?\", $2, $3)",
     },
     new String[] {
 
       //Input
       "insert into \"somthing\" -- This is a SQL comment ?WTF?\n" +
-        " (a, \"b\", \"c\", \"d\")\n" +
-        " values /* a nested\n" +
-        " /* comment with  */ a ? */" +
-        " (?,'a string with a ?', \"another \"\" ?\", {fn concat('{fn '' some()}', {fn char(?)})}, ?)",
+          " (a, \"b\", \"c\", \"d\")\n" +
+          " values /* a nested\n" +
+          " /* comment with  */ a ? */" +
+          " (?,'a string with a ?', \"another \"\" ?\", {fn concat('{fn '' some()}', {fn char(?)})}, ?)",
 
       //Output
       "insert into \"somthing\" -- This is a SQL comment ?WTF?\n" +
-        " (a, \"b\", \"c\", \"d\")\n" +
-        " values /* a nested\n" +
-        " /* comment with  */ a ? */" +
-        " ($1,'a string with a ?', \"another \"\" ?\", ('{fn '' some()}'||chr($2)), $3)",
+          " (a, \"b\", \"c\", \"d\")\n" +
+          " values /* a nested\n" +
+          " /* comment with  */ a ? */" +
+          " ($1,'a string with a ?', \"another \"\" ?\", ('{fn '' some()}'||chr($2)), $3)",
     },
     new String[] {
       "select {fn abs(-10)} as absval, {fn user()}, {fn concat(x,y)} as val from {oj tblA left outer join tblB on x=y}",

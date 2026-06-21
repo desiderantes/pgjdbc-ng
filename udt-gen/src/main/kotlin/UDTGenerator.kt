@@ -212,7 +212,7 @@ class UDTGenerator(
        )
 
     enums.forEach {
-      enumBldr.addEnumConstant(it.toUpperCase(), TypeSpec.anonymousClassBuilder("\$S", it).build())
+      enumBldr.addEnumConstant(it.uppercase(), TypeSpec.anonymousClassBuilder("\$S", it).build())
     }
 
     return enumBldr.build()
@@ -543,11 +543,11 @@ private fun getTypeAttributes(connection: Connection, typeName: QualifiedName): 
 }
 
 private fun String.javaTypeName(): String {
-  return this.split("""[-_.]""".toRegex()).joinToString("") { it.toLowerCase().capitalize() }
+  return this.split("""[-_.]""".toRegex()).joinToString("") { it.lowercase().capitalize() }
 }
 
 private fun String.javaPropertyName(): String {
-  return javaTypeName().decapitalize()
+  return javaTypeName().replaceFirstChar { it.lowercase() }
 }
 
 private val TypeName.primitiveJDBCType: JDBCType
@@ -562,3 +562,7 @@ private val TypeName.primitiveJDBCType: JDBCType
       TypeName.DOUBLE -> JDBCType.DOUBLE
       else -> throw IllegalArgumentException("Not a primitive/box type")
     }
+
+private fun String.capitalize(): String =
+  replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+

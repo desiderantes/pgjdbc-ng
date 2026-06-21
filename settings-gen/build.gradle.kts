@@ -23,6 +23,7 @@ testing {
       useJUnitJupiter(libs.versions.junit.get())
       dependencies {
         implementation(libs.compiler.testing)
+        runtimeOnly(libs.junit.platform.launcher)
       }
     }
   }

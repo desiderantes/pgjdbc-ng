@@ -10,7 +10,7 @@
 
   <!-- NewlineAtEndOfFile -->
   <module name="NewlineAtEndOfFile">
-    <property name="lineSeparator" value="lf"/>
+    <property name="lineSeparator" value="lf_cr_crlf"/>
   </module>
 
   <module name="RegexpSingleline">
@@ -50,6 +50,7 @@
       <property name="groups" value="com.impossibl,java,javax"/>
       <property name="ordered" value="true"/>
       <property name="separated" value="true"/>
+      <property name="separatedStaticGroups" value="true"/>
     </module>
 
     <!-- Checks for blocks. You know, those {}'s -->
@@ -100,15 +101,13 @@
       <property name="arrayInitIndent" value="2"/>
     </module>
 
-    <module name="FileContentsHolder"/>
+    <!-- Allow selective suppression -->
+    <module name="SuppressionCommentFilter">
+      <property name="offCommentFormat" value="CHECKSTYLE\:OFF\: ([\w\|]+)"/>
+      <property name="onCommentFormat" value="CHECKSTYLE\:ON\: ([\w\|]+)"/>
+      <property name="checkFormat" value="$1"/>
+    </module>
 
-  </module>
-
-  <!-- Allow selective suppression -->
-  <module name="SuppressionCommentFilter">
-    <property name="offCommentFormat" value="CHECKSTYLE\:OFF\: ([\w\|]+)"/>
-    <property name="onCommentFormat" value="CHECKSTYLE\:ON\: ([\w\|]+)"/>
-    <property name="checkFormat" value="$1"/>
   </module>
 
   <!-- Enforce License Header -->

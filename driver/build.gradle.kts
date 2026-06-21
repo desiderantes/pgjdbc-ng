@@ -66,6 +66,9 @@ tasks {
 val defaultPostgresVersions = "13, 12, 11, 10, 9.6, 9.5"
 
 val testTask = tasks.named<Test>("test") {
+  onlyIf {
+    project.findProperty("noDocker")?.toString()?.toBoolean() != true
+  }
   useJUnitPlatform()
   testLogging {
     exceptionFormat = TestExceptionFormat.FULL

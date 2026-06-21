@@ -29,6 +29,7 @@
 package com.impossibl.postgres.jdbc;
 
 import com.impossibl.postgres.utils.guava.ByteStreams;
+
 import static com.impossibl.postgres.jdbc.Exceptions.CLOSED_BLOB;
 import static com.impossibl.postgres.jdbc.Exceptions.ILLEGAL_ARGUMENT;
 

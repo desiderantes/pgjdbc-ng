@@ -48,12 +48,16 @@ testing {
       useJUnitJupiter(libs.versions.junit.get())
       dependencies {
         implementation(libs.compiler.testing)
+        runtimeOnly(libs.junit.platform.launcher)
       }
     }
   }
 }
 
 val testTask = tasks.named<Test>("test") {
+  onlyIf {
+    project.findProperty("noDocker")?.toString()?.toBoolean() != true
+  }
   testLogging {
     exceptionFormat = TestExceptionFormat.FULL
   }

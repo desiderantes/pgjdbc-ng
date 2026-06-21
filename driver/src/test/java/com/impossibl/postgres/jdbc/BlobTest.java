@@ -70,7 +70,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * @author Michael Barker <mailto:mike@middlesoft.co.uk>
+ * @author Michael Barker (mike@middlesoft.co.uk)
  *
  */
 @RunWith(JUnit4.class)

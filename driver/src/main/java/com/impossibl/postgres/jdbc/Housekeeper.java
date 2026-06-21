@@ -33,7 +33,7 @@ package com.impossibl.postgres.jdbc;
 
 public interface Housekeeper {
 
-  public interface Ref {
+  interface Ref {
 
     Housekeeper get();
 
@@ -51,7 +51,7 @@ public interface Housekeeper {
    * @author kdubb
    *
    */
-  public interface CleanupRunnable extends Runnable {
+  interface CleanupRunnable extends Runnable {
 
     String getKind();
 
