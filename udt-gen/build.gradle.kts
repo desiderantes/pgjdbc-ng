@@ -1,7 +1,16 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import com.avast.gradle.dockercompose.ComposeExtension
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-  id("org.jetbrains.kotlin.jvm") version Versions.kotlinPlugin
-  id("com.adarshr.test-logger") version Versions.testLoggerPlugin
+  alias(libs.plugins.kotlin.jvm)
+  id("pgjdbc.compile-java")
+  id("pgjdbc.packaging")
+  id("pgjdbc.publishing")
+  alias(libs.plugins.test.logger)
+  id("com.gradleup.shadow")
+  alias(libs.plugins.docker.compose)
+  `jvm-test-suite`
 }
 
 
@@ -12,22 +21,87 @@ description = "PostgreSQL JDBC - NG - UDT Generator"
 dependencies {
 
   implementation(project(":pgjdbc-ng"))
-  implementation("com.xenomachina:kotlin-argparser:${Versions.argParser}")
-  implementation("com.squareup:javapoet:${Versions.javaPoet}")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+  implementation(libs.kotlin.argparser)
+  implementation(libs.javapoet)
+  implementation(libs.kotlin.stdlib)
 
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:${Versions.junit}")
-  testImplementation("com.google.testing.compile:compile-testing:${Versions.compilerTesting}")
-  
 }
 
 kotlin {
-  jvmToolchain(Versions.javaTarget.majorVersion.toInt())
+  jvmToolchain(libs.versions.java.get().toInt())
 }
 
-apply {
-  from("$rootDir/shared/src/build/compile-java.gradle.kts")
-  from("src/build/testing.gradle.kts")
-  from("src/build/uber-packaging.gradle.kts")
-  from("$rootDir/shared/src/build/publishing.gradle.kts")
+
+
+// Inlined from src/build/testing.gradle.kts
+
+val defaultPostgresVersion = "11"
+
+val pgVersion = (project.findProperty("postgresVersions") as? String ?: defaultPostgresVersion)
+   .split(',')
+   .map { it.trim() }
+   .first()
+
+testing {
+  suites {
+    getByName<JvmTestSuite>("test") {
+      useJUnitJupiter(libs.versions.junit.get())
+      dependencies {
+        implementation(libs.compiler.testing)
+      }
+    }
+  }
 }
+
+val testTask = tasks.named<Test>("test") {
+  testLogging {
+    exceptionFormat = TestExceptionFormat.FULL
+  }
+}
+
+if (project.findProperty("noDocker")?.toString()?.toBoolean() != true) {
+
+  val compose = project.extensions.findByType<ComposeExtension>()?.also { compose ->
+    compose.useComposeFiles = listOf("src/test/docker/postgres-services.yml")
+    compose.startedServices = listOf("postgres")
+    compose.environment.put("PG_VERSION", pgVersion)
+    compose.captureContainersOutputToFiles = layout.buildDirectory.dir("test/containers").get().asFile
+    compose.composeLogToFile = layout.buildDirectory.file("test/compose.log").get().asFile
+    compose.setProjectName("udt-test")
+    compose.isRequiredBy(testTask.get())
+  }
+
+  testTask.configure {
+    description = "Runs the unit tests against PostgreSQL $pgVersion"
+    doFirst {
+      val pgInfo = compose?.servicesInfos["postgres"]!!.firstContainer
+      systemProperty("pgjbdc.test.server", pgInfo.host)
+      systemProperty("pgjdbc.test.port", pgInfo.ports[5432]!!)
+    }
+  }
+
+}
+
+
+// UBER JAR
+val jarTask = tasks.named<Jar>("jar")
+tasks.register<ShadowJar>("uberJar") {
+  description = ""
+    archiveAppendix.set("all")
+  manifest {
+    from(jarTask.get().manifest)
+  }
+  from(sourceSets.main)
+  configurations = listOf(project.configurations["runtimeClasspath"])
+  relocate("com.xenomachina", "com.impossibl.shadow.com.xenomachina")
+  relocate("com.squareup", "com.impossibl.shadow.com.squareup")
+  relocate("org.jetbrains.kotlin", "com.impossibl.shadow.org.jetbrains.kotlin")
+  minimize()
+  manifest {
+    from()
+    attributes(mapOf(
+       "Main-Class" to "com.impossibl.postgres.tools.UDTGenerator"
+    ))
+  }
+}
+

@@ -1,15 +1,9 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-buildscript {
-  repositories { gradlePluginPortal() }
-  dependencies {
-    classpath("gradle.plugin.com.github.jengelman.gradle.plugins:shadow:${Versions.shadowPlugin}")
-  }
+plugins {
+  id("pgjdbc.packaging")
+  id("com.gradleup.shadow")
 }
-
-
-apply { from("$rootDir/shared/src/build/packaging.gradle.kts") }
-
 
 /**
  * UBER JAR

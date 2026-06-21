@@ -1,6 +1,7 @@
 package com.impossibl.jdbc.spy.tools
 
 import com.github.javaparser.ParserConfiguration
+import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.resolution.declarations.*
 import com.github.javaparser.resolution.types.*
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver
@@ -160,7 +161,8 @@ class SpyGen {
          .addModifiers(Modifier.PUBLIC)
 
       if (targetMethod.toAst().isPresent) {
-        if (targetMethod.toAst().get().isAnnotationPresent(java.lang.Deprecated::class.java)) {
+        val ast = targetMethod.toAst().get() as MethodDeclaration
+        if (ast.getAnnotations().any { it.nameAsString == "Deprecated" || it.nameAsString == "java.lang.Deprecated" }) {
 
           relayMethodBldr.addAnnotation(
              AnnotationSpec.builder(SuppressWarnings::class.java)

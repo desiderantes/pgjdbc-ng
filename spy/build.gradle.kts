@@ -2,17 +2,20 @@ import com.impossibl.jdbc.spy.tools.SpyGen
 
 plugins {
   `java-library`
-  id("com.adarshr.test-logger") version Versions.testLoggerPlugin
+  id("pgjdbc.compile-java")
+  id("pgjdbc.packaging")
+  id("pgjdbc.publishing")
+  alias(libs.plugins.test.logger)
 }
 
 description = "PostgreSQL JDBC - NG - API Spy"
 
 
 dependencies {
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:${Versions.junit}")
+  testImplementation(libs.junit.jupiter.engine)
 }
 
-val genDir = file("$buildDir/generated")
+val genDir = layout.buildDirectory.dir("generated-spy").get().asFile
 
 sourceSets {
   main {
@@ -44,8 +47,3 @@ tasks {
 
 }
 
-apply {
-  from("$rootDir/shared/src/build/compile-java.gradle.kts")
-  from("$rootDir/shared/src/build/packaging.gradle.kts")
-  from("$rootDir/shared/src/build/publishing.gradle.kts")
-}

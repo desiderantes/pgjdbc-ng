@@ -1,0 +1,38 @@
+project:
+  name: pgjdbc-ng
+  version: 0.9-SNAPSHOT
+  description: PostgreSQL JDBC - NG
+  longDescription: PostgreSQL JDBC - NG
+  website: https://impossibl.github.io/pgjdbc-ng/
+  authors:
+    - Kevin Wooten
+    - Brett Wooldridge
+    - Jesper Pedersen
+  license: BSD-3-Clause
+
+release:
+  github:
+    owner: impossibl
+    name: pgjdbc-ng
+    overwrite: true
+    tagName: v{{projectVersion}}
+    targetCommitish: develop
+    draft: true
+    prerelease:
+      enabled: true
+      pattern: .*-SNAPSHOT
+
+files:
+  active: ALWAYS
+  artifacts:
+    - path: driver/build/libs/pgjdbc-ng-{{projectVersion}}.jar
+    - path: driver/build/libs/pgjdbc-ng-{{projectVersion}}-all.jar
+    - path: driver/build/libs/pgjdbc-ng-{{projectVersion}}-sources.jar
+    - path: driver/build/libs/pgjdbc-ng-{{projectVersion}}-javadoc.jar
+    - path: spy/build/libs/pgjdbc-ng-spy-{{projectVersion}}.jar
+    - path: spy/build/libs/pgjdbc-ng-spy-{{projectVersion}}-sources.jar
+    - path: spy/build/libs/pgjdbc-ng-spy-{{projectVersion}}-javadoc.jar
+    - path: udt-gen/build/libs/pgjdbc-ng-udt-gen-{{projectVersion}}.jar
+    - path: udt-gen/build/libs/pgjdbc-ng-udt-gen-{{projectVersion}}-all.jar
+    - path: udt-gen/build/libs/pgjdbc-ng-udt-gen-{{projectVersion}}-sources.jar
+    - path: udt-gen/build/libs/pgjdbc-ng-udt-gen-{{projectVersion}}-javadoc.jar

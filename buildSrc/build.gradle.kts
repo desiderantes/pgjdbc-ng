@@ -1,33 +1,42 @@
-
 plugins {
-  id("java-library")
-  id("org.jetbrains.kotlin.jvm") version "1.9.10" // Must match Gradle version
+  `kotlin-dsl`
+  `jvm-test-suite`
 }
 
 repositories {
   mavenLocal()
   mavenCentral()
+  gradlePluginPortal()
 }
 
+val javaVersion = libs.versions.java.get().toInt()
 
-val javaPoetVersion = "1.11.1"
-val javaParserVersion = "3.17.0"  // Must match Gradle version
-val junitVersion = "5.3.2"
-val compilerTesting = "0.15"
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(javaVersion))
+  }
+}
 
+kotlin {
+  jvmToolchain(javaVersion)
+}
 
 dependencies {
+  implementation(libs.javapoet)
+  implementation(libs.javaparser.core)
+  implementation(libs.kotlin.stdlib)
 
-  implementation("com.squareup:javapoet:$javaPoetVersion")
-  implementation("com.github.javaparser:javaparser-symbol-solver-core:$javaParserVersion")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-  testImplementation("com.google.testing.compile:compile-testing:$compilerTesting")
-  
+  // Declare dependency on the shadow plugin so precompiled script plugins can reference it
+  implementation(libs.plugins.shadow.get().let { "${it.pluginId}:${it.pluginId}.gradle.plugin:${it.version.requiredVersion}" })
 }
 
-
-tasks.test {
-  useJUnitPlatform()
+testing {
+  suites {
+    getByName<JvmTestSuite>("test") {
+      useJUnitJupiter(libs.versions.junit.get())
+      dependencies {
+        implementation(libs.compiler.testing)
+      }
+    }
+  }
 }

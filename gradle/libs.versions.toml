@@ -1,0 +1,72 @@
+[versions]
+# Source
+java = "17"
+kotlin = "1.9.24"
+
+# Required Libraries
+netty = "4.1.110.Final"
+
+# Tooling Libraries
+javaPoet = "1.13.0"
+argParser = "2.0.7"
+asciidoctorJ = "2.5.10"
+
+# Testing dependencies
+junit = "5.7.1"
+junitClassic = "4.12"
+guava = "23.5-jre"
+compilerTesting = "0.19"
+checkstyle = "6.18"
+
+# Plugin dependencies
+kotlinPlugin = "1.9.24"
+shadowPlugin = "9.3.0"
+dockerComposePlugin = "0.17.21"
+asciiDoctorPlugin = "4.0.5"
+gitPublishPlugin = "4.1.1"
+testLoggerPlugin = "4.0.0"
+
+
+# Other versions
+downloadPlugin = "5.7.0"
+
+[libraries]
+# Required Libraries
+netty-common = { group = "io.netty", name = "netty-common", version.ref = "netty" }
+netty-buffer = { group = "io.netty", name = "netty-buffer", version.ref = "netty" }
+netty-transport = { group = "io.netty", name = "netty-transport", version.ref = "netty" }
+netty-codec = { group = "io.netty", name = "netty-codec", version.ref = "netty" }
+netty-handler = { group = "io.netty", name = "netty-handler", version.ref = "netty" }
+netty-transport-native-unix-common = { group = "io.netty", name = "netty-transport-native-unix-common", version.ref = "netty" }
+netty-transport-native-kqueue = { group = "io.netty", name = "netty-transport-native-kqueue", version.ref = "netty" }
+netty-transport-native-epoll = { group = "io.netty", name = "netty-transport-native-epoll", version.ref = "netty" }
+
+# Tooling Libraries
+javapoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
+kotlin-argparser = { group = "com.xenomachina", name = "kotlin-argparser", version.ref = "argParser" }
+asciidoctorj = { group = "org.asciidoctor", name = "asciidoctorj", version.ref = "asciidoctorJ" }
+
+# Testing dependencies
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
+junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine", version.ref = "junit" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.7.1" }
+junit-classic = { group = "junit", name = "junit", version.ref = "junitClassic" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
+compiler-testing = { group = "com.google.testing.compile", name = "compile-testing", version.ref = "compilerTesting" }
+checkstyle = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyle" }
+
+# Specially for buildSrc
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+javaparser-core = { group = "com.github.javaparser", name = "javaparser-symbol-solver-core", version = "3.17.0" }
+
+[plugins]
+# Plugin dependencies
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPlugin" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadowPlugin" }
+docker-compose = { id = "com.avast.gradle.docker-compose", version.ref = "dockerComposePlugin" }
+asciidoctor-convert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciiDoctorPlugin" }
+git-publish = { id = "org.ajoberstar.git-publish", version.ref = "gitPublishPlugin" }
+test-logger = { id = "com.adarshr.test-logger", version.ref = "testLoggerPlugin" }
+
+download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }

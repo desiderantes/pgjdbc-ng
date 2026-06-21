@@ -1,11 +1,11 @@
 plugins {
-  id("org.asciidoctor.jvm.convert") version Versions.asciiDoctorPlugin
-  id("org.ajoberstar.git-publish") version Versions.gitPublishPlugin
+  alias(libs.plugins.asciidoctor.convert)
+  alias(libs.plugins.git.publish)
 }
 
-val isSnapshot: Boolean by project
+val isSnapshot = project.version.toString().endsWith("SNAPSHOT")
 
-val docsRepoUri = project.properties.getOrDefault("docsRepoUri", "git@github.com:impossibl/pgjdbc-ng.git").toString()
+val docsRepoUri = (project.findProperty("docsRepoUri") ?: "git@github.com:impossibl/pgjdbc-ng.git").toString()
 
 val javadocs: Configuration = configurations.create("javadocs")
 val docs: Configuration = configurations.create("docs")
@@ -20,17 +20,16 @@ tasks {
 
 
   val aggregateJavadocs = register<Javadoc>("aggregateJavadocs") {
-    setDestinationDir(file("$buildDir/javadoc"))
+    setDestinationDir(layout.buildDirectory.dir("javadoc").get().asFile)
+    val javaVersion = libs.versions.java.get()
     options {
       title = "PGJDBC-NG $version"
       encoding = "UTF-8"
       (this as StandardJavadocDocletOptions).apply {
         addBooleanOption("Xdoclint:none", true)
-        if (JavaVersion.current().isJava9Compatible) {
-          addBooleanOption("html5", true)
-        }
-        source("8")
-        links("https://docs.oracle.com/javase/8/docs/api/")
+        addBooleanOption("html5", true)
+        source(javaVersion)
+        links("https://docs.oracle.com/en/java/javase/$javaVersion/docs/api/")
         use(true)
         noTimestamp(true)
       }
@@ -53,18 +52,18 @@ tasks {
   val collectDocs = register<Sync>("collectDocs") {
     from(docs)
     from(docs.map { tarTree(it) })
-    into("$buildDir/tmp/docs")
+    into(layout.buildDirectory.dir("tmp/docs"))
   }
 
   asciidoctorj {
-    setVersion(Versions.asciidoctorJ)
+    setVersion(libs.versions.asciidoctorJ.get())
   }
 
   asciidoctor {
 
     val docsDir = "$projectDir/src/docs/asciidoc"
     val examplesDir = "$projectDir/src/docs/examples"
-    val includeDocsDir = "$buildDir/tmp/docs"
+    val includeDocsDir = layout.buildDirectory.dir("tmp/docs").get().asFile.absolutePath
     val docinfosDir = "$docsDir/docinfos"
 
     setSourceDir(file(docsDir))
@@ -72,7 +71,7 @@ tasks {
       include("**/index.adoc")
     })
 
-    setOutputDir(file("$buildDir/docs/html5"))
+    setOutputDir(layout.buildDirectory.dir("docs/html5").get().asFile)
     outputOptions {
       backends("html5")
     }

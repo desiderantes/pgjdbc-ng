@@ -1,8 +1,9 @@
 
 plugins {
   `java-library`
-  id("org.jetbrains.kotlin.jvm") version Versions.kotlinPlugin
-  id("com.adarshr.test-logger") version Versions.testLoggerPlugin
+  alias(libs.plugins.kotlin.jvm)
+  alias(libs.plugins.test.logger)
+  `jvm-test-suite`
 }
 
 
@@ -11,21 +12,22 @@ description = "PostgreSQL JDBC - NG - Settings Processor"
 
 
 dependencies {
-  implementation("com.squareup:javapoet:${Versions.javaPoet}")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:${Versions.junit}")
-  testImplementation("com.google.testing.compile:compile-testing:${Versions.compilerTesting}")
+  implementation(libs.javapoet)
+  implementation(libs.kotlin.stdlib)
 }
 
 
-tasks {
-
-  test {
-    useJUnitPlatform()
+testing {
+  suites {
+    getByName<JvmTestSuite>("test") {
+      useJUnitJupiter(libs.versions.junit.get())
+      dependencies {
+        implementation(libs.compiler.testing)
+      }
+    }
   }
-
 }
 
 kotlin {
-  jvmToolchain(Versions.javaTarget.majorVersion.toInt())
+  jvmToolchain(libs.versions.java.get().toInt())
 }
