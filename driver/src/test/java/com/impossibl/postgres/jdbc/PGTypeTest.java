@@ -41,63 +41,64 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(JUnit4.class)
 public class PGTypeTest {
 
   private Connection conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB();
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     TestUtil.closeDB(conn);
   }
 
-  @Test(expected = SQLException.class)
-  public void testVersionCheckThrowsException() throws SQLException {
+  @Test
+  public void testVersionCheckThrowsException() {
+    assertThrows(SQLException.class, () -> {
 
-    PGAnyType invalidType = new PGAnyType() {
-      @Override
-      public String getName() {
-        return "invalid";
+      PGAnyType invalidType = new PGAnyType() {
+        @Override
+        public String getName() {
+          return "invalid";
+        }
+
+        @Override
+        public String getVendor() {
+          return "Nobody";
+        }
+
+        @Override
+        public Integer getVendorTypeNumber() {
+          return null;
+        }
+
+        @Override
+        public Version getRequiredVersion() {
+          return Version.parse("99");
+        }
+
+        @Override
+        public Class<?> getJavaType() {
+          return Object.class;
+        }
+      };
+
+      try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT ?::text")) {
+        preparedStatement.setObject(1, null, invalidType);
       }
 
-      @Override
-      public String getVendor() {
-        return "Nobody";
-      }
-
-      @Override
-      public Integer getVendorTypeNumber() {
-        return null;
-      }
-
-      @Override
-      public Version getRequiredVersion() {
-        return Version.parse("99");
-      }
-
-      @Override
-      public Class<?> getJavaType() {
-        return Object.class;
-      }
-    };
-
-    try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT ?::text")) {
-      preparedStatement.setObject(1, null, invalidType);
-    }
+    });
 
   }
 
@@ -123,8 +124,8 @@ public class PGTypeTest {
           }
 
           String expectedName = typeOidMap.get(type.getVendorTypeNumber());
-          assertNotNull("No type with OID="  + type.getVendorTypeNumber() + " found", expectedName);
-          assertEquals("Type with OID=" + type.getVendorTypeNumber() + " has incorrect name", expectedName, type.getName());
+          assertNotNull(expectedName, "No type with OID="  + type.getVendorTypeNumber() + " found");
+          assertEquals(expectedName, type.getName(), "Type with OID=" + type.getVendorTypeNumber() + " has incorrect name");
         }
       }
 

@@ -41,30 +41,27 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@RunWith(JUnit4.class)
 public class WrapperTest {
 
   private Connection _conn;
   private Statement _statement;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     _conn = TestUtil.openDB();
     _statement = _conn.prepareStatement("SELECT 1");
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     _statement.close();
     TestUtil.closeDB(_conn);

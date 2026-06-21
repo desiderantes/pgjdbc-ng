@@ -44,9 +44,9 @@ import java.sql.Statement;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -55,13 +55,13 @@ public class CopyTest {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void setup() throws SQLException {
     con = TestUtil.openDB();
     TestUtil.createTable(con, "copytbl", "name text, value int4");
   }
 
-  @After
+  @AfterEach
   public void teardown() throws SQLException {
     TestUtil.dropTable(con, "copytbl");
     TestUtil.closeDB(con);

@@ -33,9 +33,10 @@ import com.impossibl.postgres.api.data.ACLItem;
 import java.text.ParseException;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ACLItemTest {
 
@@ -78,24 +79,24 @@ public class ACLItemTest {
     assertArrayEquals(null, ACLItem.rightsOf(null));
   }
 
-  @Test(expected = ParseException.class)
-  public void testInvalidRightsParsing1() throws ParseException {
-    ACLItem.rightsOf("*");
+  @Test
+  public void testInvalidRightsParsing1() {
+    assertThrows(ParseException.class, () -> ACLItem.rightsOf("*"));
   }
 
-  @Test(expected = ParseException.class)
-  public void testInvalidRightsParsing2() throws ParseException {
-    ACLItem.rightsOf("a**");
+  @Test
+  public void testInvalidRightsParsing2() {
+    assertThrows(ParseException.class, () -> ACLItem.rightsOf("a**"));
   }
 
-  @Test(expected = ParseException.class)
-  public void testInvalidRightsParsing3() throws ParseException {
-    ACLItem.rightsOf("q");
+  @Test
+  public void testInvalidRightsParsing3() {
+    assertThrows(ParseException.class, () -> ACLItem.rightsOf("q"));
   }
 
-  @Test(expected = ParseException.class)
-  public void testInvalidRightsParsing4() throws ParseException {
-    ACLItem.rightsOf("*a");
+  @Test
+  public void testInvalidRightsParsing4() {
+    assertThrows(ParseException.class, () -> ACLItem.rightsOf("*a"));
   }
 
 }

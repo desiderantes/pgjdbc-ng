@@ -43,28 +43,25 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@RunWith(JUnit4.class)
 public class ParameterMetaDataTest {
 
   private Connection _conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     _conn = TestUtil.openDB();
     TestUtil.createTable(_conn, "parametertest", "a int4, b float8, c text, d point, e timestamp with time zone");
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     TestUtil.dropTable(_conn, "parametertest");
     TestUtil.closeDB(_conn);
@@ -114,7 +111,7 @@ public class ParameterMetaDataTest {
 
   // Make sure we work when mashing two queries into a single statement.
   //TODO: reconcile against mainstream driver
-  @Ignore
+  @Disabled
   public void testMultiStatement() throws SQLException {
 
     PreparedStatement pstmt = _conn.prepareStatement("SELECT a FROM parametertest WHERE b = ? AND c = ? ; SELECT b FROM parametertest WHERE a = ?");

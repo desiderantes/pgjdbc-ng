@@ -37,15 +37,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
@@ -58,52 +56,54 @@ import static org.junit.Assert.assertTrue;
  * @author kdubb
  * 
  */
-@RunWith(JUnit4.class)
-@Ignore
+@Disabled
 public class ServerDisconnectTest {
 
   Connection conn;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     conn = TestUtil.openDB();
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
   }
 
-  @Test(expected = SQLException.class)
-  public void testServerDisconnect() throws SQLException {
+  @Test
+  public void testServerDisconnect() {
+    assertThrows(SQLException.class, () -> {
 
-    try (Statement stmt = conn.createStatement()) {
+      try (Statement stmt = conn.createStatement()) {
 
-      // Query connection pid
-      final int pid;
-      try (ResultSet rs = stmt.executeQuery("SELECT pg_backend_pid();")) {
+        // Query connection pid
+        final int pid;
+        try (ResultSet rs = stmt.executeQuery("SELECT pg_backend_pid();")) {
 
-        assertTrue(rs.next());
-        pid = rs.getInt(1);
-        assertTrue(pid != 0);
+          assertTrue(rs.next());
+          pid = rs.getInt(1);
+          assertTrue(pid != 0);
+        }
+
+        // Kill the postgres process for this connection after 1 second...
+        Thread killThread = new Thread(() -> {
+          try {
+            Thread.sleep(1000);
+            Process kill = Runtime.getRuntime().exec("kill -KILL " + pid);
+
+            CharStreams.copy(new InputStreamReader(kill.getErrorStream()), System.err);
+          }
+          catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+          }
+        });
+        killThread.start();
+
+        stmt.executeQuery("SELECT pg_sleep(3);");
+
       }
 
-      // Kill the postgres process for this connection after 1 second...
-      Thread killThread = new Thread(() -> {
-        try {
-          Thread.sleep(1000);
-          Process kill = Runtime.getRuntime().exec("kill -KILL " + pid);
-
-          CharStreams.copy(new InputStreamReader(kill.getErrorStream()), System.err);
-        }
-        catch (IOException | InterruptedException e) {
-          e.printStackTrace();
-        }
-      });
-      killThread.start();
-
-      stmt.executeQuery("SELECT pg_sleep(3);");
-
-    }
+    });
 
   }
 

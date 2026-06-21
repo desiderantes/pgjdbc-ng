@@ -33,18 +33,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-@RunWith(JUnit4.class)
 public class TruncateTest {
 
   private Connection conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB();
     Statement stmt = conn.createStatement();
@@ -52,7 +49,7 @@ public class TruncateTest {
     stmt.close();
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     Statement stmt = conn.createStatement();
     stmt.execute("DROP TABLE truncatetest");

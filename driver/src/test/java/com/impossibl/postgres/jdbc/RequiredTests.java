@@ -33,12 +33,11 @@ import com.impossibl.postgres.jdbc.shared.GetObject310Test;
 import com.impossibl.postgres.jdbc.shared.SetObject310Test;
 import com.impossibl.postgres.jdbc.xa.XADataSourceTest;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.platform.suite.api.SelectClasses;
+import org.junit.platform.suite.api.Suite;
 
-@RunWith(Suite.class)
-@SuiteClasses({
+@Suite
+@SelectClasses({
     ArrayTest.class,
     BatchExecuteTest.class,
     BlobTest.class,

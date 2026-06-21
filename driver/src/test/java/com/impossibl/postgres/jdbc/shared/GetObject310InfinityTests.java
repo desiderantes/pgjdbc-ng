@@ -19,29 +19,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 
-@RunWith(Parameterized.class)
 public class GetObject310InfinityTests {
-  private final String expression;
-  private final String pgType;
-  private final Class<?> klass;
-  private final Object expectedValue;
+  private String expression;
+  private String pgType;
+  private Class<?> klass;
+  private Object expectedValue;
 
-  public GetObject310InfinityTests(String expression, String pgType, Class klass, Object expectedValue) {
+  public void initGetObject310InfinityTests(String expression, String pgType, Class klass, Object expectedValue) {
     this.expression = expression;
     this.pgType = pgType;
     this.klass = klass;
     this.expectedValue = expectedValue;
   }
 
-  @Parameterized.Parameters(name = "binary = {0}, expr = {1}, pgType = {2}, klass = {3}")
   public static Iterable<Object[]> data() throws IllegalAccessException {
     Collection<Object[]> ids = new ArrayList<>();
     for (String expression : Arrays.asList("-infinity", "infinity")) {
@@ -77,23 +74,25 @@ public class GetObject310InfinityTests {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void setup() throws SQLException {
     con = TestUtil.openDB();
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws SQLException {
     TestUtil.closeDB(con);
   }
 
-  @Test
-  public void test() throws SQLException {
+  @MethodSource("data")
+  @ParameterizedTest(name = "binary = {0}, expr = {1}, pgType = {2}, klass = {3}")
+  public void test(String expression, String pgType, Class klass, Object expectedValue) throws SQLException {
+    initGetObject310InfinityTests(expression, pgType, klass, expectedValue);
     PreparedStatement stmt = con.prepareStatement("select '" + expression + "'::" + pgType);
     ResultSet rs = stmt.executeQuery();
     rs.next();
     Object res = rs.getObject(1, klass);
-    Assert.assertEquals(expectedValue, res);
+    Assertions.assertEquals(expectedValue, res);
   }
 
 }

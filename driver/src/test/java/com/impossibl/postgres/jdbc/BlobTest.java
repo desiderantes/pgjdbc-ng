@@ -54,32 +54,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
-import java.util.Arrays;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Michael Barker (mike@middlesoft.co.uk)
  *
  */
-@RunWith(JUnit4.class)
 public class BlobTest {
 
   private Connection conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB();
     TestUtil.createTable(conn, "blobtest", "ID INT PRIMARY KEY, DATA OID");
@@ -88,7 +84,7 @@ public class BlobTest {
     conn.setAutoCommit(false);
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     conn.setAutoCommit(true);
     TestUtil.dropTable(conn, "blobtest");
@@ -722,7 +718,7 @@ public class BlobTest {
     assertTrue(rs.next());
     b = rs.getBlob("DATA");
     byte[] rspData = b.getBytes(offset, data.length);
-    assertArrayEquals("Request should be the same as the response", data, rspData);
+    assertArrayEquals(data, rspData, "Request should be the same as the response");
 
     rs.close();
     ps.close();
@@ -756,7 +752,7 @@ public class BlobTest {
     assertTrue(rs.next());
     b = rs.getClob("DATA");
     String rspData = b.getSubString(offset, data.length());
-    assertEquals("Request should be the same as the response", data, rspData);
+    assertEquals(data, rspData, "Request should be the same as the response");
 
     rs.close();
     ps.close();
@@ -935,7 +931,7 @@ public class BlobTest {
     in.read(rspData);
     in.close();
 
-    assertArrayEquals("Request should be the same as the response", data, rspData);
+    assertArrayEquals(data, rspData, "Request should be the same as the response");
 
     rs.close();
     ps.close();
@@ -979,7 +975,7 @@ public class BlobTest {
     in.read(rspData);
     in.close();
 
-    assertEquals("Request should be the same as the response", data, new String(rspData));
+    assertEquals(data, new String(rspData), "Request should be the same as the response");
 
     rs.close();
     ps.close();
@@ -1011,7 +1007,7 @@ public class BlobTest {
     b = rs.getBlob("DATA");
     long position = b.position(pattern, 1);
     byte[] rspData = b.getBytes(position, pattern.length);
-    assertArrayEquals("Request should be the same as the response", pattern, rspData);
+    assertArrayEquals(pattern, rspData, "Request should be the same as the response");
 
     rs.close();
     ps.close();
@@ -1044,7 +1040,7 @@ public class BlobTest {
     c = rs.getClob("DATA");
     long position = c.position(pattern, 1);
     String rspData = c.getSubString(position, pattern.length());
-    assertEquals("Request should be the same as the response", pattern, rspData);
+    assertEquals(pattern, rspData, "Request should be the same as the response");
 
     rs.close();
     ps.close();

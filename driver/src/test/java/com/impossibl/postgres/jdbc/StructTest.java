@@ -48,16 +48,16 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StructTest {
 
@@ -115,7 +115,7 @@ public class StructTest {
   static Connection conn;
 
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     conn = TestUtil.openDB();
     TestUtil.createType(conn, "teststruct", "str varchar, str2 varchar, id uuid, num float");
@@ -124,7 +124,7 @@ public class StructTest {
     TestUtil.createTable(conn, "struct_array_test", "val teststructarray");
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     TestUtil.dropTable(conn, "struct_test");
     TestUtil.dropType(conn, "teststruct");
@@ -281,7 +281,7 @@ public class StructTest {
 
     try (st; rs) {
       @SuppressWarnings("unused") TestStruct ts2 = (TestStruct) rs.getObject(1);
-      Assert.fail("Cast should have failed");
+      Assertions.fail("Cast should have failed");
     }
     catch (ClassCastException e) {
       //Should fail

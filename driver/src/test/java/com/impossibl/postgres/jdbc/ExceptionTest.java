@@ -33,70 +33,83 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class ExceptionTest {
 
   Connection conn;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     conn = TestUtil.openDB();
     TestUtil.createTable(conn, "checktest", "id integer PRIMARY KEY, amount numeric CHECK (amount > 0), val integer NOT NULL, num integer UNIQUE");
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws SQLException {
     TestUtil.dropTable(conn, "checktest");
     TestUtil.closeDB(conn);
   }
 
-  @Test(expected = SQLIntegrityConstraintViolationException.class)
+  @Test
   public void testCheckConstraintExceptionType() throws SQLException {
+    assertThrows(SQLIntegrityConstraintViolationException.class, () -> {
 
-    try (Statement stmt = conn.createStatement()) {
+      try (Statement stmt = conn.createStatement()) {
 
-      stmt.executeUpdate("INSERT INTO checktest(amount) VALUES (-100)");
+        stmt.executeUpdate("INSERT INTO checktest(amount) VALUES (-100)");
 
-    }
+      }
+
+    });
 
   }
 
-  @Test(expected = SQLIntegrityConstraintViolationException.class)
+  @Test
   public void testUniqueConstraintExceptionType() throws SQLException {
+    assertThrows(SQLIntegrityConstraintViolationException.class, () -> {
 
-    try (Statement stmt = conn.createStatement()) {
+      try (Statement stmt = conn.createStatement()) {
 
-      stmt.executeUpdate("INSERT INTO checktest(num) VALUES (5)");
-      stmt.executeUpdate("INSERT INTO checktest(num) VALUES (5)");
+        stmt.executeUpdate("INSERT INTO checktest(num) VALUES (5)");
+        stmt.executeUpdate("INSERT INTO checktest(num) VALUES (5)");
 
-    }
+      }
+
+    });
 
   }
 
-  @Test(expected = SQLIntegrityConstraintViolationException.class)
+  @Test
   public void testNotNullConstraintExceptionType() throws SQLException {
+    assertThrows(SQLIntegrityConstraintViolationException.class, () -> {
 
-    try (Statement stmt = conn.createStatement()) {
+      try (Statement stmt = conn.createStatement()) {
 
-      stmt.executeUpdate("INSERT INTO checktest(val) VALUES (null)");
+        stmt.executeUpdate("INSERT INTO checktest(val) VALUES (null)");
 
-    }
+      }
+
+    });
 
   }
 
-  @Test(expected = SQLIntegrityConstraintViolationException.class)
+  @Test
   public void testPrimaryKeyConstraintExceptionType() throws SQLException {
+    assertThrows(SQLIntegrityConstraintViolationException.class, () -> {
 
-    try (Statement stmt = conn.createStatement()) {
+      try (Statement stmt = conn.createStatement()) {
 
-      stmt.executeUpdate("INSERT INTO checktest(id) VALUES (null)");
+        stmt.executeUpdate("INSERT INTO checktest(id) VALUES (null)");
 
-    }
+      }
+
+    });
 
   }
 

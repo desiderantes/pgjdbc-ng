@@ -32,12 +32,11 @@ import com.impossibl.postgres.jdbc.shared.GetObject310InfinityTests;
 import com.impossibl.postgres.jdbc.shared.GetObject310Test;
 import com.impossibl.postgres.jdbc.shared.SetObject310Test;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.platform.suite.api.SelectClasses;
+import org.junit.platform.suite.api.Suite;
 
-@RunWith(Suite.class)
-@SuiteClasses({
+@Suite
+@SelectClasses({
     DateTest.class,
     TimestampTest.class,
     TimeTest.class,

@@ -54,31 +54,28 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.Executor;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /*
  * TestCase to test the internal functionality of org.postgresql.jdbc2.Connection
  * and it's superclass.
  *
  */
-@RunWith(JUnit4.class)
 public class ConnectionTest {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     con = TestUtil.openDB();
 
@@ -88,7 +85,7 @@ public class ConnectionTest {
     TestUtil.closeDB(con);
   }
 
-  @After
+  @AfterEach
   public void after() throws Exception {
     TestUtil.closeDB(con);
 
@@ -141,7 +138,7 @@ public class ConnectionTest {
   /*
    * Put the test for createPrepareCall here
    */
-  @Ignore
+  @Disabled
   public void testPrepareCall() {
   }
 
@@ -493,7 +490,7 @@ public class ConnectionTest {
     }
     assertFalse(con.isValid(5));
     assertTrue(con.isClosed());
-    assertTrue("Connection was probably closed by network timeout", (System.currentTimeMillis() - start) < networkTimeout);
+    assertTrue((System.currentTimeMillis() - start) < networkTimeout, "Connection was probably closed by network timeout");
   }
 
   /**

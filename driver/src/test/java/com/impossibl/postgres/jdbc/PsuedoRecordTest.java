@@ -33,19 +33,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
-@RunWith(JUnit4.class)
 public class PsuedoRecordTest {
 
   Connection conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB();
     TestUtil.createTable(conn, "cs", "name text, val int");
@@ -53,27 +50,27 @@ public class PsuedoRecordTest {
     try (Statement stmt = conn.createStatement()) {
       stmt.execute("""
           CREATE OR REPLACE FUNCTION get4() RETURNS RECORD AS
-          $BODY$\s
+          $BODY$
           DECLARE
             r1     RECORD;
             r2     RECORD;
-            result RECORD;\s
+            result RECORD;
           BEGIN
             SELECT array_agg(c.*) AS arr
             FROM cs AS c
             INTO r1;
-          
+
             SELECT array_agg(o.*) AS arr
             FROM os AS o
             INTO r2;
-          
+
             SELECT
               r1.arr,
               r2.arr
             INTO result;
-          
+
             RETURN result;
-          
+
           END;
           $BODY$
           LANGUAGE plpgsql STABLE;""");
@@ -82,7 +79,7 @@ public class PsuedoRecordTest {
     conn = TestUtil.openDB();
   }
 
-  @After
+  @AfterEach
   public void after() throws Exception {
     try (Statement stmt = conn.createStatement()) {
       stmt.execute("DROP FUNCTION get4()");

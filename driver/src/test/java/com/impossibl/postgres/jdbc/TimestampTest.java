@@ -51,29 +51,26 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /*
  * Test get/setTimestamp for both timestamp with time zone and
  * timestamp without time zone datatypes
  *
  */
-@RunWith(JUnit4.class)
 public class TimestampTest {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     con = TestUtil.openDB();
     TestUtil.createTable(con, TSWTZ_TABLE, "ts timestamp with time zone");
@@ -81,7 +78,7 @@ public class TimestampTest {
     TestUtil.createTable(con, DATE_TABLE, "ts date");
   }
 
-  @After
+  @AfterEach
   public void after() throws Exception {
     TestUtil.dropTable(con, TSWTZ_TABLE);
     TestUtil.dropTable(con, TSWOTZ_TABLE);
@@ -510,22 +507,22 @@ public class TimestampTest {
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS1WTZ, t);
+      assertEquals(TS1WTZ, t, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS2WTZ, t);
+      assertEquals(TS2WTZ, t, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS3WTZ, t);
+      assertEquals(TS3WTZ, t, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS4WTZ, t);
+      assertEquals(TS4WTZ, t, "Failed iteration " + (i + 1));
     }
 
     // Testing for Date
@@ -592,92 +589,92 @@ public class TimestampTest {
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS1WOTZ, t);
+      assertEquals(TS1WOTZ, t, "Failed iteration " + (i + 1));
 
       tString = rs.getString(1);
       assertNotNull(tString);
-      assertEquals("Failed iteration " + (i + 1), TS1WOTZ_PGFORMAT, tString);
+      assertEquals(TS1WOTZ_PGFORMAT, tString, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS2WOTZ, t);
+      assertEquals(TS2WOTZ, t, "Failed iteration " + (i + 1));
 
       tString = rs.getString(1);
       assertNotNull(tString);
-      assertEquals("Failed iteration " + (i + 1), TS2WOTZ_PGFORMAT, tString);
+      assertEquals(TS2WOTZ_PGFORMAT, tString, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS3WOTZ, t);
+      assertEquals(TS3WOTZ, t, "Failed iteration " + (i + 1));
 
       tString = rs.getString(1);
       assertNotNull(tString);
-      assertEquals("Failed iteration " + (i + 1), TS3WOTZ_PGFORMAT, tString);
+      assertEquals(TS3WOTZ_PGFORMAT, tString, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS4WOTZ, t);
+      assertEquals(TS4WOTZ, t, "Failed iteration " + (i + 1));
 
       tString = rs.getString(1);
       assertNotNull(tString);
-      assertEquals("Failed iteration " + (i + 1), TS4WOTZ_PGFORMAT, tString);
+      assertEquals(TS4WOTZ_PGFORMAT, tString, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS5WOTZ, t);
+      assertEquals(TS5WOTZ, t, "Failed iteration " + (i + 1));
 
       tString = rs.getString(1);
       assertNotNull(tString);
-      assertEquals("Failed iteration " + (i + 1), TS5WOTZ_PGFORMAT, tString);
+      assertEquals(TS5WOTZ_PGFORMAT, tString, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS6WOTZ, t);
+      assertEquals(TS6WOTZ, t, "Failed iteration " + (i + 1));
 
       tString = rs.getString(1);
       assertNotNull(tString);
-      assertEquals("Failed iteration " + (i + 1), TS6WOTZ_PGFORMAT, tString);
+      assertEquals(TS6WOTZ_PGFORMAT, tString, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS7WOTZ, t);
+      assertEquals(TS7WOTZ, t, "Failed iteration " + (i + 1));
 
       tString = rs.getString(1);
       assertNotNull(tString);
-      assertEquals("Failed iteration " + (i + 1), TS7WOTZ_PGFORMAT, tString);
+      assertEquals(TS7WOTZ_PGFORMAT, tString, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS8WOTZ, t);
+      assertEquals(TS8WOTZ, t, "Failed iteration " + (i + 1));
 
       tString = rs.getString(1);
       assertNotNull(tString);
-      assertEquals("Failed iteration " + (i + 1), TS8WOTZ_PGFORMAT, tString);
+      assertEquals(TS8WOTZ_PGFORMAT, tString, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS9WOTZ_ROUNDED, t);
+      assertEquals(TS9WOTZ_ROUNDED, t, "Failed iteration " + (i + 1));
 
       tString = rs.getString(1);
       assertNotNull(tString);
-      assertEquals("Failed iteration " + (i + 1), TS9WOTZ_ROUNDED_PGFORMAT, tString);
+      assertEquals(TS9WOTZ_ROUNDED_PGFORMAT, tString, "Failed iteration " + (i + 1));
 
       assertTrue(rs.next());
       t = rs.getTimestamp(1);
       assertNotNull(t);
-      assertEquals("Failed iteration " + (i + 1), TS10WOTZ_ROUNDED, t);
+      assertEquals(TS10WOTZ_ROUNDED, t, "Failed iteration " + (i + 1));
 
       tString = rs.getString(1);
       assertNotNull(tString);
-      assertEquals("Failed iteration " + (i + 1), TS10WOTZ_ROUNDED_PGFORMAT, tString);
+      assertEquals(TS10WOTZ_ROUNDED_PGFORMAT, tString, "Failed iteration " + (i + 1));
     }
 
     // Testing for Date

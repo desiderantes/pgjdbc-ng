@@ -42,26 +42,23 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /*
  * Test that enhanced error reports return the correct origin
  * for constraint violation errors.
  */
-@RunWith(JUnit4.class)
 public class ServerErrorTest {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
 
     con = TestUtil.openDB();
@@ -75,7 +72,7 @@ public class ServerErrorTest {
     stmt.close();
   }
 
-  @After
+  @AfterEach
   public void after() throws Exception {
 
     TestUtil.dropTable(con, "testerr");

@@ -30,17 +30,18 @@ package com.impossibl.postgres.jdbc;
 
 import com.impossibl.postgres.system.Version;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests for the Version class
  * @author kdubb
  */
-@RunWith(JUnit4.class)
 public class VersionTest {
 
   @Test

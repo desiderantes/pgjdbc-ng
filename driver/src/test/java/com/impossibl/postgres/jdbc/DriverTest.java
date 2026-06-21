@@ -45,22 +45,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import io.netty.channel.unix.DomainSocketAddress;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /*
  * Tests the dynamically created class PGDriver
  *
  */
-@RunWith(JUnit4.class)
 public class DriverTest {
 
   /*
@@ -109,22 +106,22 @@ public class DriverTest {
   }
 
   private void verifyUrl(PGDriver drv, String url, String normalUrl, String dbName, String user, String pass, Object... hosts) throws Exception {
-    assertTrue(url, drv.acceptsURL(url));
+    assertTrue(drv.acceptsURL(url), url);
     ConnectionUtil.ConnectionSpecifier connSpec = parseURL(url);
     assertNotNull(connSpec);
-    assertEquals(url, normalUrl, connSpec.getURL());
-    assertEquals(url, dbName, connSpec.getDatabase());
-    assertEquals(url, user, connSpec.getParameters().getProperty(SystemSettings.CREDENTIALS_USERNAME.getName()));
-    assertEquals(url, pass, connSpec.getParameters().getProperty(SystemSettings.CREDENTIALS_PASSWORD.getName()));
-    assertEquals(url, hosts.length / 2, connSpec.getAddresses().size());
+    assertEquals(normalUrl, connSpec.getURL(), url);
+    assertEquals(dbName, connSpec.getDatabase(), url);
+    assertEquals(user, connSpec.getParameters().getProperty(SystemSettings.CREDENTIALS_USERNAME.getName()), url);
+    assertEquals(pass, connSpec.getParameters().getProperty(SystemSettings.CREDENTIALS_PASSWORD.getName()), url);
+    assertEquals(hosts.length / 2, connSpec.getAddresses().size(), url);
     for (int c = 0; c < hosts.length / 2; ++c) {
       SocketAddress addr = connSpec.getAddresses().get(c);
       if (addr instanceof InetSocketAddress) {
-        assertEquals(url, hosts[c * 2], ((InetSocketAddress) addr).getHostString());
-        assertEquals(url, hosts[c * 2 + 1], ((InetSocketAddress) addr).getPort());
+        assertEquals(hosts[c * 2], ((InetSocketAddress) addr).getHostString(), url);
+        assertEquals(hosts[c * 2 + 1], ((InetSocketAddress) addr).getPort(), url);
       }
       else if (addr instanceof DomainSocketAddress) {
-        assertEquals(url, hosts[c * 2], ((DomainSocketAddress) addr).path());
+        assertEquals(hosts[c * 2], ((DomainSocketAddress) addr).path(), url);
       }
       else {
         fail("Unknown socket address: " + addr);

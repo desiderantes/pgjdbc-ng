@@ -37,14 +37,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class CiTextTest {
 
@@ -53,7 +53,7 @@ public class CiTextTest {
   private Connection conn;
   private boolean ciTextInstalled;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB();
     ciTextInstalled = TestUtil.isExtensionInstalled(conn, "citext");
@@ -62,7 +62,7 @@ public class CiTextTest {
     }
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     if (ciTextInstalled) {
       TestUtil.dropTable(conn, "users");
@@ -72,7 +72,7 @@ public class CiTextTest {
 
   @Test
   public void testCiTextInSchema() throws SQLException {
-    assumeTrue("testnoexts database is created", TestUtil.isDatabaseCreated("testnoexts"));
+    assumeTrue(TestUtil.isDatabaseCreated("testnoexts"), "testnoexts database is created");
 
     String url = "jdbc:pgsql://" + TestUtil.getServer() + ":" + TestUtil.getPort() + "/testnoexts";
 
@@ -121,7 +121,7 @@ public class CiTextTest {
 
   @Test
   public void testCiTextInPlainQuery() throws SQLException {
-    assumeTrue(ASSUMPTION, ciTextInstalled);
+    assumeTrue(ciTextInstalled, ASSUMPTION);
 
     try (Statement stmt = conn.createStatement()) {
       int rows = stmt.executeUpdate("INSERT INTO users(name, email) VALUES ('Rich Drake', 'RDrake@gmail.com')");
@@ -136,7 +136,7 @@ public class CiTextTest {
 
   @Test
   public void testCiTextInPreparedStatement() throws SQLException {
-    assumeTrue(ASSUMPTION, ciTextInstalled);
+    assumeTrue(ciTextInstalled, ASSUMPTION);
 
     try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(name, email) VALUES (?, ?)")) {
       stmt.setString(1, "Fred Miller");
@@ -148,7 +148,7 @@ public class CiTextTest {
 
   @Test
   public void testCiTextInBatch() throws SQLException {
-    assumeTrue(ASSUMPTION, ciTextInstalled);
+    assumeTrue(ciTextInstalled, ASSUMPTION);
 
     try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(name, email) VALUES (?, ?)")) {
       stmt.setString(1, "Lisa Meyer");

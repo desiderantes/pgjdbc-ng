@@ -41,24 +41,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@RunWith(JUnit4.class)
 public class GeneratedKeysTest {
 
   private Connection _conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     _conn = TestUtil.openDB();
     Statement stmt = _conn.createStatement();
@@ -67,7 +64,7 @@ public class GeneratedKeysTest {
     stmt.close();
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     Statement stmt = _conn.createStatement();
     stmt.execute("DROP TABLE genkeys");

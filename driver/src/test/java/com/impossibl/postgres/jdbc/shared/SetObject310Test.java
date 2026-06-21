@@ -38,13 +38,13 @@ import static java.time.temporal.ChronoField.DAY_OF_MONTH;
 import static java.time.temporal.ChronoField.MONTH_OF_YEAR;
 import static java.time.temporal.ChronoField.YEAR_OF_ERA;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SetObject310Test {
   private static final TimeZone saveTZ = TimeZone.getDefault();
@@ -70,7 +70,7 @@ public class SetObject310Test {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     con = TestUtil.openDB();
     TestUtil.createTable(con, "table1", "timestamp_without_time_zone_column timestamp without time zone,"
@@ -81,7 +81,7 @@ public class SetObject310Test {
     );
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws SQLException {
     TimeZone.setDefault(saveTZ);
     TestUtil.dropTable(con, "table1");
@@ -238,14 +238,14 @@ public class SetObject310Test {
     TimeZone.setDefault(TimeZone.getTimeZone(zoneId));
     String readBack = insertThenReadStringWithoutType(localDateTime, "timestamp_without_time_zone_column");
     assertEquals(
-        "LocalDateTime=" + localDateTime + ", with TimeZone.default=" + zoneId + ", setObject(int, Object)",
-        expected, readBack);
+        expected,
+        readBack, "LocalDateTime=" + localDateTime + ", with TimeZone.default=" + zoneId + ", setObject(int, Object)");
     deleteRows();
 
     readBack = insertThenReadStringWithType(localDateTime, "timestamp_without_time_zone_column");
     assertEquals(
-        "LocalDateTime=" + localDateTime + ", with TimeZone.default=" + zoneId + ", setObject(int, Object, TIMESTAMP)",
-        expected, readBack);
+        expected,
+        readBack, "LocalDateTime=" + localDateTime + ", with TimeZone.default=" + zoneId + ", setObject(int, Object, TIMESTAMP)");
     deleteRows();
   }
 
@@ -262,15 +262,15 @@ public class SetObject310Test {
           String noType = rs.getString(1);
           OffsetDateTime noTypeRes = OffsetDateTime.parse(noType.replace(' ', 'T') + ":00");
           assertEquals(
+              data.toInstant(), noTypeRes.toInstant(),
               "OffsetDateTime=" + data + " (with ZoneId=" + dataZone + "), with TimeZone.default="
-                  + storeZone + ", setObject(int, Object)", data.toInstant(),
-              noTypeRes.toInstant());
+                  + storeZone + ", setObject(int, Object)");
           String withType = rs.getString(1);
           OffsetDateTime withTypeRes = OffsetDateTime.parse(withType.replace(' ', 'T') + ":00");
           assertEquals(
-              "OffsetDateTime=" + data + " (with ZoneId=" + dataZone + "), with TimeZone.default="
-                  + storeZone + ", setObject(int, Object, TIMESTAMP_WITH_TIMEZONE)",
-              data.toInstant(), withTypeRes.toInstant());
+              data.toInstant(),
+              withTypeRes.toInstant(), "OffsetDateTime=" + data + " (with ZoneId=" + dataZone + "), with TimeZone.default="
+                  + storeZone + ", setObject(int, Object, TIMESTAMP_WITH_TIMEZONE)");
         }
       }
     }

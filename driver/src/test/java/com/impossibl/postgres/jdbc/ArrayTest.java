@@ -46,31 +46,28 @@ import java.sql.Statement;
 import java.sql.Struct;
 import java.sql.Types;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(JUnit4.class)
 public class ArrayTest {
 
   private Connection conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB();
     TestUtil.createTable(conn, "arrtest", "intarr int[], decarr decimal(2,1)[], strarr text[], str text");
     TestUtil.createTable(conn, "aggtest", "id serial PRIMARY KEY, value TEXT NOT NULL");
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     TestUtil.dropTable(conn, "aggtest");
     TestUtil.dropTable(conn, "arrtest");

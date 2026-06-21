@@ -55,33 +55,29 @@ import java.util.UUID;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /*
  * CallableStatement tests.
  * @author Paul Bethe
  */
-@RunWith(JUnit4.class)
 public class CallableStatementTest {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     con = TestUtil.openDB();
     TestUtil.createTable(con, "int_table", "id int");
@@ -173,7 +169,7 @@ public class CallableStatementTest {
     stmt.close();
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     Statement stmt = con.createStatement();
     TestUtil.dropTable(con, "int_table");
@@ -443,8 +439,8 @@ public class CallableStatementTest {
     call.registerOutParameter(2, Types.VARCHAR);
     call.registerOutParameter(3, Types.BIGINT);
     call.execute();
-    Assert.assertEquals("out", call.getString(2));
-    Assert.assertEquals(21, call.getInt(3));
+    Assertions.assertEquals("out", call.getString(2));
+    Assertions.assertEquals(21, call.getInt(3));
     call.close();
   }
 
@@ -456,8 +452,8 @@ public class CallableStatementTest {
     call.registerOutParameter(2, Types.BIGINT);
     call.setInt(3, 20);
     call.execute();
-    Assert.assertEquals("out", call.getString(1));
-    Assert.assertEquals(21, call.getInt(2));
+    Assertions.assertEquals("out", call.getString(1));
+    Assertions.assertEquals(21, call.getInt(2));
     call.close();
   }
 
@@ -469,8 +465,8 @@ public class CallableStatementTest {
     call.setInt(2, 20);
     call.registerOutParameter(3, Types.BIGINT);
     call.execute();
-    Assert.assertEquals("out", call.getString(1));
-    Assert.assertEquals(21, call.getInt(3));
+    Assertions.assertEquals("out", call.getString(1));
+    Assertions.assertEquals(21, call.getInt(3));
     call.close();
   }
 
@@ -538,15 +534,15 @@ public class CallableStatementTest {
 
     call.executeUpdate();
     java.math.BigDecimal ret = call.getBigDecimal(1);
-    assertEquals("correct return from getNumeric () should be 999999999999999.000000000000000 but returned " + ret.toString(), ret, new BigDecimal("999999999999999.000000000000000"));
+    assertEquals(ret, new BigDecimal("999999999999999.000000000000000"), "correct return from getNumeric () should be 999999999999999.000000000000000 but returned " + ret.toString());
 
     ret = call.getBigDecimal(2);
-    assertEquals("correct return from getNumeric ()", ret, new BigDecimal("0.000000000000001"));
+    assertEquals(ret, new BigDecimal("0.000000000000001"), "correct return from getNumeric ()");
     try {
       ret = call.getBigDecimal(3);
     }
     catch (NullPointerException ex) {
-      assertTrue("This should be null", call.wasNull());
+      assertTrue(call.wasNull(), "This should be null");
     }
 
     call.close();

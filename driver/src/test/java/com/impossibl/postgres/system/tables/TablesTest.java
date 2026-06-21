@@ -33,18 +33,15 @@ import com.impossibl.postgres.system.Version;
 
 import static com.impossibl.postgres.jdbc.util.Asserts.assertThrows;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Created by dstipp on 12/7/15.
  */
-@RunWith(JUnit4.class)
 public class TablesTest {
 
   @Test

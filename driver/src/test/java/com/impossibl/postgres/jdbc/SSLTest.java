@@ -52,28 +52,25 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 
-@RunWith(Parameterized.class)
 public class SSLTest {
 
-  @BeforeClass
+  @BeforeAll
   public static void checkDbsExist() throws SQLException {
-    assumeTrue("Missing hostnossldb", isDatabaseCreated("hostnossldb"));
-    assumeTrue("Missing hostdb", isDatabaseCreated("hostdb"));
-    assumeTrue("Missing hostssldb", isDatabaseCreated("hostssldb"));
-    assumeTrue("Missing hostsslcertdb", isDatabaseCreated("hostsslcertdb"));
-    assumeTrue("Missing certdb", isDatabaseCreated("certdb"));
+    assumeTrue(isDatabaseCreated("hostnossldb"), "Missing hostnossldb");
+    assumeTrue(isDatabaseCreated("hostdb"), "Missing hostdb");
+    assumeTrue(isDatabaseCreated("hostssldb"), "Missing hostssldb");
+    assumeTrue(isDatabaseCreated("hostsslcertdb"), "Missing hostsslcertdb");
+    assumeTrue(isDatabaseCreated("certdb"), "Missing certdb");
   }
 
   private String certdir;
@@ -84,7 +81,7 @@ public class SSLTest {
   private String prefix;
   private Object[] expected;
 
-  public SSLTest(@SuppressWarnings("unused") String name, String certdir, String connstr, String sslmode, boolean goodclient, boolean goodserver, String prefix, Object[] expected) {
+  public void initSSLTest(@SuppressWarnings("unused") String name, String certdir, String connstr, String sslmode, boolean goodclient, boolean goodserver, String prefix, Object[] expected) {
     this.certdir = certdir;
     this.connstr = connstr;
     this.sslmode = sslmode;
@@ -94,8 +91,10 @@ public class SSLTest {
     this.expected = expected;
   }
 
-  @Test
-  public void testConnection() {
+  @MethodSource("suite")
+  @ParameterizedTest(name = "{0}")
+  public void testConnection(@SuppressWarnings("unused") String name, String certdir, String connstr, String sslmode, boolean goodclient, boolean goodserver, String prefix, Object[] expected) {
+    initSSLTest(name, certdir, connstr, sslmode, goodclient, goodserver, prefix, expected);
     driver(makeConnStr(sslmode, goodclient, goodserver), expected);
   }
 
@@ -127,7 +126,7 @@ public class SSLTest {
         try (Statement stmt = conn.createStatement()) {
           try (ResultSet rs = stmt.executeQuery("select ssl_is_used()")) {
             assertTrue(rs.next());
-            assertEquals("ssl_is_used: ", expected[1], rs.getBoolean(1));
+            assertEquals(expected[1], rs.getBoolean(1), "ssl_is_used: ");
           }
         }
       }
@@ -139,12 +138,11 @@ public class SSLTest {
       else {
         StringWriter trace = new StringWriter();
         ex.printStackTrace(new PrintWriter(trace));
-        assertTrue("Unexpected Exception Message: " + ex.getMessage() + "\nexpected: " + exmsg + "\nfrom\n" + trace, ex.getMessage().matches(exmsg));
+        assertTrue(ex.getMessage().matches(exmsg), "Unexpected Exception Message: " + ex.getMessage() + "\nexpected: " + exmsg + "\nfrom\n" + trace);
       }
     }
   }
 
-  @Parameters(name = "{0}")
   public static Collection<Object[]> suite() throws Exception {
 
     Collection<Object[]> data = new ArrayList<>();

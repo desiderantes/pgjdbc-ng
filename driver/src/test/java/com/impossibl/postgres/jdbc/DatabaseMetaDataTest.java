@@ -49,28 +49,25 @@ import static java.sql.Types.INTEGER;
 import static java.sql.Types.TIMESTAMP_WITH_TIMEZONE;
 import static java.sql.Types.VARCHAR;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /*
  * TestCase to test the internal functionality of org.postgresql.jdbc2.DatabaseMetaData
  *
  */
-@RunWith(JUnit4.class)
 public class DatabaseMetaDataTest {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     con = TestUtil.openDB();
     TestUtil.createTable(con, "metadatatest", "id int4, name text, updated timestamptz, colour text, quest text");
@@ -102,7 +99,7 @@ public class DatabaseMetaDataTest {
     stmt.close();
   }
 
-  @After
+  @AfterEach
   public void after() throws Exception {
     // Drop function first because it depends on the
     // metadatatest table's type
@@ -144,7 +141,7 @@ public class DatabaseMetaDataTest {
     String tableType = rs.getString("TABLE_TYPE");
     assertEquals("TABLE", tableType);
     // There should only be one row returned
-    assertEquals("getTables() returned too many rows", false, rs.next());
+    assertEquals(false, rs.next(), "getTables() returned too many rows");
     rs.close();
 
     rs = dbmd.getColumns(null, null, "meta%", "%");
@@ -492,7 +489,7 @@ public class DatabaseMetaDataTest {
     }
     rs.close();
     // Test that the table owner has select priv
-    assertTrue("Couldn't find SELECT priv on table metadatatest for " + TestUtil.getUser(), l_foundSelect);
+    assertTrue(l_foundSelect, "Couldn't find SELECT priv on table metadatatest for " + TestUtil.getUser());
   }
 
   @Test
@@ -929,8 +926,8 @@ public class DatabaseMetaDataTest {
       dataType = rs.getInt("data_type");
       remarks = rs.getString("remarks");
       baseType = rs.getInt("base_type");
-      assertEquals("type name ", "testint8", typeName);
-      assertEquals("schema name ", "jdbc", schema);
+      assertEquals("testint8", typeName, "type name ");
+      assertEquals("jdbc", schema, "schema name ");
 
       rs.close();
 
@@ -944,8 +941,8 @@ public class DatabaseMetaDataTest {
       dataType = rs.getInt("data_type");
       remarks = rs.getString("remarks");
       baseType = rs.getInt("base_type");
-      assertEquals("type name ", "testint8", typeName);
-      assertEquals("schema name ", "jdbc", schema);
+      assertEquals("testint8", typeName, "type name ");
+      assertEquals("jdbc", schema, "schema name ");
 
       rs.close();
     }
@@ -993,10 +990,10 @@ public class DatabaseMetaDataTest {
       remarks = rs.getString("remarks");
 
       baseType = rs.getInt("base_type");
-      assertFalse("base type", rs.wasNull());
-      assertEquals("data type", Types.DISTINCT, dataType);
-      assertEquals("type name ", "testint8", typeName);
-      assertEquals("remarks", "jdbc123", remarks);
+      assertFalse(rs.wasNull(), "base type");
+      assertEquals(Types.DISTINCT, dataType, "data type");
+      assertEquals("testint8", typeName, "type name ");
+      assertEquals("jdbc123", remarks, "remarks");
 
       rs.close();
     }
@@ -1040,10 +1037,10 @@ public class DatabaseMetaDataTest {
       remarks = rs.getString("remarks");
 
       baseType = rs.getInt("base_type");
-      assertFalse("base type", rs.wasNull());
-      assertEquals("data type", Types.DISTINCT, dataType);
-      assertEquals("type name ", "testint8", typeName);
-      assertEquals("remarks", "jdbc123", remarks);
+      assertFalse(rs.wasNull(), "base type");
+      assertEquals(Types.DISTINCT, dataType, "data type");
+      assertEquals("testint8", typeName, "type name ");
+      assertEquals("jdbc123", remarks, "remarks");
 
       rs.close();
     }
@@ -1087,10 +1084,10 @@ public class DatabaseMetaDataTest {
       remarks = rs.getString("remarks");
 
       baseType = rs.getInt("base_type");
-      assertFalse("base type", rs.wasNull());
-      assertEquals("data type", Types.DISTINCT, dataType);
-      assertEquals("type name ", "testint8", typeName);
-      assertEquals("remarks", "jdbc123", remarks);
+      assertFalse(rs.wasNull(), "base type");
+      assertEquals(Types.DISTINCT, dataType, "data type");
+      assertEquals("testint8", typeName, "type name ");
+      assertEquals("jdbc123", remarks, "remarks");
 
       rs.close();
     }
@@ -1133,9 +1130,9 @@ public class DatabaseMetaDataTest {
       remarks = rs.getString("remarks");
 
       baseType = rs.getInt("base_type");
-      assertTrue("base type", rs.wasNull());
-      assertEquals("data type", Types.STRUCT, dataType);
-      assertEquals("type name ", "testint8", typeName);
+      assertTrue(rs.wasNull(), "base type");
+      assertEquals(Types.STRUCT, dataType, "data type");
+      assertEquals("testint8", typeName, "type name ");
 
       rs.close();
     }

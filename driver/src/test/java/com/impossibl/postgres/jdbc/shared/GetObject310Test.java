@@ -22,18 +22,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@RunWith(JUnit4.class)
 public class GetObject310Test {
 
   private static final TimeZone saveTZ = TimeZone.getDefault();
@@ -45,7 +42,7 @@ public class GetObject310Test {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     con = TestUtil.openDB();
     TestUtil.createTable(con, "table1", "timestamp_without_time_zone_column timestamp without time zone,"
@@ -56,7 +53,7 @@ public class GetObject310Test {
     );
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws SQLException {
     TimeZone.setDefault(saveTZ);
     TestUtil.dropTable(con, "table1");
@@ -197,8 +194,8 @@ public class GetObject310Test {
       try (ResultSet rs = stmt.executeQuery(TestUtil.selectSQL("table1", "timestamp_without_time_zone_column"))) {
         assertTrue(rs.next());
         LocalDateTime localDateTime = LocalDateTime.parse(timestamp);
-        assertEquals("Failed for " + timestamp + " in " + zoneId, localDateTime, rs.getObject("timestamp_without_time_zone_column", LocalDateTime.class));
-        assertEquals("Failed for " + timestamp + " in " + zoneId, localDateTime, rs.getObject(1, LocalDateTime.class));
+        assertEquals(localDateTime, rs.getObject("timestamp_without_time_zone_column", LocalDateTime.class), "Failed for " + timestamp + " in " + zoneId);
+        assertEquals(localDateTime, rs.getObject(1, LocalDateTime.class), "Failed for " + timestamp + " in " + zoneId);
 
         //Also test that we get the correct values when retrieving the data as LocalDate objects
         assertEquals(localDateTime.toLocalDate(), rs.getObject("timestamp_without_time_zone_column", LocalDate.class));

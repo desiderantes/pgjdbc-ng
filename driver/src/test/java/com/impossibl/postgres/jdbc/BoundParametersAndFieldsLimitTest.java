@@ -33,32 +33,31 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-@RunWith(JUnit4.class)
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class BoundParametersAndFieldsLimitTest {
 
   private Connection conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB();
     TestUtil.createTable(conn, "person", "id bigint primary key");
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     TestUtil.dropTable(conn, "person");
     TestUtil.closeDB(conn);
   }
 
-  @Test(expected = PGSQLSimpleException.class)
+  @Test
   public void testTooManyBindParams() throws SQLException {
-    testParams(0x10000);
+    assertThrows(PGSQLSimpleException.class, () -> testParams(0x10000));
   }
 
   @Test
@@ -83,9 +82,9 @@ public class BoundParametersAndFieldsLimitTest {
     ps.close();
   }
 
-  @Test(expected = PGSQLSimpleException.class)
+  @Test
   public void testTooManyFields() throws SQLException {
-    testFields(0x10000);
+    assertThrows(PGSQLSimpleException.class, () -> testFields(0x10000));
   }
 
   @Test

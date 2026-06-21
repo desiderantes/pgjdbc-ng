@@ -39,20 +39,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class NetworkTest {
 
   private PGConnection conn;
   private Version macaddr8Ver = MACADDR8.getRequiredVersion();
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB().unwrap(PGConnection.class);
     if (conn.isServerMinimumVersion(macaddr8Ver.getMajor(), macaddr8Ver.getMinor())) {
@@ -63,7 +63,7 @@ public class NetworkTest {
     }
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     TestUtil.dropTable(conn, "mactest");
     TestUtil.closeDB(conn);
@@ -73,7 +73,7 @@ public class NetworkTest {
   public void testMacStringConversion() throws SQLException {
     try (Statement stmt = conn.createStatement()) {
       int rows = stmt.executeUpdate("INSERT into mactest(mac_address) VALUES ('08:00:2b:01:02:03')");
-      assertEquals("Number of inserted rows not as expected", 1, rows);
+      assertEquals(1, rows, "Number of inserted rows not as expected");
 
       ResultSet resultSet = stmt.executeQuery("SELECT mac_address FROM mactest WHERE mac_address='08:00:2b:01:02:03'");
       assertTrue(resultSet.next());
@@ -86,7 +86,7 @@ public class NetworkTest {
     try (PreparedStatement stmt = conn.prepareStatement("INSERT into mactest(mac_address) VALUES (?)")) {
       stmt.setString(1, "08:00:2b:01:02:03");
       int rows = stmt.executeUpdate();
-      assertEquals("Number of inserted rows not as expected", 1, rows);
+      assertEquals(1, rows, "Number of inserted rows not as expected");
     }
   }
 
@@ -106,20 +106,20 @@ public class NetworkTest {
       stmt.setString(1, "08002b010203");
       stmt.addBatch();
       int[] batchResult = stmt.executeBatch();
-      assertEquals("Number of inserted rows not as expected", 6, batchResult.length);
+      assertEquals(6, batchResult.length, "Number of inserted rows not as expected");
       for (int rows : batchResult) {
-        assertEquals("Number of inserted rows not as expected", 1, rows);
+        assertEquals(1, rows, "Number of inserted rows not as expected");
       }
     }
   }
 
   @Test
   public void testMac8StringConversion() throws SQLException {
-    assumeTrue("macaddr8 requires server version " + macaddr8Ver,
-        conn.isServerMinimumVersion(macaddr8Ver.getMajor(), macaddr8Ver.getMinor()));
+    assumeTrue(conn.isServerMinimumVersion(macaddr8Ver.getMajor(), macaddr8Ver.getMinor()),
+        "macaddr8 requires server version " + macaddr8Ver);
     try (Statement stmt = conn.createStatement()) {
       int rows = stmt.executeUpdate("INSERT into mactest(mac8_address) VALUES ('08:00:2b:01:02:03:07:08')");
-      assertEquals("Number of inserted rows not as expected", 1, rows);
+      assertEquals(1, rows, "Number of inserted rows not as expected");
 
       ResultSet resultSet = stmt.executeQuery("SELECT mac8_address FROM mactest WHERE mac8_address='08:00:2b:01:02:03:07:08'");
       assertTrue(resultSet.next());
@@ -129,19 +129,19 @@ public class NetworkTest {
 
   @Test
   public void testMac8PreparedStatement() throws SQLException {
-    assumeTrue("macaddr8 requires server version " + macaddr8Ver,
-        conn.isServerMinimumVersion(macaddr8Ver.getMajor(), macaddr8Ver.getMinor()));
+    assumeTrue(conn.isServerMinimumVersion(macaddr8Ver.getMajor(), macaddr8Ver.getMinor()),
+        "macaddr8 requires server version " + macaddr8Ver);
     try (PreparedStatement stmt = conn.prepareStatement("INSERT into mactest(mac8_address) VALUES (?)")) {
       stmt.setString(1, "08:00:2b:01:02:03:07:08");
       int rows = stmt.executeUpdate();
-      assertEquals("Number of inserted rows not as expected", 1, rows);
+      assertEquals(1, rows, "Number of inserted rows not as expected");
     }
   }
 
   @Test
   public void testMac8Batch() throws SQLException {
-    assumeTrue("macaddr8 requires server version " + macaddr8Ver,
-        conn.isServerMinimumVersion(macaddr8Ver.getMajor(), macaddr8Ver.getMinor()));
+    assumeTrue(conn.isServerMinimumVersion(macaddr8Ver.getMajor(), macaddr8Ver.getMinor()),
+        "macaddr8 requires server version " + macaddr8Ver);
     try (PreparedStatement stmt = conn.prepareStatement("INSERT into mactest(mac8_address) VALUES (CAST (? AS macaddr8))")) {
       stmt.setString(1, "08:00:2b:01:02:03:07:08");
       stmt.addBatch();
@@ -156,9 +156,9 @@ public class NetworkTest {
       stmt.setString(1, "08002b0102030708");
       stmt.addBatch();
       int[] batchResult = stmt.executeBatch();
-      assertEquals("Number of inserted rows not as expected", 6, batchResult.length);
+      assertEquals(6, batchResult.length, "Number of inserted rows not as expected");
       for (int rows : batchResult) {
-        assertEquals("Number of inserted rows not as expected", 1, rows);
+        assertEquals(1, rows, "Number of inserted rows not as expected");
       }
     }
   }
@@ -167,7 +167,7 @@ public class NetworkTest {
   public void testCidrStringConversion() throws SQLException {
     try (Statement stmt = conn.createStatement()) {
       int rows = stmt.executeUpdate("INSERT into mactest(cidr_mask) VALUES ('192.168/24')");
-      assertEquals("Number of inserted rows not as expected", 1, rows);
+      assertEquals(1, rows, "Number of inserted rows not as expected");
 
       ResultSet resultSet = stmt.executeQuery("SELECT cidr_mask FROM mactest WHERE cidr_mask='192.168.0.0/24'");
       assertTrue(resultSet.next());
@@ -180,7 +180,7 @@ public class NetworkTest {
     try (PreparedStatement stmt = conn.prepareStatement("INSERT into mactest(cidr_mask) VALUES (?)")) {
       stmt.setString(1, "192.168.100.128/25");
       int rows = stmt.executeUpdate();
-      assertEquals("Number of inserted rows not as expected", 1, rows);
+      assertEquals(1, rows, "Number of inserted rows not as expected");
     }
   }
 
@@ -200,9 +200,9 @@ public class NetworkTest {
       stmt.setString(1, "::ffff:1.2.3.0/120");
       stmt.addBatch();
       int[] batchResult = stmt.executeBatch();
-      assertEquals("Number of inserted rows not as expected", 6, batchResult.length);
+      assertEquals(6, batchResult.length, "Number of inserted rows not as expected");
       for (int rows : batchResult) {
-        assertEquals("Number of inserted rows not as expected", 1, rows);
+        assertEquals(1, rows, "Number of inserted rows not as expected");
       }
     }
   }

@@ -35,21 +35,18 @@ import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@RunWith(JUnit4.class)
 public class SavepointTest {
 
   private Connection _conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     _conn = TestUtil.openDB();
     TestUtil.createTable(_conn, "savepointtable", "id int primary key");
@@ -57,7 +54,7 @@ public class SavepointTest {
     _conn.setAutoCommit(false);
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     _conn.setAutoCommit(true);
     TestUtil.dropTable(_conn, "savepointtable");

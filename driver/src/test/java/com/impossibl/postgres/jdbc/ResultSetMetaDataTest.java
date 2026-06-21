@@ -48,22 +48,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(JUnit4.class)
 public class ResultSetMetaDataTest {
 
   private Connection conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB();
     TestUtil.createTable(conn, "rsmd1", "a int primary key, b text, c decimal(10,2)", true);
@@ -82,7 +79,7 @@ public class ResultSetMetaDataTest {
     TestUtil.createTable(conn, "compositetest", "col rsmd1");
   }
 
-  @After
+  @AfterEach
   public void after() throws Exception {
     TestUtil.dropTable(conn, "compositetest");
     TestUtil.dropTable(conn, "rsmd1");

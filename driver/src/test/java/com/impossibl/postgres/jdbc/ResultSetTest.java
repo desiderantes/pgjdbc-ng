@@ -55,28 +55,25 @@ import java.util.Locale;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /*
  * ResultSet tests.
  */
-@RunWith(JUnit4.class)
 public class ResultSetTest {
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     con = TestUtil.openDB();
     Statement stmt = con.createStatement();
@@ -151,7 +148,7 @@ public class ResultSetTest {
 
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     TestUtil.dropTable(con, "testrs");
     TestUtil.dropTable(con, "teststring");

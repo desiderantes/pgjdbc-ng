@@ -13,7 +13,7 @@ asciidoctorJ = "2.5.10"
 
 # Testing dependencies
 junit = "6.1.0"
-junitClassic = "4.13.2"
+hamcrest = "2.2"
 guava = "33.6.0-jre"
 compilerTesting = "0.23.0"
 checkstyle = "13.6.0"
@@ -50,9 +50,9 @@ asciidoctorj = { group = "org.asciidoctor", name = "asciidoctorj", version.ref =
 # Testing dependencies
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
 junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
-junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine", version.ref = "junit" }
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junit" }
-junit-classic = { group = "junit", name = "junit", version.ref = "junitClassic" }
+junit-platform-suite-api = { group = "org.junit.platform", name = "junit-platform-suite-api", version.ref = "junit" }
+hamcrest = { group = "org.hamcrest", name = "hamcrest", version.ref = "hamcrest" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 compiler-testing = { group = "com.google.testing.compile", name = "compile-testing", version.ref = "compilerTesting" }
 checkstyle = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyle" }

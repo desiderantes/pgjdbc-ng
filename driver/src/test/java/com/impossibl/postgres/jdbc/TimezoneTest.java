@@ -49,13 +49,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * <p>Tests for time and date types with calendars involved. TimestampTest was melting my brain, so I
@@ -107,7 +107,7 @@ public class TimezoneTest {
     cGMT13 = Calendar.getInstance(GMT13);
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     // We must change the default TZ before establishing the connection.
     // Arbitrary timezone that doesn't match our test timezones
@@ -126,7 +126,7 @@ public class TimezoneTest {
     // System.err.println("++++++ TESTS START (" + getName() + ") ++++++");
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     // System.err.println("++++++ TESTS END (" + getName() + ") ++++++");
     TimeZone.setDefault(saveTZ);
@@ -163,7 +163,7 @@ public class TimezoneTest {
     ts = rs.getTimestamp(1, cGMT13); // Represents an instant in time, timezone is irrelevant.
     assertEquals(1104580800000L, ts.getTime()); // 2005-01-01 12:00:00 UTC
     str = rs.getString(1);
-    assertEquals("tstz -> getString", "2005-01-01 15:00:00+03", str);
+    assertEquals("2005-01-01 15:00:00+03", str, "tstz -> getString");
 
     // timestamp: 2005-01-01 15:00:00
     ts = rs.getTimestamp(2); // Convert timestamp to +0100
@@ -177,7 +177,7 @@ public class TimezoneTest {
     ts = rs.getTimestamp(2, cGMT13); // Convert timestamp to +1300
     assertEquals(1104544800000L, ts.getTime()); // 2005-01-01 15:00:00 +1300
     str = rs.getString(2);
-    assertEquals("ts -> getString", "2005-01-01 15:00:00", str);
+    assertEquals("2005-01-01 15:00:00", str, "ts -> getString");
 
     // time: 15:00:00
     ts = rs.getTimestamp(3);
@@ -191,7 +191,7 @@ public class TimezoneTest {
     ts = rs.getTimestamp(3, cGMT13);
     assertEquals(7200000L, ts.getTime()); // 1970-01-01 15:00:00 +1300
     str = rs.getString(3);
-    assertEquals("time -> getString", "15:00:00", str);
+    assertEquals("15:00:00", str, "time -> getString");
 
     // timetz: 15:00:00+03
     ts = rs.getTimestamp(4);
@@ -210,7 +210,7 @@ public class TimezoneTest {
     // 1970-01-01 15:00:00 +0300 -> 1970-01-02 01:00:00 +1300
     assertEquals(43200000L, ts.getTime());
     str = rs.getString(4);
-    assertEquals("timetz -> getString", "15:00:00+03", str);
+    assertEquals("15:00:00+03", str, "timetz -> getString");
 
     // date: 2005-01-01
     ts = rs.getTimestamp(5);
@@ -224,7 +224,7 @@ public class TimezoneTest {
     ts = rs.getTimestamp(5, cGMT13);
     assertEquals(1104490800000L, ts.getTime()); // 2005-01-01 00:00:00 +1300
     str = rs.getString(5);
-    assertEquals("date -> getString", "2005-01-01", str);
+    assertEquals("2005-01-01", str, "date -> getString");
 
     assertFalse(rs.next());
     rs.close();
@@ -892,20 +892,20 @@ public class TimezoneTest {
       expectedTimestamp.setTime(sdf.parse(testDate));
 
       assertEquals(
-          "getTimestamp: " + testDate + ", timeZone: " + timeZone,
-          sdf.format(expectedTimestamp.getTimeInMillis()), sdf.format(getTimestamp));
+          sdf.format(expectedTimestamp.getTimeInMillis()),
+          sdf.format(getTimestamp), "getTimestamp: " + testDate + ", timeZone: " + timeZone);
 
       assertEquals(
-          "getString: " + testDate + ", timeZone: " + timeZone,
-          sdf.format(expectedTimestamp.getTimeInMillis()), sdf.format(sdf.parse(getString)));
+          sdf.format(expectedTimestamp.getTimeInMillis()),
+          sdf.format(sdf.parse(getString)), "getString: " + testDate + ", timeZone: " + timeZone);
 
       expectedTimestamp.set(Calendar.HOUR_OF_DAY, 0);
       expectedTimestamp.set(Calendar.MINUTE, 0);
       expectedTimestamp.set(Calendar.SECOND, 0);
 
       assertEquals(
-          "TIMESTAMP -> getDate: " + testDate + ", timeZone: " + timeZone,
-          sdf.format(expectedTimestamp.getTimeInMillis()), sdf.format(getDate));
+          sdf.format(expectedTimestamp.getTimeInMillis()),
+          sdf.format(getDate), "TIMESTAMP -> getDate: " + testDate + ", timeZone: " + timeZone);
 
       String expectedDateFromDateColumn = setTimeTo00_00_00(testDate);
       if ("Atlantic/Azores".equals(timeZone) && testDate.startsWith("2000-03-26")) {
@@ -917,8 +917,8 @@ public class TimezoneTest {
       }
 
       assertEquals(
-          "DATE -> getDate: " + expectedDateFromDateColumn + ", timeZone: " + timeZone,
-          expectedDateFromDateColumn, sdf.format(getDateFromDateColumn));
+          expectedDateFromDateColumn,
+          sdf.format(getDateFromDateColumn), "DATE -> getDate: " + expectedDateFromDateColumn + ", timeZone: " + timeZone);
 
       expectedTimestamp.setTime(sdf.parse(testDate));
       expectedTimestamp.set(Calendar.YEAR, 1970);
@@ -926,8 +926,8 @@ public class TimezoneTest {
       expectedTimestamp.set(Calendar.DAY_OF_MONTH, 1);
 
       assertEquals(
-          "getTime: " + testDate + ", timeZone: " + timeZone,
-          sdf.format(expectedTimestamp.getTimeInMillis()), sdf.format(getTime));
+          sdf.format(expectedTimestamp.getTimeInMillis()),
+          sdf.format(getTime), "getTime: " + testDate + ", timeZone: " + timeZone);
 
     }
     rs.close();
@@ -953,7 +953,7 @@ public class TimezoneTest {
     for (int j = 0; j < correct.length; ++j) {
       assertTrue(rs.next());
       for (int i = 0; i < correct[j].length; ++i) {
-        assertEquals("On row " + (j + 1), correct[j][i], rs.getString(i + 1));
+        assertEquals(correct[j][i], rs.getString(i + 1), "On row " + (j + 1));
       }
     }
     assertFalse(rs.next());

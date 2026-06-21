@@ -37,25 +37,21 @@ import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
-
-@RunWith(JUnit4.class)
 public class GiantBlobTest {
 
   Connection conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB();
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     TestUtil.closeDB(conn);
   }

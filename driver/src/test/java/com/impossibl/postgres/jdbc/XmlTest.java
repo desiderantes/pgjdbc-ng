@@ -61,20 +61,17 @@ import javax.xml.transform.stax.StAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Node;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@RunWith(JUnit4.class)
 public class XmlTest {
 
   private Connection _conn;
@@ -84,7 +81,7 @@ public class XmlTest {
   private static final String _xmlDocument = "<a><b>1</b><b>2</b></a>";
   private static final String _xmlFragment = "<a>f</a><b>g</b>";
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     TransformerFactory factory = TransformerFactory.newInstance();
     _xslTransformer = factory.newTransformer(new StreamSource(new StringReader(_xsl)));
@@ -99,7 +96,7 @@ public class XmlTest {
     stmt.close();
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     Statement stmt = _conn.createStatement();
     stmt.execute("DROP TABLE xmltest");

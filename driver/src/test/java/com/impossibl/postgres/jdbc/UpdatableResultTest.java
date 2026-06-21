@@ -49,29 +49,25 @@ import java.util.TimeZone;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
-
-@RunWith(JUnit4.class)
 public class UpdatableResultTest {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     con = TestUtil.openDB();
     TestUtil.createTable(con, "updatable", "id int primary key, name text, notselected text, ts timestamp with time zone, intarr int[]", true);
@@ -88,7 +84,7 @@ public class UpdatableResultTest {
     con.setAutoCommit(false);
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     con.commit();
 
@@ -99,7 +95,7 @@ public class UpdatableResultTest {
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testDeleteRows() throws SQLException {
     Statement st = con.createStatement();
     st.executeUpdate("INSERT INTO second values (2,'two')");
@@ -126,7 +122,7 @@ public class UpdatableResultTest {
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testCancelRowUpdates() throws Exception {
     Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
     ResultSet rs = st.executeQuery("select * from second");
@@ -228,7 +224,7 @@ public class UpdatableResultTest {
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testUpdateTimestamp() throws SQLException {
     TimeZone origTZ = TimeZone.getDefault();
     try {
@@ -254,7 +250,7 @@ public class UpdatableResultTest {
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testUpdateStreams() throws SQLException {
     String string = "Hello";
     byte[] bytes = new byte[] {0, '\\', (byte) 128, (byte) 255};
@@ -325,7 +321,7 @@ public class UpdatableResultTest {
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testUpdatable() throws SQLException {
     Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE, ResultSet.HOLD_CURSORS_OVER_COMMIT);
     ResultSet rs = st.executeQuery("select * from updatable");

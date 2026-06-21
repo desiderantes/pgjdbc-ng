@@ -37,9 +37,9 @@ dependencies {
 
   testImplementation(libs.junit.jupiter.engine)
   testImplementation(libs.junit.jupiter.params)
-  testImplementation(libs.junit.vintage.engine)
-  testImplementation(libs.junit.classic)
+  testImplementation(libs.junit.platform.suite.api)
   testImplementation(libs.guava)
+  testImplementation(libs.hamcrest)
   testRuntimeOnly(libs.junit.platform.launcher)
 
 }

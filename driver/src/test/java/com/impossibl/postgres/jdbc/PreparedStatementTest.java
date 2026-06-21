@@ -64,27 +64,25 @@ import java.util.Properties;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-@RunWith(JUnit4.class)
 public class PreparedStatementTest {
 
   private Connection conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     Properties properties = new Properties();
     conn = TestUtil.openDB(properties);
@@ -93,7 +91,7 @@ public class PreparedStatementTest {
     TestUtil.createTable(conn, "intervaltable", "i interval");
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     TestUtil.dropTable(conn, "streamtable");
     TestUtil.dropTable(conn, "texttable");
@@ -504,8 +502,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
     rs.getFloat(1);
-    assertEquals("expected 1.0E37,received " + rs.getFloat(1), 1.0E37f, rs.getFloat(1), 0.0);
-    assertEquals("expected 1.0E-37,received " + rs.getFloat(2), 1.0E-37f, rs.getFloat(2), 0.0);
+    assertEquals(1.0E37f, rs.getFloat(1), 0.0, "expected 1.0E37,received " + rs.getFloat(1));
+    assertEquals(1.0E-37f, rs.getFloat(2), 0.0, "expected 1.0E-37,received " + rs.getFloat(2));
     rs.getDouble(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -530,8 +528,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertTrue("expected true,received " + rs.getBoolean(1), rs.getBoolean(1));
-    assertFalse("expected false,received " + rs.getBoolean(2), rs.getBoolean(2));
+    assertTrue(rs.getBoolean(1), "expected true,received " + rs.getBoolean(1));
+    assertFalse(rs.getBoolean(2), "expected false,received " + rs.getBoolean(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -559,8 +557,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxFloat + " ,received " + rs.getObject(1), rs.getObject(1), BigDecimal.valueOf(maxFloat));
-    assertEquals("expected " + minFloat + " ,received " + rs.getObject(2), rs.getObject(2), BigDecimal.valueOf(minFloat));
+    assertEquals(rs.getObject(1), BigDecimal.valueOf(maxFloat), "expected " + maxFloat + " ,received " + rs.getObject(1));
+    assertEquals(rs.getObject(2), BigDecimal.valueOf(minFloat), "expected " + minFloat + " ,received " + rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -583,7 +581,7 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected NaN ,received " + rs.getObject(1), Double.NaN, rs.getObject(1));
+    assertEquals(Double.NaN, rs.getObject(1), "expected NaN ,received " + rs.getObject(1));
     rs.close();
     pstmt.close();
 
@@ -604,30 +602,34 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected NaN ,received " + rs.getObject(1), Double.NaN, rs.getObject(1));
+    assertEquals(Double.NaN, rs.getObject(1), "expected NaN ,received " + rs.getObject(1));
     rs.close();
     pstmt.close();
 
   }
 
-  @Test(expected = SQLException.class)
-  public void testSetDecimalDoubleInfinity() throws SQLException {
-    PreparedStatement pstmt = conn.prepareStatement("CREATE temp TABLE dec_tab (nan_val decimal)");
-    pstmt.executeUpdate();
-    pstmt.close();
+  @Test
+  public void testSetDecimalDoubleInfinity() {
+    assertThrows(SQLException.class, () -> {
+      PreparedStatement pstmt = conn.prepareStatement("CREATE temp TABLE dec_tab (nan_val decimal)");
+      pstmt.executeUpdate();
+      pstmt.close();
 
-    pstmt = conn.prepareStatement("insert into dec_tab values (?)");
-    pstmt.setObject(1, Double.POSITIVE_INFINITY);
+      pstmt = conn.prepareStatement("insert into dec_tab values (?)");
+      pstmt.setObject(1, Double.POSITIVE_INFINITY);
+    });
   }
 
-  @Test(expected = SQLException.class)
-  public void testSetDecimalFloatInfinity() throws SQLException {
-    PreparedStatement pstmt = conn.prepareStatement("CREATE temp TABLE dec_tab (nan_val decimal)");
-    pstmt.executeUpdate();
-    pstmt.close();
+  @Test
+  public void testSetDecimalFloatInfinity() {
+    assertThrows(SQLException.class, () -> {
+      PreparedStatement pstmt = conn.prepareStatement("CREATE temp TABLE dec_tab (nan_val decimal)");
+      pstmt.executeUpdate();
+      pstmt.close();
 
-    pstmt = conn.prepareStatement("insert into dec_tab values (?)");
-    pstmt.setObject(1, Float.POSITIVE_INFINITY);
+      pstmt = conn.prepareStatement("insert into dec_tab values (?)");
+      pstmt.setObject(1, Float.POSITIVE_INFINITY);
+    });
   }
 
   @Test
@@ -650,8 +652,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxFloat + " ,received " + rs.getObject(1), maxFloat, rs.getObject(1));
-    assertEquals("expected " + minFloat + " ,received " + rs.getObject(2), minFloat, rs.getObject(2));
+    assertEquals(maxFloat, rs.getObject(1), "expected " + maxFloat + " ,received " + rs.getObject(1));
+    assertEquals(minFloat, rs.getObject(2), "expected " + minFloat + " ,received " + rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -679,8 +681,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected true,received " + rs.getObject(1), maxFloat, rs.getObject(1));
-    assertEquals("expected false,received " + rs.getBoolean(2), minFloat, rs.getObject(2));
+    assertEquals(maxFloat, rs.getObject(1), "expected true,received " + rs.getObject(1));
+    assertEquals(minFloat, rs.getObject(2), "expected false,received " + rs.getBoolean(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -708,8 +710,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxFloat + " ,received " + rs.getObject(1), maxFloat, rs.getObject(1));
-    assertEquals("expected " + minFloat + " ,received " + rs.getObject(2), minFloat, rs.getObject(2));
+    assertEquals(maxFloat, rs.getObject(1), "expected " + maxFloat + " ,received " + rs.getObject(1));
+    assertEquals(minFloat, rs.getObject(2), "expected " + minFloat + " ,received " + rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -737,8 +739,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxInt + " ,received " + rs.getObject(1), maxInt, rs.getObject(1));
-    assertEquals("expected " + minInt + " ,received " + rs.getObject(2), minInt, rs.getObject(2));
+    assertEquals(maxInt, rs.getObject(1), "expected " + maxInt + " ,received " + rs.getObject(1));
+    assertEquals(minInt, rs.getObject(2), "expected " + minInt + " ,received " + rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -766,8 +768,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxInt + " ,received " + rs.getObject(1), maxInt, rs.getObject(1));
-    assertEquals("expected " + minInt + " ,received " + rs.getObject(2), minInt, rs.getObject(2));
+    assertEquals(maxInt, rs.getObject(1), "expected " + maxInt + " ,received " + rs.getObject(1));
+    assertEquals(minInt, rs.getObject(2), "expected " + minInt + " ,received " + rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -795,8 +797,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxInt + " ,received " + rs.getObject(1), maxInt, rs.getObject(1));
-    assertEquals("expected " + minInt + " ,received " + rs.getObject(2), minInt, rs.getObject(2));
+    assertEquals(maxInt, rs.getObject(1), "expected " + maxInt + " ,received " + rs.getObject(1));
+    assertEquals(minInt, rs.getObject(2), "expected " + minInt + " ,received " + rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -823,8 +825,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + dBooleanTrue + " ,received " + rs.getObject(1), dBooleanTrue, rs.getObject(1));
-    assertEquals("expected " + dBooleanFalse + " ,received " + rs.getObject(2), dBooleanFalse, rs.getObject(2));
+    assertEquals(dBooleanTrue, rs.getObject(1), "expected " + dBooleanTrue + " ,received " + rs.getObject(1));
+    assertEquals(dBooleanFalse, rs.getObject(2), "expected " + dBooleanFalse + " ,received " + rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -851,8 +853,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + dBooleanTrue + " ,received " + rs.getObject(1), 0, ((BigDecimal) rs.getObject(1)).compareTo(dBooleanTrue));
-    assertEquals("expected " + dBooleanFalse + " ,received " + rs.getObject(2), 0, ((BigDecimal) rs.getObject(2)).compareTo(dBooleanFalse));
+    assertEquals(0, ((BigDecimal) rs.getObject(1)).compareTo(dBooleanTrue), "expected " + dBooleanTrue + " ,received " + rs.getObject(1));
+    assertEquals(0, ((BigDecimal) rs.getObject(2)).compareTo(dBooleanFalse), "expected " + dBooleanFalse + " ,received " + rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -879,8 +881,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + dBooleanTrue + " ,received " + rs.getObject(1), 0, ((BigDecimal) rs.getObject(1)).compareTo(dBooleanTrue));
-    assertEquals("expected " + dBooleanFalse + " ,received " + rs.getObject(2), 0, ((BigDecimal) rs.getObject(2)).compareTo(dBooleanFalse));
+    assertEquals(0, ((BigDecimal) rs.getObject(1)).compareTo(dBooleanTrue), "expected " + dBooleanTrue + " ,received " + rs.getObject(1));
+    assertEquals(0, ((BigDecimal) rs.getObject(2)).compareTo(dBooleanFalse), "expected " + dBooleanFalse + " ,received " + rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -1256,7 +1258,7 @@ public class PreparedStatementTest {
   @Test
   public void testHStore() throws SQLException {
 
-    assumeTrue("hstore (extension not intalled)", TestUtil.isExtensionInstalled(conn, "hstore"));
+    assumeTrue(TestUtil.isExtensionInstalled(conn, "hstore"), "hstore (extension not intalled)");
 
     PreparedStatement pstmt = conn.prepareStatement("CREATE TEMP TABLE hstore_tab (hs1 hstore, hs2 hstore, hs3 hstore)");
     pstmt.executeUpdate();

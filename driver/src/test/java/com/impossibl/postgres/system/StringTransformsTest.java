@@ -33,13 +33,10 @@ import static com.impossibl.postgres.utils.StringTransforms.dottedFromCamelCase;
 import static com.impossibl.postgres.utils.StringTransforms.toLowerCamelCase;
 import static com.impossibl.postgres.utils.StringTransforms.toUpperCamelCase;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(JUnit4.class)
 public class StringTransformsTest {
 
   @Test

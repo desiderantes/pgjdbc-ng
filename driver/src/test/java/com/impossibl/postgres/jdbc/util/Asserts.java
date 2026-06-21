@@ -28,7 +28,7 @@
  */
 package com.impossibl.postgres.jdbc.util;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -46,7 +46,7 @@ public class Asserts {
   public static void assertThrows(Class<? extends Throwable> throwableType, ThrowBlock block) {
     try {
       block.run();
-      Assert.fail("Expected exception " + throwableType + " not thrown");
+      Assertions.fail("Expected exception " + throwableType + " not thrown");
     }
     catch (Throwable t) {
       assertThat(t, is(instanceOf(throwableType)));

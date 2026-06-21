@@ -37,21 +37,21 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class PerformanceTest {
 
   static Connection conn;
 
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     conn = TestUtil.openDB();
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     TestUtil.closeDB(conn);
   }

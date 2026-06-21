@@ -35,34 +35,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-@RunWith(JUnit4.class)
 public class TypeOIDTest {
 
   private Connection conn;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     conn = TestUtil.openDB();
   }
 
-  @After
+  @AfterEach
   public void after() throws SQLException {
     TestUtil.closeDB(conn);
   }
 
   @Test
   public void testUnsignedOid() throws SQLException {
-    assumeTrue("Server version is 12 or above", conn.getMetaData().getDatabaseMajorVersion() >= 12);
+    assumeTrue(conn.getMetaData().getDatabaseMajorVersion() >= 12, "Server version is 12 or above");
 
     try (Connection conn = TestUtil.openDB()) {
       try (Statement statement = conn.createStatement()) {

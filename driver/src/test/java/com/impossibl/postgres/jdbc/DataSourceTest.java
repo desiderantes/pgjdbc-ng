@@ -53,29 +53,26 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 import io.netty.channel.unix.DomainSocketAddress;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests for PGDataSource
  * @author <a href="mailto:jesper.pedersen@redhat.com">Jesper Pedersen</a>
  */
-@RunWith(JUnit4.class)
 public class DataSourceTest {
 
   private Connection con;
 
-  @Before
+  @BeforeEach
   public void before() throws Exception {
     PGDataSource ds = new PGDataSource();
     ds.setServerName(TestUtil.getServer());
@@ -88,7 +85,7 @@ public class DataSourceTest {
     con = ds.getConnection();
   }
 
-  @After
+  @AfterEach
   public void after() throws Exception {
     TestUtil.closeDB(con);
   }
@@ -198,7 +195,7 @@ public class DataSourceTest {
 
       PropertyDescriptor settingPD = findPropertyDescriptor(beanInfo, toLowerCamelCase(setting.getName()));
 
-      assertNotNull("Missing property for setting " + setting.getName() + " (" + toLowerCamelCase(setting.getName()) + ")", settingPD);
+      assertNotNull(settingPD, "Missing property for setting " + setting.getName() + " (" + toLowerCamelCase(setting.getName()) + ")");
     }
 
   }
