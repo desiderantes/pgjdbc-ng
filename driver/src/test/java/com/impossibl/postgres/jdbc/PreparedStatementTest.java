@@ -49,6 +49,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -144,7 +145,7 @@ public class PreparedStatementTest {
   @Test
   public void testSetAsciiStream() throws Exception {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    PrintWriter pw = new PrintWriter(new OutputStreamWriter(baos, "ASCII"));
+    PrintWriter pw = new PrintWriter(new OutputStreamWriter(baos, StandardCharsets.US_ASCII));
     pw.println("Hello");
     pw.flush();
 
@@ -357,12 +358,12 @@ public class PreparedStatementTest {
       "\"\"leading_double_quote", "trailing_double_quote\"\"", "\"\"surrounding_double_quotes\"\"", " \"\"surrounding_double_quotes_surrounding_space\"\" ", " \"\"surrounding_double_quotes_leading_space\"\"", "\"\"surrounding_double_quotes_trailing_space\"\" ",
       "\"\"", "\"\"\"\""};
 
-    for (int i = 0; i < testStrings.length; ++i) {
-      PreparedStatement pstmt = conn.prepareStatement("CREATE TABLE \"" + testStrings[i] + "\" (i integer)");
+    for (String testString : testStrings) {
+      PreparedStatement pstmt = conn.prepareStatement("CREATE TABLE \"" + testString + "\" (i integer)");
       pstmt.executeUpdate();
       pstmt.close();
 
-      pstmt = conn.prepareStatement("DROP TABLE \"" + testStrings[i] + "\"");
+      pstmt = conn.prepareStatement("DROP TABLE \"" + testString + "\"");
       pstmt.executeUpdate();
       pstmt.close();
     }
@@ -503,8 +504,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
     rs.getFloat(1);
-    assertEquals("expected 1.0E37,received " + rs.getFloat(1), rs.getFloat(1), 1.0E37f, 0.0);
-    assertEquals("expected 1.0E-37,received " + rs.getFloat(2), rs.getFloat(2), 1.0E-37f, 0.0);
+    assertEquals("expected 1.0E37,received " + rs.getFloat(1), 1.0E37f, rs.getFloat(1), 0.0);
+    assertEquals("expected 1.0E-37,received " + rs.getFloat(2), 1.0E-37f, rs.getFloat(2), 0.0);
     rs.getDouble(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -582,7 +583,7 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected NaN ,received " + rs.getObject(1), rs.getObject(1), Double.NaN);
+    assertEquals("expected NaN ,received " + rs.getObject(1), Double.NaN, rs.getObject(1));
     rs.close();
     pstmt.close();
 
@@ -603,7 +604,7 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected NaN ,received " + rs.getObject(1), rs.getObject(1), Double.NaN);
+    assertEquals("expected NaN ,received " + rs.getObject(1), Double.NaN, rs.getObject(1));
     rs.close();
     pstmt.close();
 
@@ -649,8 +650,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxFloat + " ,received " + rs.getObject(1), rs.getObject(1), maxFloat);
-    assertEquals("expected " + minFloat + " ,received " + rs.getObject(2), rs.getObject(2), minFloat);
+    assertEquals("expected " + maxFloat + " ,received " + rs.getObject(1), maxFloat, rs.getObject(1));
+    assertEquals("expected " + minFloat + " ,received " + rs.getObject(2), minFloat, rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -678,8 +679,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected true,received " + rs.getObject(1), rs.getObject(1), maxFloat);
-    assertEquals("expected false,received " + rs.getBoolean(2), rs.getObject(2), minFloat);
+    assertEquals("expected true,received " + rs.getObject(1), maxFloat, rs.getObject(1));
+    assertEquals("expected false,received " + rs.getBoolean(2), minFloat, rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -707,8 +708,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxFloat + " ,received " + rs.getObject(1), rs.getObject(1), maxFloat);
-    assertEquals("expected " + minFloat + " ,received " + rs.getObject(2), rs.getObject(2), minFloat);
+    assertEquals("expected " + maxFloat + " ,received " + rs.getObject(1), maxFloat, rs.getObject(1));
+    assertEquals("expected " + minFloat + " ,received " + rs.getObject(2), minFloat, rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -736,8 +737,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxInt + " ,received " + rs.getObject(1), rs.getObject(1), maxInt);
-    assertEquals("expected " + minInt + " ,received " + rs.getObject(2), rs.getObject(2), minInt);
+    assertEquals("expected " + maxInt + " ,received " + rs.getObject(1), maxInt, rs.getObject(1));
+    assertEquals("expected " + minInt + " ,received " + rs.getObject(2), minInt, rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -765,8 +766,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxInt + " ,received " + rs.getObject(1), rs.getObject(1), maxInt);
-    assertEquals("expected " + minInt + " ,received " + rs.getObject(2), rs.getObject(2), minInt);
+    assertEquals("expected " + maxInt + " ,received " + rs.getObject(1), maxInt, rs.getObject(1));
+    assertEquals("expected " + minInt + " ,received " + rs.getObject(2), minInt, rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -794,8 +795,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + maxInt + " ,received " + rs.getObject(1), rs.getObject(1), maxInt);
-    assertEquals("expected " + minInt + " ,received " + rs.getObject(2), rs.getObject(2), minInt);
+    assertEquals("expected " + maxInt + " ,received " + rs.getObject(1), maxInt, rs.getObject(1));
+    assertEquals("expected " + minInt + " ,received " + rs.getObject(2), minInt, rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -822,8 +823,8 @@ public class PreparedStatementTest {
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
 
-    assertEquals("expected " + dBooleanTrue + " ,received " + rs.getObject(1), rs.getObject(1), dBooleanTrue);
-    assertEquals("expected " + dBooleanFalse + " ,received " + rs.getObject(2), rs.getObject(2), dBooleanFalse);
+    assertEquals("expected " + dBooleanTrue + " ,received " + rs.getObject(1), dBooleanTrue, rs.getObject(1));
+    assertEquals("expected " + dBooleanFalse + " ,received " + rs.getObject(2), dBooleanFalse, rs.getObject(2));
     rs.getFloat(3);
     assertTrue(rs.wasNull());
     rs.close();
@@ -984,18 +985,15 @@ public class PreparedStatementTest {
     }
 
     PreparedStatement pstmt = conn.prepareStatement("INSERT INTO streamtable (bin,str) VALUES (?,?)");
-    pstmt.setObject(1, buf, Types.BINARY);
-    pstmt.setString(2, null);
-    pstmt.clearParameters();
-    try {
+    try (pstmt) {
+      pstmt.setObject(1, buf, Types.BINARY);
+      pstmt.setString(2, null);
+      pstmt.clearParameters();
       pstmt.executeQuery();
       fail("Failed");
     }
     catch (SQLException se) {
       // Correct
-    }
-    finally {
-      pstmt.close();
     }
   }
 
@@ -1050,9 +1048,9 @@ public class PreparedStatementTest {
     pstmt = conn.prepareStatement("select * from inet_tab");
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
-    assertSame(rs.getObject(1).getClass(), InetAddr.class);
+    assertSame(InetAddr.class, rs.getObject(1).getClass());
     assertEquals(inet1, rs.getObject(1));
-    assertSame(rs.getObject(2).getClass(), InetAddr.class);
+    assertSame(InetAddr.class, rs.getObject(2).getClass());
     assertEquals(inet2, rs.getObject(2));
     rs.getObject(3);
     assertTrue(rs.wasNull());
@@ -1078,9 +1076,9 @@ public class PreparedStatementTest {
     pstmt = conn.prepareStatement("select * from cidr_tab");
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
-    assertSame(rs.getObject(1).getClass(), CidrAddr.class);
+    assertSame(CidrAddr.class, rs.getObject(1).getClass());
     assertEquals(cidr1, rs.getObject(1));
-    assertSame(rs.getObject(2).getClass(), CidrAddr.class);
+    assertSame(CidrAddr.class, rs.getObject(2).getClass());
     assertEquals(cidr2, rs.getObject(2));
     rs.getObject(3);
     assertTrue(rs.wasNull());
@@ -1106,7 +1104,7 @@ public class PreparedStatementTest {
     pstmt = conn.prepareStatement("select * from point_tab");
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
-    assertSame(rs.getObject(1).getClass(), double[].class);
+    assertSame(double[].class, rs.getObject(1).getClass());
     assertArrayEquals(p1, (double[]) rs.getObject(1), 0.0);
     assertArrayEquals(p2, (double[]) rs.getObject(2), 0.0);
     rs.getObject(3);
@@ -1132,7 +1130,7 @@ public class PreparedStatementTest {
     try (PreparedStatement pstmt = conn.prepareStatement("select * from path_tab");
         ResultSet rs = pstmt.executeQuery()) {
       assertTrue(rs.next());
-      assertSame(rs.getObject(1).getClass(), Path.class);
+      assertSame(Path.class, rs.getObject(1).getClass());
       assertEquals(p1, rs.getObject(1));
       assertEquals(p2, rs.getObject(2));
       rs.getObject(3);
@@ -1157,7 +1155,7 @@ public class PreparedStatementTest {
     try (PreparedStatement pstmt = conn.prepareStatement("select * from polygon_tab");
         ResultSet rs = pstmt.executeQuery()) {
       assertTrue(rs.next());
-      assertSame(rs.getObject(1).getClass(), double[][].class);
+      assertSame(double[][].class, rs.getObject(1).getClass());
       assertTrue(Arrays.deepEquals(p1, (double[][]) rs.getObject(1)));
       assertTrue(Arrays.deepEquals(p2, (double[][]) rs.getObject(2)));
       rs.getObject(3);
@@ -1183,7 +1181,7 @@ public class PreparedStatementTest {
     pstmt = conn.prepareStatement("select * from circle_tab");
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
-    assertSame(rs.getObject(1).getClass(), double[].class);
+    assertSame(double[].class, rs.getObject(1).getClass());
     assertArrayEquals(p1, (double[]) rs.getObject(1), 0.0);
     assertArrayEquals(p2, (double[]) rs.getObject(2), 0.0);
     rs.getObject(3);
@@ -1219,7 +1217,7 @@ public class PreparedStatementTest {
     pstmt = conn.prepareStatement("select * from " + pgtype + "_tab");
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
-    assertSame(rs.getObject(1).getClass(), double[].class);
+    assertSame(double[].class, rs.getObject(1).getClass());
     assertArrayEquals(p1, (double[]) rs.getObject(1), 0.0);
     assertArrayEquals(p2, (double[]) rs.getObject(2), 0.0);
     rs.getObject(3);
@@ -1246,7 +1244,7 @@ public class PreparedStatementTest {
     pstmt = conn.prepareStatement("select * from mac_tab");
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
-    assertSame(rs.getObject(1).getClass(), byte[].class);
+    assertSame(byte[].class, rs.getObject(1).getClass());
     assertArrayEquals(mac1, (byte[]) rs.getObject(1));
     assertArrayEquals(mac2, (byte[]) rs.getObject(2));
     rs.getObject(3);

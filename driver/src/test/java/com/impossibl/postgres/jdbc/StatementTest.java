@@ -124,7 +124,7 @@ public class StatementTest {
     assertEquals(1, rs.getInt(1));
     rs.close();
 
-    assertTrue(!stmt.getMoreResults());
+    assertFalse(stmt.getMoreResults());
     assertEquals(0, stmt.getUpdateCount());
 
     assertTrue(stmt.getMoreResults());
@@ -133,7 +133,7 @@ public class StatementTest {
     assertEquals(2, rs.getInt(1));
     rs.close();
 
-    assertTrue(!stmt.getMoreResults());
+    assertFalse(stmt.getMoreResults());
     assertEquals(-1, stmt.getUpdateCount());
     stmt.close();
   }
@@ -199,7 +199,7 @@ public class StatementTest {
     assertEquals(0, count);
 
     rs = stmt.executeQuery("select * from {oj test_statement a left outer join b on (a.i=b.i)} ");
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     // test escape escape character
     rs = stmt.executeQuery("select str2 from comparisontest where str1 like '|_abcd' {escape '|'} ");
     assertTrue(rs.next());
@@ -429,7 +429,7 @@ public class StatementTest {
     assertEquals(1, rs.getInt(1));
     assertTrue(rs.next());
     assertEquals(2, rs.getInt(1));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -622,17 +622,17 @@ public class StatementTest {
     Statement stmt = con.createStatement();
     ResultSet rs = stmt.executeQuery("SELECT '{\"a\":1, \"b\":2}'::jsonb ?? 'b'");
     assertTrue(rs.next());
-    assertEquals(true, rs.getBoolean(1));
+    assertTrue(rs.getBoolean(1));
     rs.close();
 
     rs = stmt.executeQuery("SELECT '{\"a\":1, \"b\":2, \"c\":3}'::jsonb ?| array['b', 'd']");
     assertTrue(rs.next());
-    assertEquals(true, rs.getBoolean(1));
+    assertTrue(rs.getBoolean(1));
     rs.close();
 
     rs = stmt.executeQuery("SELECT '{\"a\":1, \"b\":2, \"c\":3}'::jsonb ?& array['b', 'd']");
     assertTrue(rs.next());
-    assertEquals(false, rs.getBoolean(1));
+    assertFalse(rs.getBoolean(1));
     rs.close();
 
     stmt.close();

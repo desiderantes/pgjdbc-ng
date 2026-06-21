@@ -56,6 +56,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -143,7 +144,7 @@ public class DatabaseMetaDataTest {
     String tableType = rs.getString("TABLE_TYPE");
     assertEquals("TABLE", tableType);
     // There should only be one row returned
-    assertTrue("getTables() returned too many rows", rs.next() == false);
+    assertEquals("getTables() returned too many rows", false, rs.next());
     rs.close();
 
     rs = dbmd.getColumns(null, null, "meta%", "%");
@@ -228,14 +229,14 @@ public class DatabaseMetaDataTest {
         "FKTABLE_CAT", "FKTABLE_SCHEM", "FKTABLE_NAME", "FKCOLUMN_NAME", "KEY_SEQ", "UPDATE_RULE", "DELETE_RULE",
         "FK_NAME", "PK_NAME", "DEFERRABILITY");
     assertTrue(rs.next());
-    assertTrue(rs.getInt("UPDATE_RULE") == DatabaseMetaData.importedKeyRestrict);
-    assertTrue(rs.getInt("DELETE_RULE") == DatabaseMetaData.importedKeyCascade);
+    assertEquals(DatabaseMetaData.importedKeyRestrict, rs.getInt("UPDATE_RULE"));
+    assertEquals(DatabaseMetaData.importedKeyCascade, rs.getInt("DELETE_RULE"));
     rs.close();
 
     rs = dbmd.getImportedKeys(null, "", "fkt2");
     assertTrue(rs.next());
-    assertTrue(rs.getInt("UPDATE_RULE") == DatabaseMetaData.importedKeySetNull);
-    assertTrue(rs.getInt("DELETE_RULE") == DatabaseMetaData.importedKeySetDefault);
+    assertEquals(DatabaseMetaData.importedKeySetNull, rs.getInt("UPDATE_RULE"));
+    assertEquals(DatabaseMetaData.importedKeySetDefault, rs.getInt("DELETE_RULE"));
     rs.close();
 
     TestUtil.dropTable(conn, "fkt2");
@@ -257,12 +258,12 @@ public class DatabaseMetaDataTest {
         "FK_NAME", "PK_NAME", "DEFERRABILITY");
     int j = 0;
     for (; rs.next(); j++) {
-      assertTrue("pkt".equals(rs.getString("PKTABLE_NAME")));
-      assertTrue("fkt".equals(rs.getString("FKTABLE_NAME")));
-      assertTrue("pkt_un_b".equals(rs.getString("PK_NAME")));
-      assertTrue("b".equals(rs.getString("PKCOLUMN_NAME")));
+      assertEquals("pkt", rs.getString("PKTABLE_NAME"));
+      assertEquals("fkt", rs.getString("FKTABLE_NAME"));
+      assertEquals("pkt_un_b", rs.getString("PK_NAME"));
+      assertEquals("b", rs.getString("PKCOLUMN_NAME"));
     }
-    assertTrue(j == 1);
+    assertEquals(1, j);
 
     rs.close();
 
@@ -284,19 +285,19 @@ public class DatabaseMetaDataTest {
         "FK_NAME", "PK_NAME", "DEFERRABILITY");
     int j = 0;
     for (; rs.next(); j++) {
-      assertTrue("pkt".equals(rs.getString("PKTABLE_NAME")));
-      assertTrue("fkt".equals(rs.getString("FKTABLE_NAME")));
-      assertTrue(j + 1 == rs.getInt("KEY_SEQ"));
+      assertEquals("pkt", rs.getString("PKTABLE_NAME"));
+      assertEquals("fkt", rs.getString("FKTABLE_NAME"));
+      assertEquals(j + 1, rs.getInt("KEY_SEQ"));
       if (j == 0) {
-        assertTrue("b".equals(rs.getString("PKCOLUMN_NAME")));
-        assertTrue("c".equals(rs.getString("FKCOLUMN_NAME")));
+        assertEquals("b", rs.getString("PKCOLUMN_NAME"));
+        assertEquals("c", rs.getString("FKCOLUMN_NAME"));
       }
       else {
-        assertTrue("a".equals(rs.getString("PKCOLUMN_NAME")));
-        assertTrue("d".equals(rs.getString("FKCOLUMN_NAME")));
+        assertEquals("a", rs.getString("PKCOLUMN_NAME"));
+        assertEquals("d", rs.getString("FKCOLUMN_NAME"));
       }
     }
-    assertTrue(j == 2);
+    assertEquals(2, j);
 
     rs.close();
 
@@ -344,7 +345,7 @@ public class DatabaseMetaDataTest {
 
     }
 
-    assertTrue(j == 2);
+    assertEquals(2, j);
 
     rs.close();
 
@@ -418,7 +419,7 @@ public class DatabaseMetaDataTest {
     assertTrue(rs.next());
     assertEquals("quest", rs.getString("COLUMN_NAME"));
     assertEquals(3, rs.getInt("ORDINAL_POSITION"));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
   }
 
@@ -503,7 +504,7 @@ public class DatabaseMetaDataTest {
 
     DatabaseMetaData dbmd = con.getMetaData();
     ResultSet rs = dbmd.getTablePrivileges(null, null, "metadatatest");
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
   }
 
@@ -560,7 +561,7 @@ public class DatabaseMetaDataTest {
     assertEquals("idx_un_id", rs.getString("INDEX_NAME"));
     assertEquals(1, rs.getInt("ORDINAL_POSITION"));
     assertEquals("id", rs.getString("COLUMN_NAME"));
-    assertTrue(!rs.getBoolean("NON_UNIQUE"));
+    assertFalse(rs.getBoolean("NON_UNIQUE"));
 
     assertTrue(rs.next());
     assertEquals("idx_func_mixed", rs.getString("INDEX_NAME"));
@@ -593,7 +594,7 @@ public class DatabaseMetaDataTest {
     assertEquals("id", rs.getString("COLUMN_NAME"));
     assertTrue(rs.getBoolean("NON_UNIQUE"));
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
 
     rs.close();
   }
@@ -612,7 +613,7 @@ public class DatabaseMetaDataTest {
     assertEquals("nndom", rs.getString("TYPE_NAME"));
     assertEquals(INTEGER, rs.getInt("SOURCE_DATA_TYPE"));
     assertEquals("NO", rs.getString("IS_NULLABLE"));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
   }
 
@@ -693,7 +694,7 @@ public class DatabaseMetaDataTest {
     assertEquals(DatabaseMetaData.procedureColumnIn, rs.getInt(5));
     assertEquals(VARCHAR, rs.getInt(6));
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
 
     rs.close();
   }
@@ -715,7 +716,7 @@ public class DatabaseMetaDataTest {
     assertTrue(rs.next());
     assertEquals("b", rs.getString(4));
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
 
     rs.close();
   }
@@ -786,7 +787,7 @@ public class DatabaseMetaDataTest {
     assertEquals(DatabaseMetaData.procedureColumnResult, rs.getInt(5));
     assertEquals(VARCHAR, rs.getInt(6));
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
   }
 
@@ -830,7 +831,7 @@ public class DatabaseMetaDataTest {
     checkResultSetColumnLabels(rs, "TABLE_CAT");
     assertTrue(rs.next());
     assertEquals(con.getCatalog(), rs.getString(1));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
   }
 
@@ -862,7 +863,7 @@ public class DatabaseMetaDataTest {
     assertTrue(count >= 2);
     assertTrue(foundPublic);
     assertTrue(foundPGCatalog);
-    assertTrue(!foundEmpty);
+    assertFalse(foundEmpty);
   }
 
   @Test
@@ -882,7 +883,7 @@ public class DatabaseMetaDataTest {
     //TODO fix this for 9.1
     if (dbmd.getDatabaseMajorVersion() != 9 || dbmd.getDatabaseMinorVersion() != 1) {
       rs = dbmd.getTables(null, null, "a\\", new String[] {"TABLE"});
-      assertTrue(!rs.next());
+      assertFalse(rs.next());
       rs.close();
     }
   }
@@ -896,7 +897,7 @@ public class DatabaseMetaDataTest {
     pstmt.setString(2, pattern);
     ResultSet rs = pstmt.executeQuery();
     assertTrue(rs.next());
-    assertTrue(!rs.getBoolean(1));
+    assertFalse(rs.getBoolean(1));
     assertTrue(rs.getBoolean(2));
     rs.close();
     pstmt.close();
@@ -992,7 +993,7 @@ public class DatabaseMetaDataTest {
       remarks = rs.getString("remarks");
 
       baseType = rs.getInt("base_type");
-      assertTrue("base type", !rs.wasNull());
+      assertFalse("base type", rs.wasNull());
       assertEquals("data type", Types.DISTINCT, dataType);
       assertEquals("type name ", "testint8", typeName);
       assertEquals("remarks", "jdbc123", remarks);
@@ -1039,7 +1040,7 @@ public class DatabaseMetaDataTest {
       remarks = rs.getString("remarks");
 
       baseType = rs.getInt("base_type");
-      assertTrue("base type", !rs.wasNull());
+      assertFalse("base type", rs.wasNull());
       assertEquals("data type", Types.DISTINCT, dataType);
       assertEquals("type name ", "testint8", typeName);
       assertEquals("remarks", "jdbc123", remarks);
@@ -1086,7 +1087,7 @@ public class DatabaseMetaDataTest {
       remarks = rs.getString("remarks");
 
       baseType = rs.getInt("base_type");
-      assertTrue("base type", !rs.wasNull());
+      assertFalse("base type", rs.wasNull());
       assertEquals("data type", Types.DISTINCT, dataType);
       assertEquals("type name ", "testint8", typeName);
       assertEquals("remarks", "jdbc123", remarks);
@@ -1171,11 +1172,11 @@ public class DatabaseMetaDataTest {
     assertEquals(0, rs.getInt("NUM_PREC_RADIX"));
     assertEquals(DatabaseMetaData.attributeNullable, rs.getInt("NULLABLE"));
     assertEquals("this is a attribute comment", rs.getString("REMARKS"));
-    assertEquals(null, rs.getString("ATTR_DEF"));
+    assertNull(rs.getString("ATTR_DEF"));
     assertEquals(-1, rs.getInt("CHAR_OCTET_LENGTH"));
     assertEquals(1, rs.getInt("ORDINAL_POSITION"));
     assertEquals("YES", rs.getString("IS_NULLABLE"));
-    assertEquals(null, rs.getObject("SOURCE_DATA_TYPE"));
+    assertNull(rs.getObject("SOURCE_DATA_TYPE"));
 
     assertTrue(rs.next());
     assertEquals("public", rs.getString("TYPE_SCHEM"));
@@ -1187,12 +1188,12 @@ public class DatabaseMetaDataTest {
     assertEquals(3, rs.getInt("DECIMAL_DIGITS"));
     assertEquals(10, rs.getInt("NUM_PREC_RADIX"));
     assertEquals(DatabaseMetaData.attributeNullable, rs.getInt("NULLABLE"));
-    assertEquals(null, rs.getString("REMARKS"));
-    assertEquals(null, rs.getString("ATTR_DEF"));
+    assertNull(rs.getString("REMARKS"));
+    assertNull(rs.getString("ATTR_DEF"));
     assertEquals(-1, rs.getInt("CHAR_OCTET_LENGTH"));
     assertEquals(2, rs.getInt("ORDINAL_POSITION"));
     assertEquals("YES", rs.getString("IS_NULLABLE"));
-    assertEquals(null, rs.getObject("SOURCE_DATA_TYPE"));
+    assertNull(rs.getObject("SOURCE_DATA_TYPE"));
 
     assertTrue(rs.next());
     assertEquals("public", rs.getString("TYPE_SCHEM"));
@@ -1204,8 +1205,8 @@ public class DatabaseMetaDataTest {
     assertEquals(0, rs.getInt("DECIMAL_DIGITS"));
     assertEquals(10, rs.getInt("NUM_PREC_RADIX"));
     assertEquals(DatabaseMetaData.attributeNoNulls, rs.getInt("NULLABLE"));
-    assertEquals(null, rs.getString("REMARKS"));
-    assertEquals(null, rs.getString("ATTR_DEF"));
+    assertNull(rs.getString("REMARKS"));
+    assertNull(rs.getString("ATTR_DEF"));
     assertEquals(4, rs.getInt("CHAR_OCTET_LENGTH"));
     assertEquals(3, rs.getInt("ORDINAL_POSITION"));
     assertEquals("NO", rs.getString("IS_NULLABLE"));
@@ -1224,13 +1225,13 @@ public class DatabaseMetaDataTest {
         "NUM_PREC_RADIX");
     while (rs.next()) {
       if ("int4".equals(rs.getString("TYPE_NAME"))) {
-        assertEquals(false, rs.getBoolean("UNSIGNED_ATTRIBUTE"));
+        assertFalse(rs.getBoolean("UNSIGNED_ATTRIBUTE"));
       }
       else if ("float8".equals(rs.getString("TYPE_NAME"))) {
-        assertEquals(false, rs.getBoolean("UNSIGNED_ATTRIBUTE"));
+        assertFalse(rs.getBoolean("UNSIGNED_ATTRIBUTE"));
       }
       else if ("text".equals(rs.getString("TYPE_NAME"))) {
-        assertEquals(true, rs.getBoolean("UNSIGNED_ATTRIBUTE"));
+        assertTrue(rs.getBoolean("UNSIGNED_ATTRIBUTE"));
       }
     }
     rs.close();
@@ -1271,7 +1272,7 @@ public class DatabaseMetaDataTest {
     assertTrue(rs.next());
     assertEquals("b", rs.getString("COLUMN_NAME"));
     assertEquals(100, rs.getInt("COLUMN_SIZE"));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
   }
 
@@ -1311,7 +1312,7 @@ public class DatabaseMetaDataTest {
     assertEquals("c", rs.getString("COLUMN_NAME"));
     assertEquals("YES", rs.getString("IS_AUTOINCREMENT"));
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
 
     rs.close();
   }
@@ -1326,7 +1327,7 @@ public class DatabaseMetaDataTest {
     assertTrue(rs.next());
     assertEquals("public", rs.getString("TABLE_SCHEM"));
     assertNull(rs.getString("TABLE_CATALOG"));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
 
     rs.close();
   }

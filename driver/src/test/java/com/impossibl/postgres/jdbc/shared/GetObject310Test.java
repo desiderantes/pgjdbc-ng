@@ -112,13 +112,10 @@ public class GetObject310Test {
     Statement stmt = con.createStatement();
     stmt.executeUpdate(TestUtil.insertSQL("table1","time_without_time_zone_column","NULL"));
 
-    ResultSet rs = stmt.executeQuery(TestUtil.selectSQL("table1", "time_without_time_zone_column"));
-    try {
+    try (ResultSet rs = stmt.executeQuery(TestUtil.selectSQL("table1", "time_without_time_zone_column"))) {
       assertTrue(rs.next());
       assertNull(rs.getObject("time_without_time_zone_column", LocalTime.class));
       assertNull(rs.getObject(1, LocalTime.class));
-    } finally {
-      rs.close();
     }
   }
 
@@ -130,25 +127,24 @@ public class GetObject310Test {
     Statement stmt = con.createStatement();
     stmt.executeUpdate(TestUtil.insertSQL("table1","time_with_time_zone_column", "TIME '04:05:06.123456-08:00'"));
 
-    ResultSet rs = stmt.executeQuery(TestUtil.selectSQL("table1", "time_with_time_zone_column"));
-    try {
+    try (ResultSet rs = stmt.executeQuery(TestUtil.selectSQL("table1", "time_with_time_zone_column"))) {
       assertTrue(rs.next());
       try {
         rs.getObject("time_with_time_zone_column", LocalTime.class);
         fail("Retrieving a LocalTime from a 'time with timezone' column should fail");
-      } catch (SQLException e) {
+      }
+      catch (SQLException e) {
 //        assertTrue(e.getSQLState().equals(PSQLState.DATA_TYPE_MISMATCH.getState())
 //                || e.getSQLState().equals(PSQLState.BAD_DATETIME_FORMAT.getState()));
       }
       try {
         assertNull(rs.getObject(1, LocalTime.class));
         fail("Retrieving a LocalTime from a 'time with timezone' column should fail");
-      } catch (SQLException e) {
+      }
+      catch (SQLException e) {
 //        assertTrue(e.getSQLState().equals(PSQLState.DATA_TYPE_MISMATCH.getState())
 //                || e.getSQLState().equals(PSQLState.BAD_DATETIME_FORMAT.getState()));
       }
-    } finally {
-      rs.close();
     }
   }
 
@@ -158,7 +154,7 @@ public class GetObject310Test {
   @Test
   public void testGetLocalDateTime() throws SQLException {
 
-    List<String> zoneIdsToTest = new ArrayList<String>();
+    List<String> zoneIdsToTest = new ArrayList<>();
     zoneIdsToTest.add("Africa/Casablanca"); // It is something like GMT+0..GMT+1
     zoneIdsToTest.add("America/Adak"); // It is something like GMT-10..GMT-9
     zoneIdsToTest.add("Atlantic/Azores"); // It is something like GMT-1..GMT+0
@@ -195,12 +191,10 @@ public class GetObject310Test {
 
   public void localTimestamps(ZoneId zoneId, String timestamp) throws SQLException {
     TimeZone.setDefault(TimeZone.getTimeZone(zoneId));
-    Statement stmt = con.createStatement();
-    try {
-      stmt.executeUpdate(TestUtil.insertSQL("table1","timestamp_without_time_zone_column","TIMESTAMP '" + timestamp + "'"));
+    try (Statement stmt = con.createStatement()) {
+      stmt.executeUpdate(TestUtil.insertSQL("table1", "timestamp_without_time_zone_column", "TIMESTAMP '" + timestamp + "'"));
 
-      ResultSet rs = stmt.executeQuery(TestUtil.selectSQL("table1", "timestamp_without_time_zone_column"));
-      try {
+      try (ResultSet rs = stmt.executeQuery(TestUtil.selectSQL("table1", "timestamp_without_time_zone_column"))) {
         assertTrue(rs.next());
         LocalDateTime localDateTime = LocalDateTime.parse(timestamp);
         assertEquals("Failed for " + timestamp + " in " + zoneId, localDateTime, rs.getObject("timestamp_without_time_zone_column", LocalDateTime.class));
@@ -209,12 +203,8 @@ public class GetObject310Test {
         //Also test that we get the correct values when retrieving the data as LocalDate objects
         assertEquals(localDateTime.toLocalDate(), rs.getObject("timestamp_without_time_zone_column", LocalDate.class));
         assertEquals(localDateTime.toLocalDate(), rs.getObject(1, LocalDate.class));
-      } finally {
-        rs.close();
       }
       stmt.executeUpdate("DELETE FROM table1");
-    } finally {
-      stmt.close();
     }
   }
 
@@ -230,24 +220,18 @@ public class GetObject310Test {
   }
 
   private void runGetOffsetDateTime(ZoneOffset offset) throws SQLException {
-    Statement stmt = con.createStatement();
-    try {
-      stmt.executeUpdate(TestUtil.insertSQL("table1","timestamp_with_time_zone_column","TIMESTAMP WITH TIME ZONE '2004-10-19 10:23:54.123456" + offset.toString() + "'"));
+    try (Statement stmt = con.createStatement()) {
+      stmt.executeUpdate(TestUtil.insertSQL("table1", "timestamp_with_time_zone_column", "TIMESTAMP WITH TIME ZONE '2004-10-19 10:23:54.123456" + offset.toString() + "'"));
 
-      ResultSet rs = stmt.executeQuery(TestUtil.selectSQL("table1", "timestamp_with_time_zone_column"));
-      try {
+      try (ResultSet rs = stmt.executeQuery(TestUtil.selectSQL("table1", "timestamp_with_time_zone_column"))) {
         assertTrue(rs.next());
         LocalDateTime localDateTime = LocalDateTime.of(2004, 10, 19, 10, 23, 54, 123456000);
 
         OffsetDateTime offsetDateTime = localDateTime.atOffset(offset).withOffsetSameInstant(ZoneOffset.UTC);
         assertEquals(offsetDateTime, rs.getObject("timestamp_with_time_zone_column", OffsetDateTime.class));
         assertEquals(offsetDateTime, rs.getObject(1, OffsetDateTime.class));
-      } finally {
-        rs.close();
       }
       stmt.executeUpdate("DELETE FROM table1");
-    } finally {
-      stmt.close();
     }
   }
 

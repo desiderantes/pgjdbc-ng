@@ -227,7 +227,7 @@ public class ArrayTest {
             assertTrue(arrrs.next());
             assertEquals(3, arrrs.getInt(1));
             assertEquals(3, arrrs.getInt(2));
-            assertTrue(!arrrs.next());
+            assertFalse(arrrs.next());
             assertTrue(arrrs.previous());
             assertEquals(3, arrrs.getInt(2));
             arrrs.first();
@@ -258,7 +258,7 @@ public class ArrayTest {
             assertTrue(arrrs.next());
             assertEquals(3, arrrs.getInt(1));
             assertEquals("fa\"b", arrrs.getString(2));
-            assertTrue(!arrrs.next());
+            assertFalse(arrrs.next());
           }
           arr.free();
         }
@@ -400,9 +400,9 @@ public class ArrayTest {
       String[] i = (String[]) arr.getArray();
       assertEquals(5, i.length);
       assertEquals("null", i[0]);
-      assertEquals(null, i[1]);
+      assertNull(i[1]);
       assertEquals("null", i[2]);
-      assertEquals(null, i[3]);
+      assertNull(i[3]);
       assertEquals("null", i[4]);
       arr.free();
       rs.close();
@@ -415,11 +415,11 @@ public class ArrayTest {
       Array arr = rs.getArray(1);
       String[] i = (String[]) arr.getArray();
       assertEquals(5, i.length);
-      assertEquals(null, i[0]);
+      assertNull(i[0]);
       assertEquals("null", i[1]);
-      assertEquals(null, i[2]);
+      assertNull(i[2]);
       assertEquals("null", i[3]);
-      assertEquals(null, i[4]);
+      assertNull(i[4]);
       arr.free();
       rs.close();
     }
@@ -441,7 +441,7 @@ public class ArrayTest {
       Array arr = rs.getArray(1);
       String[] i = (String[]) arr.getArray();
       assertEquals(1, i.length);
-      assertEquals(null, i[0]);
+      assertNull(i[0]);
       arr.free();
       rs.close();
     }
@@ -493,7 +493,7 @@ public class ArrayTest {
     assertEquals(1, a1RS.getInt(2));
     assertTrue(a1RS.next());
     assertEquals(2, a1RS.getInt(2));
-    assertTrue(!a1RS.next());
+    assertFalse(a1RS.next());
     a1RS.close();
     a1.free();
 
@@ -506,7 +506,7 @@ public class ArrayTest {
     assertEquals(3, a2RS.getInt(2));
     assertTrue(a2RS.next());
     assertEquals(4, a2RS.getInt(2));
-    assertTrue(!a2RS.next());
+    assertFalse(a2RS.next());
     a2RS.close();
     a2.free();
 
@@ -557,7 +557,7 @@ public class ArrayTest {
     assertEquals("c\"d", rs1.getString(2));
     assertTrue(rs1.next());
     assertEquals("'", rs1.getString(2));
-    assertTrue(!rs1.next());
+    assertFalse(rs1.next());
     rs1.close();
     a1.free();
 
@@ -568,7 +568,7 @@ public class ArrayTest {
     assertEquals("\\", rs2.getString(2));
     assertTrue(rs2.next());
     assertEquals("'", rs2.getString(2));
-    assertTrue(!rs2.next());
+    assertFalse(rs2.next());
     rs2.close();
     a2.free();
 
@@ -799,13 +799,13 @@ public class ArrayTest {
     }
     try (PreparedStatement stmt = conn.prepareStatement("SELECT array_agg(values) FROM (SELECT * from aggtest) as values")) {
       try (ResultSet rs = stmt.executeQuery()) {
-        assertEquals(rs.next(), true);
+        assertTrue(rs.next());
         Struct[] array = rs.getObject(1, Struct[].class);
-        assertEquals(array.length, 1);
+        assertEquals(1, array.length);
         Object[] attrs = array[0].getAttributes();
-        assertEquals(attrs.length, 2);
-        assertEquals(attrs[0], 1);
-        assertEquals(attrs[1], "some text");
+        assertEquals(2, attrs.length);
+        assertEquals(1, attrs[0]);
+        assertEquals("some text", attrs[1]);
       }
     }
 

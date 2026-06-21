@@ -79,7 +79,7 @@ public class VersionTest {
 
     ver = Version.parse("10devel");
 
-    assertEquals(ver.getMajor(), 10);
+    assertEquals(10, ver.getMajor());
     assertNull(ver.getMinor());
     assertEquals(0, ver.getMinorValue());
     assertNull(ver.getRevision());
@@ -89,7 +89,7 @@ public class VersionTest {
 
     ver = Version.parse("11.1rc1");
 
-    assertEquals(ver.getMajor(), 11);
+    assertEquals(11, ver.getMajor());
     assertEquals((Integer) 1, ver.getMinor());
     assertEquals(1, ver.getMinorValue());
     assertNull(ver.getRevision());
@@ -99,7 +99,7 @@ public class VersionTest {
 
     ver = Version.parse("12.0  beta");
 
-    assertEquals(ver.getMajor(), 12);
+    assertEquals(12, ver.getMajor());
     assertEquals((Integer) 0, ver.getMinor());
     assertEquals(0, ver.getMinorValue());
     assertNull(ver.getRevision());
@@ -139,7 +139,7 @@ public class VersionTest {
 
     ver = Version.parse("10devel (Ubuntu 10.6-1.pgdg16.04+1)");
 
-    assertEquals(ver.getMajor(), 10);
+    assertEquals(10, ver.getMajor());
     assertNull(ver.getMinor());
     assertEquals(0, ver.getMinorValue());
     assertNull(ver.getRevision());
@@ -149,7 +149,7 @@ public class VersionTest {
 
     ver = Version.parse("11.1rc1 (Ubuntu 10.6-1.pgdg16.04+1)");
 
-    assertEquals(ver.getMajor(), 11);
+    assertEquals(11, ver.getMajor());
     assertEquals((Integer) 1, ver.getMinor());
     assertEquals(1, ver.getMinorValue());
     assertNull(ver.getRevision());
@@ -159,7 +159,7 @@ public class VersionTest {
 
     ver = Version.parse("12.0  beta (Ubuntu 10.6-1.pgdg16.04+1)");
 
-    assertEquals(ver.getMajor(), 12);
+    assertEquals(12, ver.getMajor());
     assertEquals((Integer) 0, ver.getMinor());
     assertEquals(0, ver.getMinorValue());
     assertNull(ver.getRevision());

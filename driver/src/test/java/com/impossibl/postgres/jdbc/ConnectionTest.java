@@ -166,7 +166,7 @@ public class ConnectionTest {
 
     // Turn it off
     con.setAutoCommit(false);
-    assertTrue(!con.getAutoCommit());
+    assertFalse(con.getAutoCommit());
 
     // Turn it back on
     con.setAutoCommit(true);
@@ -204,7 +204,7 @@ public class ConnectionTest {
     con = TestUtil.openDB();
 
     // Should not say closed
-    assertTrue(!con.isClosed());
+    assertFalse(con.isClosed());
 
     TestUtil.closeDB(con);
 
@@ -219,7 +219,7 @@ public class ConnectionTest {
   public void testWarnings() throws Exception {
     con = TestUtil.openDB().unwrap(PGDirectConnection.class);
     // The connection must be ours!
-    assertTrue(con != null);
+    assertNotNull(con);
 
     String testStr = "This Is OuR TeSt message";
 
@@ -429,8 +429,7 @@ public class ConnectionTest {
     con.setNetworkTimeout(null, 1000);
     assertEquals(1000, con.getNetworkTimeout());
 
-    Statement stmt = con.createStatement();
-    try {
+    try (Statement stmt = con.createStatement()) {
       stmt.execute("SELECT pg_sleep(10);");
       fail("Expected SQLTimeoutException");
     }
@@ -439,9 +438,6 @@ public class ConnectionTest {
     }
     catch (Throwable t) {
       throw t;
-    }
-    finally {
-      stmt.close();
     }
 
     assertTrue(con.isClosed());
@@ -512,26 +508,21 @@ public class ConnectionTest {
     con = TestUtil.openDB();
     con.setNetworkTimeout(null, 40000);
 
-    Thread queryThread = new Thread() {
+    Thread queryThread = new Thread(() -> {
 
-      @Override
-      public void run() {
+      try {
 
-        try {
+        try (Statement stmt = con.createStatement()) {
 
-          try (Statement stmt = con.createStatement()) {
-
-            stmt.execute("SELECT pg_sleep(30);");
-            fail("Query should have been aborted");
-          }
-
-        }
-        catch (SQLException e) {
+          stmt.execute("SELECT pg_sleep(30);");
+          fail("Query should have been aborted");
         }
 
       }
+      catch (SQLException e) {
+      }
 
-    };
+    });
 
     queryThread.start();
 
@@ -556,26 +547,21 @@ public class ConnectionTest {
     con = TestUtil.openDB();
     con.setNetworkTimeout(null, 40000);
 
-    Thread queryThread = new Thread() {
+    Thread queryThread = new Thread(() -> {
 
-      @Override
-      public void run() {
+      try {
 
-        try {
+        try (Statement stmt = con.createStatement()) {
 
-          try (Statement stmt = con.createStatement()) {
-
-            stmt.execute("SELECT pg_sleep(30);");
-            fail("Query should have been aborted");
-          }
-
-        }
-        catch (SQLException e) {
+          stmt.execute("SELECT pg_sleep(30);");
+          fail("Query should have been aborted");
         }
 
       }
+      catch (SQLException e) {
+      }
 
-    };
+    });
 
     queryThread.start();
 
@@ -598,20 +584,20 @@ public class ConnectionTest {
     try (PGDirectConnection con = TestUtil.openDB().unwrap(PGDirectConnection.class)) {
 
       con.setAutoCommit(true);
-      assertEquals(con.getTransactionStatus(), TransactionStatus.Idle);
+      assertEquals(TransactionStatus.Idle, con.getTransactionStatus());
       assertTrue(con.isValid(5));
-      assertEquals(con.getTransactionStatus(), TransactionStatus.Idle);
+      assertEquals(TransactionStatus.Idle, con.getTransactionStatus());
 
       con.setAutoCommit(false);
-      assertEquals(con.getTransactionStatus(), TransactionStatus.Idle);
+      assertEquals(TransactionStatus.Idle, con.getTransactionStatus());
       assertTrue(con.isValid(5));
-      assertEquals(con.getTransactionStatus(), TransactionStatus.Idle);
+      assertEquals(TransactionStatus.Idle, con.getTransactionStatus());
 
       con.execute("BEGIN");
 
-      assertEquals(con.getTransactionStatus(), TransactionStatus.Active);
+      assertEquals(TransactionStatus.Active, con.getTransactionStatus());
       assertTrue(con.isValid(5));
-      assertEquals(con.getTransactionStatus(), TransactionStatus.Active);
+      assertEquals(TransactionStatus.Active, con.getTransactionStatus());
 
     }
   }
@@ -643,16 +629,16 @@ public class ConnectionTest {
 
     con = TestUtil.openDB();
 
-    assertEquals(con.getSchema(), "public");
+    assertEquals("public", con.getSchema());
 
     con.setSchema(null);
     con.setSchema("public");
 
-    assertEquals(con.getSchema(), "public");
+    assertEquals("public", con.getSchema());
 
     con.prepareStatement("set search_path to ''").execute();
 
-    assertEquals(con.getSchema(), "");
+    assertEquals("", con.getSchema());
 
   }
 

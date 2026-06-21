@@ -154,11 +154,11 @@ public class DataSourceTest {
 
   @Test
   public void testServerAddressParsing() throws SQLException {
-    assertEquals(PGDataSource.parseServerAddress("/tmp"), new DomainSocketAddress("/tmp"));
-    assertEquals(PGDataSource.parseServerAddress("[::1]:2345"), new InetSocketAddress("::1", 2345));
-    assertEquals(PGDataSource.parseServerAddress("[::1]"), new InetSocketAddress("::1", 5432));
-    assertEquals(PGDataSource.parseServerAddress("1.2.3.4:2345"), new InetSocketAddress("1.2.3.4", 2345));
-    assertEquals(PGDataSource.parseServerAddress("1.2.3.4"), new InetSocketAddress("1.2.3.4", 5432));
+    assertEquals(new DomainSocketAddress("/tmp"), PGDataSource.parseServerAddress("/tmp"));
+    assertEquals(new InetSocketAddress("::1", 2345), PGDataSource.parseServerAddress("[::1]:2345"));
+    assertEquals(new InetSocketAddress("::1", 5432), PGDataSource.parseServerAddress("[::1]"));
+    assertEquals(new InetSocketAddress("1.2.3.4", 2345), PGDataSource.parseServerAddress("1.2.3.4:2345"));
+    assertEquals(new InetSocketAddress("1.2.3.4", 5432), PGDataSource.parseServerAddress("1.2.3.4"));
 
     assertTrue(parseAddressFails("[]"));
     assertTrue(parseAddressFails("[::1]:"));

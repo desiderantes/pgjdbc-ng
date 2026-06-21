@@ -51,31 +51,32 @@ public class PsuedoRecordTest {
     TestUtil.createTable(conn, "cs", "name text, val int");
     TestUtil.createTable(conn, "os", "name text, val int");
     try (Statement stmt = conn.createStatement()) {
-      stmt.execute("CREATE OR REPLACE FUNCTION get4() RETURNS RECORD AS\n" +
-          "$BODY$ \n" +
-          "DECLARE\n" +
-          "  r1     RECORD;\n" +
-          "  r2     RECORD;\n" +
-          "  result RECORD; \n" +
-          "BEGIN\n" +
-          "  SELECT array_agg(c.*) AS arr\n" +
-          "  FROM cs AS c\n" +
-          "  INTO r1;\n" +
-          "\n" +
-          "  SELECT array_agg(o.*) AS arr\n" +
-          "  FROM os AS o\n" +
-          "  INTO r2;\n" +
-          "\n" +
-          "  SELECT\n" +
-          "    r1.arr,\n" +
-          "    r2.arr\n" +
-          "  INTO result;\n" +
-          "\n" +
-          "  RETURN result;\n" +
-          "\n" +
-          "END;\n" +
-          "$BODY$\n" +
-          "LANGUAGE plpgsql STABLE;");
+      stmt.execute("""
+          CREATE OR REPLACE FUNCTION get4() RETURNS RECORD AS
+          $BODY$\s
+          DECLARE
+            r1     RECORD;
+            r2     RECORD;
+            result RECORD;\s
+          BEGIN
+            SELECT array_agg(c.*) AS arr
+            FROM cs AS c
+            INTO r1;
+          
+            SELECT array_agg(o.*) AS arr
+            FROM os AS o
+            INTO r2;
+          
+            SELECT
+              r1.arr,
+              r2.arr
+            INTO result;
+          
+            RETURN result;
+          
+          END;
+          $BODY$
+          LANGUAGE plpgsql STABLE;""");
     }
     TestUtil.closeDB(conn);
     conn = TestUtil.openDB();

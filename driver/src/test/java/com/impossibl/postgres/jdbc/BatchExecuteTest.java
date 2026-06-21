@@ -56,6 +56,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -126,7 +127,7 @@ public class BatchExecuteTest {
 
     assertEquals(expected, actual);
 
-    assertEquals(false, rs.next());
+    assertFalse(rs.next());
 
     rs.close();
     getCol1.close();
@@ -354,7 +355,7 @@ public class BatchExecuteTest {
     assertEquals("2007-11-20", rs.getString(1));
     assertTrue(rs.next());
     assertEquals("2007-11-20", rs.getString(1));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -519,18 +520,14 @@ public class BatchExecuteTest {
 
     PreparedStatement pstmt = con.prepareStatement("SELECT pk FROM multiplebatch WHERE pk = ?");
 
-    pstmt.setInt(1, 1);
-    pstmt.addBatch();
-
-    try {
+    try (pstmt) {
+      pstmt.setInt(1, 1);
+      pstmt.addBatch();
       int[] result = pstmt.executeBatch();
       fail("Failure");
     }
     catch (BatchUpdateException bue) {
       assertEquals(0, bue.getUpdateCounts().length);
-    }
-    finally {
-      pstmt.close();
     }
   }
 
@@ -544,19 +541,15 @@ public class BatchExecuteTest {
 
     PreparedStatement pstmt = con.prepareStatement("SELECT pk FROM multiplebatch WHERE pk = ?");
 
-    pstmt.setInt(1, 1);
-    pstmt.addBatch();
-
-    try {
+    try (pstmt) {
+      pstmt.setInt(1, 1);
+      pstmt.addBatch();
       int[] result = pstmt.executeBatch();
       fail("Failure");
     }
     catch (BatchUpdateException bue) {
       assertEquals(1, bue.getUpdateCounts().length);
       assertEquals(Statement.EXECUTE_FAILED, bue.getUpdateCounts()[0]);
-    }
-    finally {
-      pstmt.close();
     }
   }
 

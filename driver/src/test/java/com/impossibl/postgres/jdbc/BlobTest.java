@@ -64,6 +64,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -203,13 +204,13 @@ public class BlobTest {
     Blob lob = rs.getBlob(1);
     int blobLength = 6;
     byte[] data = lob.getBytes(2, blobLength);
-    assertEquals(data.length, blobLength);
-    assertEquals(data[0], '?');
-    assertEquals(data[1], 'x');
-    assertEquals(data[2], 'm');
-    assertEquals(data[3], 'l');
-    assertEquals(data[4], ' ');
-    assertEquals(data[5], 'v');
+    assertEquals(blobLength, data.length);
+    assertEquals('?', data[0]);
+    assertEquals('x', data[1]);
+    assertEquals('m', data[2]);
+    assertEquals('l', data[3]);
+    assertEquals(' ', data[4]);
+    assertEquals('v', data[5]);
 
     stmt.close();
     rs.close();
@@ -226,13 +227,13 @@ public class BlobTest {
     Clob lob = rs.getClob(1);
     int blobLength = 6;
     String data = lob.getSubString(2, blobLength);
-    assertEquals(data.length(), blobLength);
-    assertEquals(data.charAt(0), '?');
-    assertEquals(data.charAt(1), 'x');
-    assertEquals(data.charAt(2), 'm');
-    assertEquals(data.charAt(3), 'l');
-    assertEquals(data.charAt(4), ' ');
-    assertEquals(data.charAt(5), 'v');
+    assertEquals(blobLength, data.length());
+    assertEquals('?', data.charAt(0));
+    assertEquals('x', data.charAt(1));
+    assertEquals('m', data.charAt(2));
+    assertEquals('l', data.charAt(3));
+    assertEquals(' ', data.charAt(4));
+    assertEquals('v', data.charAt(5));
 
     stmt.close();
     rs.close();
@@ -251,14 +252,14 @@ public class BlobTest {
 
     InputStream is = lob.getBinaryStream();
     assertEquals(data.length, is.read(data));
-    assertEquals(data[0], '<');
-    assertEquals(data[1], '?');
+    assertEquals('<', data[0]);
+    assertEquals('?', data[1]);
     is.close();
 
     is = lob.getBinaryStream();
     assertEquals(data.length, is.read(data));
-    assertEquals(data[0], '<');
-    assertEquals(data[1], '?');
+    assertEquals('<', data[0]);
+    assertEquals('?', data[1]);
     is.close();
 
     rs.close();
@@ -278,14 +279,14 @@ public class BlobTest {
 
     Reader r = lob.getCharacterStream();
     assertEquals(data.length, r.read(data));
-    assertEquals(data[0], '<');
-    assertEquals(data[1], '?');
+    assertEquals('<', data[0]);
+    assertEquals('?', data[1]);
     r.close();
 
     r = lob.getCharacterStream();
     assertEquals(data.length, r.read(data));
-    assertEquals(data[0], '<');
-    assertEquals(data[1], '?');
+    assertEquals('<', data[0]);
+    assertEquals('?', data[1]);
     r.close();
 
     rs.close();
@@ -430,7 +431,7 @@ public class BlobTest {
       result = result && f == -1 && b == -1;
 
       if (!result)
-        assertTrue("Blob compare failed at " + c + " of " + blob.length(), false);
+        fail("Blob compare failed at " + c + " of " + blob.length());
 
       bis.close();
       fis.close();
@@ -470,7 +471,7 @@ public class BlobTest {
       result = result && f == -1 && b == -1;
 
       if (!result)
-        assertTrue("Clob compare failed at " + c + " of " + clob.length(), false);
+        fail("Clob compare failed at " + c + " of " + clob.length());
 
       cr.close();
       fr.close();
@@ -721,7 +722,7 @@ public class BlobTest {
     assertTrue(rs.next());
     b = rs.getBlob("DATA");
     byte[] rspData = b.getBytes(offset, data.length);
-    assertTrue("Request should be the same as the response", Arrays.equals(data, rspData));
+    assertArrayEquals("Request should be the same as the response", data, rspData);
 
     rs.close();
     ps.close();
@@ -934,7 +935,7 @@ public class BlobTest {
     in.read(rspData);
     in.close();
 
-    assertTrue("Request should be the same as the response", Arrays.equals(data, rspData));
+    assertArrayEquals("Request should be the same as the response", data, rspData);
 
     rs.close();
     ps.close();
@@ -1010,7 +1011,7 @@ public class BlobTest {
     b = rs.getBlob("DATA");
     long position = b.position(pattern, 1);
     byte[] rspData = b.getBytes(position, pattern.length);
-    assertTrue("Request should be the same as the response", Arrays.equals(pattern, rspData));
+    assertArrayEquals("Request should be the same as the response", pattern, rspData);
 
     rs.close();
     ps.close();
@@ -1306,19 +1307,10 @@ public class BlobTest {
   public void testBlobClose() throws Exception {
     final Blob blob = conn.createBlob();
     try {
-      OutputStream blobOutputStream = blob.setBinaryStream(1L);
-      try {
-        java.io.BufferedOutputStream bufferedOutputStream =
-            new java.io.BufferedOutputStream(blobOutputStream);
-        try {
+      try (OutputStream blobOutputStream = blob.setBinaryStream(1L)) {
+        try (java.io.BufferedOutputStream bufferedOutputStream = new java.io.BufferedOutputStream(blobOutputStream)) {
           bufferedOutputStream.write(100);
         }
-        finally {
-          bufferedOutputStream.close();
-        }
-      }
-      finally {
-        blobOutputStream.close();
       }
     }
     finally {
@@ -1330,13 +1322,9 @@ public class BlobTest {
   public void testBlobCloseWithResources() throws Exception {
     final Blob blob = conn.createBlob();
     try {
-      OutputStream blobOutputStream = blob.setBinaryStream(1L);
-      try (java.io.BufferedOutputStream bufferedOutputStream =
-               new java.io.BufferedOutputStream(blobOutputStream)) {
+      try (OutputStream blobOutputStream = blob.setBinaryStream(1L); java.io.BufferedOutputStream bufferedOutputStream =
+          new java.io.BufferedOutputStream(blobOutputStream)) {
         bufferedOutputStream.write(100);
-      }
-      finally {
-        blobOutputStream.close();
       }
     }
     finally {
@@ -1355,7 +1343,7 @@ public class BlobTest {
         try (InputStream in = blob.getBinaryStream()) {
           byte[] data = ByteStreams.toByteArray(in);
           String str = new String(data, UTF_8);
-          assertEquals(str, "Here is some data");
+          assertEquals("Here is some data", str);
         }
         finally {
           blob.free();

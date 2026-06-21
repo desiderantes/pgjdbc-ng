@@ -163,8 +163,7 @@ public class TestUtil {
    * Helper - creates a schema for use by a test
    */
   public static void createSchema(Connection con, String schema) throws SQLException {
-    Statement st = con.createStatement();
-    try {
+    try (Statement st = con.createStatement()) {
       // Drop schema
       dropSchema(con, schema);
 
@@ -172,9 +171,6 @@ public class TestUtil {
       String sql = "CREATE SCHEMA " + schema;
 
       st.executeUpdate(sql);
-    }
-    finally {
-      st.close();
     }
   }
 
@@ -190,8 +186,7 @@ public class TestUtil {
    * Helper - creates a test table for use by a test
    */
   public static void createTable(Connection con, String table, String columns, boolean withSerialIds) throws SQLException {
-    Statement st = con.createStatement();
-    try {
+    try (Statement st = con.createStatement()) {
       // Drop the table
       dropTable(con, table);
 
@@ -204,17 +199,13 @@ public class TestUtil {
 
       st.executeUpdate(sql);
     }
-    finally {
-      st.close();
-    }
   }
 
   /*
    * Helper - creates a test type for use by a test
    */
   public static void createType(Connection con, String type, String attrs) throws SQLException {
-    Statement st = con.createStatement();
-    try {
+    try (Statement st = con.createStatement()) {
       // Drop the type
       dropType(con, type);
 
@@ -223,17 +214,13 @@ public class TestUtil {
 
       st.executeUpdate(sql);
     }
-    finally {
-      st.close();
-    }
   }
 
   /*
    * Helper - creates an enum type for use by a test
    */
   public static void createEnum(Connection con, String type, String... values) throws SQLException {
-    Statement st = con.createStatement();
-    try {
+    try (Statement st = con.createStatement()) {
       // Drop the enum
       dropType(con, type);
 
@@ -245,9 +232,6 @@ public class TestUtil {
       String sql = "CREATE TYPE " + type + " AS ENUM (" + Joiner.on(", ").join(values) + ") ";
 
       st.executeUpdate(sql);
-    }
-    finally {
-      st.close();
     }
   }
 
@@ -264,16 +248,12 @@ public class TestUtil {
    */
 
   public static void createTempTable(Connection con, String table, String columns) throws SQLException {
-    Statement st = con.createStatement();
-    try {
+    try (Statement st = con.createStatement()) {
       // Drop the table
       dropTable(con, table);
 
       // Now create the table
       st.executeUpdate("create temp table " + table + " (" + columns + ")");
-    }
-    finally {
-      st.close();
     }
   }
 
@@ -282,8 +262,7 @@ public class TestUtil {
    * for serials
    */
   public static void dropSequence(Connection con, String sequence) throws SQLException {
-    Statement stmt = con.createStatement();
-    try {
+    try (Statement stmt = con.createStatement()) {
       String sql = "DROP SEQUENCE " + sequence;
       stmt.executeUpdate(sql);
     }
@@ -291,17 +270,13 @@ public class TestUtil {
       if (!con.getAutoCommit())
         throw sqle;
     }
-    finally {
-      stmt.close();
-    }
   }
 
   /*
    * Helper - drops a schema
    */
   public static void dropSchema(Connection con, String schema) throws SQLException {
-    Statement stmt = con.createStatement();
-    try {
+    try (Statement stmt = con.createStatement()) {
       String sql = "DROP SCHEMA " + schema + " CASCADE ";
       stmt.executeUpdate(sql);
     }
@@ -309,17 +284,13 @@ public class TestUtil {
       if (!con.getAutoCommit())
         throw ex;
     }
-    finally {
-      stmt.close();
-    }
   }
 
   /*
    * Helper - drops a table
    */
   public static void dropTable(Connection con, String table) throws SQLException {
-    Statement stmt = con.createStatement();
-    try {
+    try (Statement stmt = con.createStatement()) {
       String sql = "DROP TABLE " + table + " CASCADE ";
       stmt.executeUpdate(sql);
     }
@@ -331,17 +302,13 @@ public class TestUtil {
       if (!con.getAutoCommit())
         throw ex;
     }
-    finally {
-      stmt.close();
-    }
   }
 
   /*
    * Helper - drops a type
    */
   public static void dropType(Connection con, String type) throws SQLException {
-    Statement stmt = con.createStatement();
-    try {
+    try (Statement stmt = con.createStatement()) {
       String sql = "DROP TYPE " + type + " CASCADE ";
       stmt.executeUpdate(sql);
     }
@@ -353,17 +320,13 @@ public class TestUtil {
       if (!con.getAutoCommit())
         throw ex;
     }
-    finally {
-      stmt.close();
-    }
   }
 
   /*
    * Helper - drops a text search configuration
    */
   public static void dropTextSearchConfiguration(Connection con, String configuration) throws SQLException {
-    Statement stmt = con.createStatement();
-    try {
+    try (Statement stmt = con.createStatement()) {
       String sql = "DROP TEXT SEARCH CONFIGURATION " + configuration + " CASCADE ";
       stmt.executeUpdate(sql);
     }
@@ -374,9 +337,6 @@ public class TestUtil {
       // transaction then we've got trouble
       if (!con.getAutoCommit())
         throw ex;
-    }
-    finally {
-      stmt.close();
     }
   }
 
@@ -457,7 +417,7 @@ public class TestUtil {
   }
 
   public static String fix(int v, int l) {
-    String s = "0000000000".substring(0, l) + Integer.toString(v);
+    String s = "0000000000".substring(0, l) + v;
     return s.substring(s.length() - l);
   }
 

@@ -66,15 +66,9 @@ public class SavepointTest {
   }
 
   private void addRow(int id) throws SQLException {
-    PreparedStatement pstmt = null;
-    try {
-      pstmt = _conn.prepareStatement("INSERT INTO savepointtable VALUES (?)");
+    try (PreparedStatement pstmt = _conn.prepareStatement("INSERT INTO savepointtable VALUES (?)")) {
       pstmt.setInt(1, id);
       pstmt.executeUpdate();
-    }
-    finally {
-      if (pstmt != null)
-        pstmt.close();
     }
   }
 

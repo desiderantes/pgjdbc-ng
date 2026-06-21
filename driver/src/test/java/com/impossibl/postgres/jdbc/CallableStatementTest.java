@@ -64,6 +64,7 @@ import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -196,7 +197,7 @@ public class CallableStatementTest {
     try (CallableStatement stmt = con.prepareCall("SELECT current_schema()")) {
       try (ResultSet rs = stmt.executeQuery()) {
         assertTrue(rs.next());
-        assertEquals(rs.getString(1), "public");
+        assertEquals("public", rs.getString(1));
       }
     }
   }
@@ -207,7 +208,7 @@ public class CallableStatementTest {
       stmt.setString(1, "");
       try (ResultSet rs = stmt.executeQuery()) {
         assertTrue(rs.next());
-        assertEquals(rs.getString(1), "bob");
+        assertEquals("bob", rs.getString(1));
       }
     }
   }
@@ -235,11 +236,11 @@ public class CallableStatementTest {
     assertNotNull(rs);
     assertTrue(rs.next());
     assertEquals(42.42, rs.getDouble(1), 0.00001);
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
 
     assertEquals(-1, call.getUpdateCount());
-    assertTrue(!call.getMoreResults());
+    assertFalse(call.getMoreResults());
     call.close();
   }
 
@@ -324,7 +325,7 @@ public class CallableStatementTest {
     assertEquals(1, rs.getInt(1));
     assertTrue(rs.next());
     assertEquals(2, rs.getInt(1));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     arr.free();
     rs.close();
     call.close();
@@ -429,7 +430,7 @@ public class CallableStatementTest {
     assertEquals(2, rs.getInt(1));
     assertTrue(rs.next());
     assertEquals(3, rs.getInt(1));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -537,11 +538,10 @@ public class CallableStatementTest {
 
     call.executeUpdate();
     java.math.BigDecimal ret = call.getBigDecimal(1);
-    assertTrue("correct return from getNumeric () should be 999999999999999.000000000000000 but returned " + ret.toString(),
-        ret.equals(new java.math.BigDecimal("999999999999999.000000000000000")));
+    assertEquals("correct return from getNumeric () should be 999999999999999.000000000000000 but returned " + ret.toString(), ret, new BigDecimal("999999999999999.000000000000000"));
 
     ret = call.getBigDecimal(2);
-    assertTrue("correct return from getNumeric ()", ret.equals(new java.math.BigDecimal("0.000000000000001")));
+    assertEquals("correct return from getNumeric ()", ret, new BigDecimal("0.000000000000001"));
     try {
       ret = call.getBigDecimal(3);
     }
@@ -579,11 +579,11 @@ public class CallableStatementTest {
       cstmt.registerOutParameter(3, Types.DECIMAL);
       cstmt.executeUpdate();
       BigDecimal val = (BigDecimal) cstmt.getObject(1);
-      assertTrue(val.compareTo(new BigDecimal("999999999999999.000000000000000")) == 0);
+      assertEquals(0, val.compareTo(new BigDecimal("999999999999999.000000000000000")));
       val = (BigDecimal) cstmt.getObject(2);
-      assertTrue(val.compareTo(new BigDecimal("0.000000000000001")) == 0);
+      assertEquals(0, val.compareTo(new BigDecimal("0.000000000000001")));
       val = (BigDecimal) cstmt.getObject(3);
-      assertTrue(val == null);
+      assertNull(val);
       cstmt.close();
     }
     catch (Exception ex) {
@@ -630,9 +630,9 @@ public class CallableStatementTest {
       Statement stmt = con.createStatement();
       ResultSet rs = stmt.executeQuery("select * from vartab");
       assertTrue(rs.next());
-      assertTrue(rs.getString(1).equals("t"));
+      assertEquals("t", rs.getString(1));
 
-      assertTrue(rs.getString(2).equals("f"));
+      assertEquals("f", rs.getString(2));
       rs.close();
       stmt.close();
     }
@@ -640,24 +640,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function updatevarchar(text,text)");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -692,32 +681,21 @@ public class CallableStatementTest {
       cstmt.registerOutParameter(3, Types.BIT);
       cstmt.executeUpdate();
 
-      assertTrue(cstmt.getBoolean(1) == true);
-      assertTrue(cstmt.getBoolean(2) == false);
+      assertEquals(true, cstmt.getBoolean(1));
+      assertEquals(false, cstmt.getBoolean(2));
       cstmt.getBoolean(3);
       assertTrue(cstmt.wasNull());
 
       cstmt.close();
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function insert_bit(boolean, boolean, boolean)");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -757,8 +735,8 @@ public class CallableStatementTest {
       ResultSet rs = stmt.executeQuery("select * from bit_tab");
 
       assertTrue(rs.next());
-      assertTrue(rs.getBoolean(1) == true);
-      assertTrue(rs.getBoolean(2) == false);
+      assertEquals(true, rs.getBoolean(1));
+      assertEquals(false, rs.getBoolean(2));
       rs.getBoolean(3);
       assertTrue(rs.wasNull());
 
@@ -770,24 +748,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function update_bit(boolean, boolean, boolean)");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -823,9 +790,9 @@ public class CallableStatementTest {
       cstmt.registerOutParameter(2, Types.LONGVARCHAR);
       cstmt.executeUpdate();
       String val = (String) cstmt.getObject(1);
-      assertTrue(val.equals("testdata"));
+      assertEquals("testdata", val);
       val = (String) cstmt.getObject(2);
-      assertTrue(val == null);
+      assertNull(val);
       cstmt.close();
       cstmt = con.prepareCall("{ call lvarchar_in_name(?) }");
       String maxFloat = "3.4E38";
@@ -844,25 +811,14 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function longvarchar_proc()");
         dstmt.execute("drop function lvarchar_in_name(text)");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -897,11 +853,11 @@ public class CallableStatementTest {
       cstmt.executeUpdate();
       byte[] retval = cstmt.getBytes(1);
       for (int i = 0; i < testdata.length; i++) {
-        assertTrue(testdata[i] == retval[i]);
+        assertEquals(testdata[i], retval[i]);
       }
 
       retval = cstmt.getBytes(2);
-      assertTrue(retval == null);
+      assertNull(retval);
 
       cstmt.close();
     }
@@ -909,24 +865,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function varbinary_proc()");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -990,10 +935,10 @@ public class CallableStatementTest {
       assertTrue(rs.next());
       Float oVal = (float) intValues[0];
       Float rVal = Float.valueOf(rs.getObject(1).toString());
-      assertTrue(oVal.equals(rVal));
+      assertEquals(oVal, rVal);
       oVal = (float) intValues[1];
       rVal = Float.valueOf(rs.getObject(2).toString());
-      assertTrue(oVal.equals(rVal));
+      assertEquals(oVal, rVal);
       rs.close();
       stmt.close();
     }
@@ -1001,24 +946,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute(dropUpdateReal);
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1059,24 +993,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function updatefloat_proc(float, float)");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1112,11 +1035,11 @@ public class CallableStatementTest {
       cstmt.executeUpdate();
       byte[] retval = cstmt.getBytes(1);
       for (int i = 0; i < testdata.length; i++) {
-        assertTrue(testdata[i] == retval[i]);
+        assertEquals(testdata[i], retval[i]);
       }
 
       retval = cstmt.getBytes(2);
-      assertTrue(retval == null);
+      assertNull(retval);
 
       cstmt.close();
     }
@@ -1124,24 +1047,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function longvarbinary_proc()");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1165,10 +1077,10 @@ public class CallableStatementTest {
       cstmt.registerOutParameter(3, java.sql.Types.FLOAT);
       cstmt.executeUpdate();
       Double val = (Double) cstmt.getObject(1);
-      assertTrue(val.doubleValue() == doubleValues[0]);
+      assertEquals(val.doubleValue(), doubleValues[0], 0.0);
 
       val = (Double) cstmt.getObject(2);
-      assertTrue(val.doubleValue() == doubleValues[1]);
+      assertEquals(val.doubleValue(), doubleValues[1], 0.0);
 
       val = (Double) cstmt.getObject(3);
       assertTrue(cstmt.wasNull());
@@ -1179,24 +1091,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute(dropFloatProc);
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1236,24 +1137,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function double_proc()");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1283,8 +1173,8 @@ public class CallableStatementTest {
       cstmt.registerOutParameter(2, java.sql.Types.REAL);
       cstmt.registerOutParameter(3, java.sql.Types.REAL);
       cstmt.executeUpdate();
-      assertTrue(cstmt.getFloat(1) == 3.4E38f);
-      assertTrue(cstmt.getFloat(2) == 1.4E-45f);
+      assertEquals(3.4E38f, cstmt.getFloat(1), 0.0);
+      assertEquals(1.4E-45f, cstmt.getFloat(2), 0.0);
       cstmt.getFloat(3);
       assertTrue(cstmt.wasNull());
       cstmt.close();
@@ -1293,24 +1183,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function double_proc()");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1349,24 +1228,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement rstmt = null;
-      try {
-        rstmt = con.createStatement();
+      try (Statement rstmt = con.createStatement()) {
         rstmt.execute("drop function real_proc()");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (rstmt != null) {
-          try {
-            rstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1396,8 +1264,8 @@ public class CallableStatementTest {
       cstmt.registerOutParameter(2, java.sql.Types.SMALLINT);
       cstmt.registerOutParameter(3, java.sql.Types.SMALLINT);
       cstmt.executeUpdate();
-      assertEquals(cstmt.getShort(1), 32767);
-      assertEquals(cstmt.getShort(2), -32768);
+      assertEquals(32767, cstmt.getShort(1));
+      assertEquals(-32768, cstmt.getShort(2));
       cstmt.getShort(3);
       assertTrue(cstmt.wasNull());
       cstmt.close();
@@ -1406,24 +1274,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function short_proc()");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1453,8 +1310,8 @@ public class CallableStatementTest {
       cstmt.registerOutParameter(2, java.sql.Types.INTEGER);
       cstmt.registerOutParameter(3, java.sql.Types.INTEGER);
       cstmt.executeUpdate();
-      assertTrue(cstmt.getInt(1) == 2147483647);
-      assertTrue(cstmt.getInt(2) == -2147483648);
+      assertEquals(2147483647, cstmt.getInt(1));
+      assertEquals(-2147483648, cstmt.getInt(2));
       cstmt.getInt(3);
       assertTrue(cstmt.wasNull());
       cstmt.close();
@@ -1463,24 +1320,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function int_proc()");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1510,8 +1356,8 @@ public class CallableStatementTest {
       cstmt.registerOutParameter(2, java.sql.Types.BIGINT);
       cstmt.registerOutParameter(3, java.sql.Types.BIGINT);
       cstmt.executeUpdate();
-      assertTrue(cstmt.getLong(1) == 9223372036854775807L);
-      assertTrue(cstmt.getLong(2) == -9223372036854775808L);
+      assertEquals(9223372036854775807L, cstmt.getLong(1));
+      assertEquals(-9223372036854775808L, cstmt.getLong(2));
       cstmt.getLong(3);
       assertTrue(cstmt.wasNull());
       cstmt.close();
@@ -1520,24 +1366,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function bigint_proc()");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1568,7 +1403,7 @@ public class CallableStatementTest {
       cstmt.registerOutParameter(3, java.sql.Types.BIT);
       cstmt.executeUpdate();
       assertTrue(cstmt.getBoolean(1));
-      assertTrue(cstmt.getBoolean(2) == false);
+      assertEquals(false, cstmt.getBoolean(2));
       cstmt.getBoolean(3);
       assertTrue(cstmt.wasNull());
       cstmt.close();
@@ -1577,24 +1412,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function bit_proc()");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1624,8 +1448,8 @@ public class CallableStatementTest {
       cstmt.registerOutParameter(2, java.sql.Types.TINYINT);
       cstmt.registerOutParameter(3, java.sql.Types.TINYINT);
       cstmt.executeUpdate();
-      assertTrue(cstmt.getByte(1) == 127);
-      assertTrue(cstmt.getByte(2) == -128);
+      assertEquals(127, cstmt.getByte(1));
+      assertEquals(-128, cstmt.getByte(2));
       cstmt.getByte(3);
       assertTrue(cstmt.wasNull());
       cstmt.close();
@@ -1634,24 +1458,13 @@ public class CallableStatementTest {
       fail(ex.getMessage());
     }
     finally {
-      Statement dstmt = null;
-      try {
-        dstmt = con.createStatement();
+      try (Statement dstmt = con.createStatement()) {
         dstmt.execute("drop function byte_proc()");
       }
       catch (Exception ex) {
         // Expected...
       }
-      finally {
-        if (dstmt != null) {
-          try {
-            dstmt.close();
-          }
-          catch (SQLException se) {
-            // Ignore
-          }
-        }
-      }
+      // Ignore
     }
   }
 
@@ -1684,44 +1497,45 @@ public class CallableStatementTest {
 
     try (Statement statement = con.createStatement()) {
 
-      statement.execute("" +
-          "CREATE OR REPLACE FUNCTION fn_test_in_out_index(\n" +
-          "    IN txt text,\n" +
-          "    OUT a text,\n" +
-          "    OUT b text,\n" +
-          "    OUT c timestamp without time zone,\n" +
-          "    OUT d timestamp with time zone,\n" +
-          "    OUT e time without time zone,\n" +
-          "    OUT f time with time zone,\n" +
-          "    OUT g date,\n" +
-          "    OUT h decimal,\n" +
-          "    OUT i bytea,\n" +
-          "    OUT j xml,\n" +
-          "    OUT k uuid,\n" +
-          "    OUT l text,\n" +
-          "    OUT m text,\n" +
-          "    OUT n bigint)\n" +
-          "  RETURNS record AS\n" +
-          "$BODY$\n" +
-          "DECLARE \n" +
-          "BEGIN\n" +
-          "a := 'a-test'; \n" +
-          "b := 'b-test'; \n" +
-          "c := LOCALTIMESTAMP;\n" +
-          "d := LOCALTIMESTAMP;\n" +
-          "e := LOCALTIME;\n" +
-          "f := LOCALTIME;\n" +
-          "g := current_date;\n" +
-          "h := 9999999.12233445566778899;\n" +
-          "i := 'yo'::bytea;\n" +
-          "j := '<a></a>';\n" +
-          "k := '42009FB2-2FE5-4ED5-BE10-F3C9894018AB'::uuid;\n" +
-          "l := 'http://example.com';\n" +
-          "m := 'hi nikhil';\n" +
-          "n := 111;\n" +
-          "END;\n" +
-          "$BODY$\n" +
-          "LANGUAGE plpgsql VOLATILE COST 100;");
+      statement.execute("""
+          \
+          CREATE OR REPLACE FUNCTION fn_test_in_out_index(
+              IN txt text,
+              OUT a text,
+              OUT b text,
+              OUT c timestamp without time zone,
+              OUT d timestamp with time zone,
+              OUT e time without time zone,
+              OUT f time with time zone,
+              OUT g date,
+              OUT h decimal,
+              OUT i bytea,
+              OUT j xml,
+              OUT k uuid,
+              OUT l text,
+              OUT m text,
+              OUT n bigint)
+            RETURNS record AS
+          $BODY$
+          DECLARE\s
+          BEGIN
+          a := 'a-test';\s
+          b := 'b-test';\s
+          c := LOCALTIMESTAMP;
+          d := LOCALTIMESTAMP;
+          e := LOCALTIME;
+          f := LOCALTIME;
+          g := current_date;
+          h := 9999999.12233445566778899;
+          i := 'yo'::bytea;
+          j := '<a></a>';
+          k := '42009FB2-2FE5-4ED5-BE10-F3C9894018AB'::uuid;
+          l := 'http://example.com';
+          m := 'hi nikhil';
+          n := 111;
+          END;
+          $BODY$
+          LANGUAGE plpgsql VOLATILE COST 100;""");
       try {
 
         // Procedure call

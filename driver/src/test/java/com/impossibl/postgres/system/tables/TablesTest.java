@@ -50,10 +50,10 @@ public class TablesTest {
   @Test
   public void testGetSQL() {
 
-    assertEquals(Tables.getSQL(SQL, Version.parse("9.0.0")), SQL[3]);
-    assertNotEquals(Tables.getSQL(SQL, Version.parse("9.0.0")), SQL[1]);
+    assertEquals(SQL[3], Tables.getSQL(SQL, Version.parse("9.0.0")));
+    assertNotEquals(SQL[1], Tables.getSQL(SQL, Version.parse("9.0.0")));
 
-    assertEquals(Tables.getSQL(SQL, Version.parse("9.4.5")), SQL[1]);
+    assertEquals(SQL[1], Tables.getSQL(SQL, Version.parse("9.4.5")));
   }
 
   @Test

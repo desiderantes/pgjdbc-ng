@@ -69,6 +69,7 @@ import org.junit.runners.JUnit4;
 import org.w3c.dom.Node;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -229,7 +230,7 @@ public class XmlTest {
     xml = rs.getSQLXML(1);
     assertEquals(header + _xmlDocument, xml.getString());
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
 
     rs.close();
     stmt.close();
@@ -313,7 +314,7 @@ public class XmlTest {
     assertNull(rs.getSQLXML(1));
     assertTrue(rs.next());
     assertNull(rs.getSQLXML("val"));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }

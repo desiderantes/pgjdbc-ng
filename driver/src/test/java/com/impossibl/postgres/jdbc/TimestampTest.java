@@ -58,6 +58,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -569,7 +570,7 @@ public class TimestampTest {
     assertNotNull(t);
     assertEquals(tmpTime4.getTime(), t.getTime());
 
-    assertTrue(!rs.next()); // end of table. Fail if more entries exist.
+    assertFalse(rs.next()); // end of table. Fail if more entries exist.
 
     rs.close();
     stmt.close();
@@ -771,7 +772,7 @@ public class TimestampTest {
     assertNotNull(t);
     assertEquals(tmpTime8WOTZ.getTime(), t.getTime());
 
-    assertTrue(!rs.next()); // end of table. Fail if more entries exist.
+    assertFalse(rs.next()); // end of table. Fail if more entries exist.
 
     rs.close();
     stmt.close();

@@ -89,7 +89,7 @@ public class GeneratedKeysTest {
     assertEquals(1, rs.getInt("a"));
     assertEquals("a", rs.getString("b"));
     assertEquals(2, rs.getInt("c"));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -100,7 +100,7 @@ public class GeneratedKeysTest {
     stmt.executeUpdate("INSERT INTO genkeys VALUES (1, 'a', 2)", Statement.RETURN_GENERATED_KEYS);
     assertEquals(1, stmt.getUpdateCount());
     assertNull(stmt.getResultSet());
-    assertTrue(!stmt.getMoreResults());
+    assertFalse(stmt.getMoreResults());
     stmt.close();
   }
 
@@ -108,17 +108,13 @@ public class GeneratedKeysTest {
   public void testCloseStatementClosesRS() throws SQLException {
     Statement stmt = _conn.createStatement();
     stmt.executeUpdate("INSERT INTO genkeys VALUES (1, 'a', 2)", Statement.RETURN_GENERATED_KEYS);
-    ResultSet rs = stmt.getGeneratedKeys();
-    stmt.close();
-    try {
+    try (ResultSet rs = stmt.getGeneratedKeys()) {
+      stmt.close();
       rs.next();
       fail("Can't operate on a closed result set.");
     }
     catch (SQLException sqle) {
       // Ok
-    }
-    finally {
-      rs.close();
     }
   }
 
@@ -129,7 +125,7 @@ public class GeneratedKeysTest {
     ResultSet rs = stmt.getGeneratedKeys();
     assertTrue(rs.next());
     assertEquals("a", rs.getString(2));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -140,7 +136,7 @@ public class GeneratedKeysTest {
     int count = stmt.executeUpdate("INSERT INTO genkeys VALUES (1, 'a', 2); ", Statement.NO_GENERATED_KEYS);
     assertEquals(1, count);
     ResultSet rs = stmt.getGeneratedKeys();
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -156,7 +152,7 @@ public class GeneratedKeysTest {
     assertEquals(1, rs.getInt(2));
     assertEquals(1, rs.getInt("a"));
     assertEquals(2, rs.getInt("c"));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -171,7 +167,7 @@ public class GeneratedKeysTest {
     assertEquals(2, rs.getInt(1));
     assertTrue(rs.next());
     assertEquals(4, rs.getInt(1));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -186,7 +182,7 @@ public class GeneratedKeysTest {
     assertEquals(1, rs.getInt(1));
     assertTrue(rs.next());
     assertEquals(2, rs.getInt(1));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -201,7 +197,7 @@ public class GeneratedKeysTest {
     assertTrue(rs.next());
     assertEquals(3, rs.getInt(1));
     assertEquals("a", rs.getString(2));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -216,7 +212,7 @@ public class GeneratedKeysTest {
     assertTrue(rs.next());
     assertEquals(2, rs.getInt(1));
     assertEquals("a", rs.getString(2));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -236,7 +232,7 @@ public class GeneratedKeysTest {
     assertTrue(rs.next());
     assertEquals(3, rs.getInt(1));
     assertEquals("a", rs.getString(2));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     ps.close();
   }
@@ -256,7 +252,7 @@ public class GeneratedKeysTest {
     assertTrue(rs.next());
     assertEquals(2, rs.getInt(1));
     assertEquals("a", rs.getString(2));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
 
     ps.setInt(1, 2);
@@ -265,7 +261,7 @@ public class GeneratedKeysTest {
     assertTrue(rs.next());
     assertEquals(4, rs.getInt(1));
     assertEquals("b", rs.getString(2));
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
 
     ps.close();
@@ -280,7 +276,7 @@ public class GeneratedKeysTest {
     rs.close();
     stmt.executeUpdate("INSERT INTO genkeys VALUES (2, 'b', 3)");
     rs = stmt.getGeneratedKeys();
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -298,7 +294,7 @@ public class GeneratedKeysTest {
     assertEquals(1, batchRs1.getInt("a"));
     assertTrue(batchRs1.next());
     assertEquals(2, batchRs1.getInt("a"));
-    assertTrue(!batchRs1.next());
+    assertFalse(batchRs1.next());
     // BatchRs1 isn't explicit closed
     assertFalse(batchRs1.isClosed());
 
@@ -312,7 +308,7 @@ public class GeneratedKeysTest {
     assertEquals(3, batchRs2.getInt("a"));
     assertTrue(batchRs2.next());
     assertEquals(4, batchRs2.getInt("a"));
-    assertTrue(!batchRs2.next());
+    assertFalse(batchRs2.next());
     batchRs2.close();
 
     assertTrue(batchRs1.isClosed());

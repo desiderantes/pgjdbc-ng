@@ -226,7 +226,7 @@ public class TimezoneTest {
     str = rs.getString(5);
     assertEquals("date -> getString", "2005-01-01", str);
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     ps.close();
   }
@@ -282,7 +282,7 @@ public class TimezoneTest {
     d = rs.getDate(3, cGMT13); // 2005-01-01 00:00:00 +1300
     assertEquals(1104490800000L, d.getTime());
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     ps.close();
   }
@@ -429,7 +429,7 @@ public class TimezoneTest {
     assertEquals(seq++, rs.getInt(1));
     assertEquals(normalizeTimeOfDayPart(instantTime, cGMT13), rs.getTimestamp(2, cGMT13));
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     ps.close();
   }
@@ -556,7 +556,7 @@ public class TimezoneTest {
     assertEquals(normalizeTimeOfDayPart(instantTime, cGMT13), rs.getTimestamp(4, cGMT13));
     assertEquals(instantDateGMT13, rs.getTimestamp(5, cGMT13));
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     ps.close();
   }
@@ -665,7 +665,7 @@ public class TimezoneTest {
     assertEquals(dGMT13, rs.getDate(3, cGMT13));
     assertEquals(dGMT13, rs.getDate(4, cGMT13));
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     ps.close();
   }
@@ -764,7 +764,7 @@ public class TimezoneTest {
     assertEquals(tGMT13, rs.getTime(2, cGMT13));
     assertEquals(tGMT13, rs.getTime(3, cGMT13));
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.close();
     ps.close();
   }

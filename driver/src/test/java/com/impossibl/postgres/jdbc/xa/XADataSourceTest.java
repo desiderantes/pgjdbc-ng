@@ -761,10 +761,8 @@ public class XADataSourceTest {
       if (other == this)
         return true;
 
-      if (other == null || !(other instanceof XidImpl))
+      if (other == null || !(other instanceof XidImpl x))
         return false;
-
-      XidImpl x = (XidImpl)other;
 
       return id == x.id;
     }

@@ -139,7 +139,7 @@ public class SSLTest {
       else {
         StringWriter trace = new StringWriter();
         ex.printStackTrace(new PrintWriter(trace));
-        assertTrue("Unexpected Exception Message: " + ex.getMessage() + "\nexpected: " + exmsg + "\nfrom\n" + trace.toString(), ex.getMessage().matches(exmsg));
+        assertTrue("Unexpected Exception Message: " + ex.getMessage() + "\nexpected: " + exmsg + "\nfrom\n" + trace, ex.getMessage().matches(exmsg));
       }
     }
   }
@@ -157,9 +157,9 @@ public class SSLTest {
     String[] hostmode = {"sslhost", "sslhostssl", "sslhostsslcert", "sslcert"};
     String[] certmode = {"gh", "bh"};
 
-    for (int i = 0; i < hostmode.length; i++) {
-      for (int j = 0; j < certmode.length; j++) {
-        add(data, prop, hostmode[i] + certmode[j]);
+    for (String string : hostmode) {
+      for (String s : certmode) {
+        add(data, prop, string + s);
       }
     }
 
@@ -168,7 +168,7 @@ public class SSLTest {
 
   private static void add(Collection<Object[]> data, Properties prop, String param) throws Exception {
 
-    if (prop.getProperty(param, "").equals("")) {
+    if (prop.getProperty(param, "").isEmpty()) {
       System.out.println("Skipping " + param + ".");
     }
     else {

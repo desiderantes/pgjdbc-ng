@@ -44,50 +44,56 @@ public class SQLTextTests {
     new String[] {
 
       //Input
-      "select \"somthing\" -- This is a SQL comment ?WTF?\n" +
-          " from\n" +
-          "   test\n" +
-          " where\n" +
-          "   'a string with a ?' =  ?",
+        """
+select "somthing" -- This is a SQL comment ?WTF?
+ from
+   test
+ where
+   'a string with a ?' =  ?""",
 
       //Output
-      "select \"somthing\" -- This is a SQL comment ?WTF?\n" +
-          " from\n" +
-          "   test\n" +
-          " where\n" +
-          "   'a string with a ?' =  $1"
+        """
+select "somthing" -- This is a SQL comment ?WTF?
+ from
+   test
+ where
+   'a string with a ?' =  $1"""
     },
     new String[] {
 
       //Input
-      "insert into \"somthing\" -- This is a SQL comment ?WTF?\n" +
-          " (a, \"b\", \"c\", \"d\")\n" +
-          " values /* a nested\n" +
-          " /* comment with  */ a ? */" +
-          " (?,'a string with a ?', \"another ?\", ?, ?)",
+        """
+insert into "somthing" -- This is a SQL comment ?WTF?
+ (a, "b", "c", "d")
+ values /* a nested
+ /* comment with  */ a ? */\
+ (?,'a string with a ?', "another ?", ?, ?)""",
 
       //Output
-      "insert into \"somthing\" -- This is a SQL comment ?WTF?\n" +
-          " (a, \"b\", \"c\", \"d\")\n" +
-          " values /* a nested\n" +
-          " /* comment with  */ a ? */" +
-          " ($1,'a string with a ?', \"another ?\", $2, $3)",
+        """
+insert into "somthing" -- This is a SQL comment ?WTF?
+ (a, "b", "c", "d")
+ values /* a nested
+ /* comment with  */ a ? */\
+ ($1,'a string with a ?', "another ?", $2, $3)""",
     },
     new String[] {
 
       //Input
-      "insert into \"somthing\" -- This is a SQL comment ?WTF?\n" +
-          " (a, \"b\", \"c\", \"d\")\n" +
-          " values /* a nested\n" +
-          " /* comment with  */ a ? */" +
-          " (?,'a string with a ?', \"another \"\" ?\", {fn concat('{fn '' some()}', {fn char(?)})}, ?)",
+        """
+insert into "somthing" -- This is a SQL comment ?WTF?
+ (a, "b", "c", "d")
+ values /* a nested
+ /* comment with  */ a ? */\
+ (?,'a string with a ?', "another "" ?", {fn concat('{fn '' some()}', {fn char(?)})}, ?)""",
 
       //Output
-      "insert into \"somthing\" -- This is a SQL comment ?WTF?\n" +
-          " (a, \"b\", \"c\", \"d\")\n" +
-          " values /* a nested\n" +
-          " /* comment with  */ a ? */" +
-          " ($1,'a string with a ?', \"another \"\" ?\", ('{fn '' some()}'||chr($2)), $3)",
+        """
+insert into "somthing" -- This is a SQL comment ?WTF?
+ (a, "b", "c", "d")
+ values /* a nested
+ /* comment with  */ a ? */\
+ ($1,'a string with a ?', "another "" ?", ('{fn '' some()}'||chr($2)), $3)""",
     },
     new String[] {
       "select {fn abs(-10)} as absval, {fn user()}, {fn concat(x,y)} as val from {oj tblA left outer join tblB on x=y}",
@@ -124,65 +130,66 @@ public class SQLTextTests {
 
   @Test
   public void testTruncate() throws SQLException, ParseException {
-    String sql = "SELECT\n" +
-        "      folder.entity_id  AS folder_id\n" +
-        "    , archive_pers.entity_id AS person_id\n" +
-        "/*\n" +
-        "    , archive_pers.initials AS person_initials\n" +
-        "*/\n" +
-        "    ,ARRAY(WITH RECURSIVE t AS (SELECT\n" +
-        "                                   1 AS level,\n" +
-        "                                   p.entity_id,\n" +
-        "                                   p.id,\n" +
-        "                                   p.parent_id,\n" +
-        "                                   p.name\n" +
-        "                               FROM pants_krank_project p\n" +
-        "                               WHERE p.entity_id = 1\n" +
-        "                               UNION ALL\n" +
-        "                               SELECT\n" +
-        "                                   t.level + 1,\n" +
-        "                                   c.entity_id,\n" +
-        "                                   c.id,\n" +
-        "                                   c.parent_id,\n" +
-        "                                   c.name\n" +
-        "                               FROM pants_krank_project c JOIN t ON c.id = t.parent_id)\n" +
-        "          SELECT\n" +
-        "              t.name\n" +
-        "          FROM t\n" +
-        "          ORDER BY level DESC)\n" +
-        "      AS project_name_array\n" +
-        "FROM\n" +
-        "    fishy_email_delivery del JOIN fishy_email_folder_message fm ON fm.delivery_id = del.entity_id\n" +
-        "    JOIN fishy_email_folder folder ON folder.entity_id = fm.folder_id\n" +
-        "    JOIN pants_krank_entity ent ON ent.entity_id = folder.owner_id\n" +
-        "    CROSS JOIN pants_krank_relation archive_comp\n" +
-        "    LEFT OUTER JOIN pants_krank_person archive_pers ON archive_pers.entity_id = folder.owner_id\n" +
-        "WHERE 1 = 1\n" +
-        "      AND NOT EXISTS(SELECT * FROM\n" +
-        "    fishy_email_folder ef JOIN fishy_email_mailbox em ON ef.entity_id = em.folder_id\n" +
-        "WHERE ef.entity_id = folder.entity_id)\n" +
-        "      AND folder.owner_id IN (\n" +
-        "    SELECT\n" +
-        "        archive_comp.entity_id\n" +
-        "    WHERE archive_comp.entity_id = folder.owner_id\n" +
-        "    UNION ALL SELECT\n" +
-        "                  pers.entity_id\n" +
-        "              FROM pants_krank_person pers\n" +
-        "              WHERE pers.relation_id = archive_comp.entity_id AND folder.owner_id = pers.entity_id\n" +
-        "    UNION ALL SELECT\n" +
-        "                  pr.entity_id\n" +
-        "              FROM pants_krank_project pr\n" +
-        "              WHERE pr.relation_id = archive_comp.entity_id AND folder.owner_id = pr.entity_id\n" +
-        "    UNION ALL SELECT\n" +
-        "                  1\n" +
-        "              FROM fishy_project_phase ph\n" +
-        "                  JOIN fishy_project_phase_category cat ON 1 = cat.entity_id\n" +
-        "                  JOIN pants_krank_project pr ON cat.project_id = pr.entity_id\n" +
-        "              WHERE pr.relation_id = archive_comp.entity_id AND folder.owner_id = 3\n" +
-        ")\n" +
-        "      AND archive_comp.entity_id = 2\n" +
-        "--          AND proj.entity_id = 890\n" +
-        "ORDER BY del.received_timestamp DESC";
+    String sql = """
+        SELECT
+              folder.entity_id  AS folder_id
+            , archive_pers.entity_id AS person_id
+        /*
+            , archive_pers.initials AS person_initials
+        */
+            ,ARRAY(WITH RECURSIVE t AS (SELECT
+                                           1 AS level,
+                                           p.entity_id,
+                                           p.id,
+                                           p.parent_id,
+                                           p.name
+                                       FROM pants_krank_project p
+                                       WHERE p.entity_id = 1
+                                       UNION ALL
+                                       SELECT
+                                           t.level + 1,
+                                           c.entity_id,
+                                           c.id,
+                                           c.parent_id,
+                                           c.name
+                                       FROM pants_krank_project c JOIN t ON c.id = t.parent_id)
+                  SELECT
+                      t.name
+                  FROM t
+                  ORDER BY level DESC)
+              AS project_name_array
+        FROM
+            fishy_email_delivery del JOIN fishy_email_folder_message fm ON fm.delivery_id = del.entity_id
+            JOIN fishy_email_folder folder ON folder.entity_id = fm.folder_id
+            JOIN pants_krank_entity ent ON ent.entity_id = folder.owner_id
+            CROSS JOIN pants_krank_relation archive_comp
+            LEFT OUTER JOIN pants_krank_person archive_pers ON archive_pers.entity_id = folder.owner_id
+        WHERE 1 = 1
+              AND NOT EXISTS(SELECT * FROM
+            fishy_email_folder ef JOIN fishy_email_mailbox em ON ef.entity_id = em.folder_id
+        WHERE ef.entity_id = folder.entity_id)
+              AND folder.owner_id IN (
+            SELECT
+                archive_comp.entity_id
+            WHERE archive_comp.entity_id = folder.owner_id
+            UNION ALL SELECT
+                          pers.entity_id
+                      FROM pants_krank_person pers
+                      WHERE pers.relation_id = archive_comp.entity_id AND folder.owner_id = pers.entity_id
+            UNION ALL SELECT
+                          pr.entity_id
+                      FROM pants_krank_project pr
+                      WHERE pr.relation_id = archive_comp.entity_id AND folder.owner_id = pr.entity_id
+            UNION ALL SELECT
+                          1
+                      FROM fishy_project_phase ph
+                          JOIN fishy_project_phase_category cat ON 1 = cat.entity_id
+                          JOIN pants_krank_project pr ON cat.project_id = pr.entity_id
+                      WHERE pr.relation_id = archive_comp.entity_id AND folder.owner_id = 3
+        )
+              AND archive_comp.entity_id = 2
+        --          AND proj.entity_id = 890
+        ORDER BY del.received_timestamp DESC""";
 
     SQLText sqlText = new SQLText(sql);
     SQLTextEscapes.processEscapes(sqlText, null);

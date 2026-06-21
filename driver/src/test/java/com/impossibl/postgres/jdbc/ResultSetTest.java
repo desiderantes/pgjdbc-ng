@@ -178,7 +178,7 @@ public class ResultSetTest {
     Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
     ResultSet rs = stmt.executeQuery("SELECT * FROM testrs");
 
-    assertTrue(!rs.absolute(0));
+    assertFalse(rs.absolute(0));
     assertEquals(0, rs.getRow());
 
     assertTrue(rs.absolute(-1));
@@ -187,12 +187,12 @@ public class ResultSetTest {
     assertTrue(rs.absolute(1));
     assertEquals(1, rs.getRow());
 
-    assertTrue(!rs.absolute(-10));
+    assertFalse(rs.absolute(-10));
     assertEquals(0, rs.getRow());
     assertTrue(rs.next());
     assertEquals(1, rs.getRow());
 
-    assertTrue(!rs.absolute(10));
+    assertFalse(rs.absolute(10));
     assertEquals(0, rs.getRow());
     assertTrue(rs.previous());
     assertEquals(6, rs.getRow());
@@ -206,9 +206,9 @@ public class ResultSetTest {
     ResultSet rs = stmt.executeQuery("SELECT * FROM testrs where id=100");
     rs.beforeFirst();
     rs.afterLast();
-    assertTrue(!rs.first());
-    assertTrue(!rs.last());
-    assertTrue(!rs.next());
+    assertFalse(rs.first());
+    assertFalse(rs.last());
+    assertFalse(rs.next());
     rs.close();
     stmt.close();
   }
@@ -682,23 +682,23 @@ public class ResultSetTest {
   public void testZeroRowResultPositioning() throws SQLException {
     Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
     ResultSet rs = stmt.executeQuery("SELECT * FROM pg_database WHERE datname='nonexistantdatabase'");
-    assertTrue(!rs.previous());
-    assertTrue(!rs.previous());
-    assertTrue(!rs.next());
-    assertTrue(!rs.next());
-    assertTrue(!rs.next());
-    assertTrue(!rs.next());
-    assertTrue(!rs.next());
-    assertTrue(!rs.previous());
-    assertTrue(!rs.first());
-    assertTrue(!rs.last());
+    assertFalse(rs.previous());
+    assertFalse(rs.previous());
+    assertFalse(rs.next());
+    assertFalse(rs.next());
+    assertFalse(rs.next());
+    assertFalse(rs.next());
+    assertFalse(rs.next());
+    assertFalse(rs.previous());
+    assertFalse(rs.first());
+    assertFalse(rs.last());
     assertEquals(0, rs.getRow());
-    assertTrue(!rs.absolute(1));
-    assertTrue(!rs.relative(1));
-    assertTrue(!rs.isBeforeFirst());
-    assertTrue(!rs.isAfterLast());
-    assertTrue(!rs.isFirst());
-    assertTrue(!rs.isLast());
+    assertFalse(rs.absolute(1));
+    assertFalse(rs.relative(1));
+    assertFalse(rs.isBeforeFirst());
+    assertFalse(rs.isAfterLast());
+    assertFalse(rs.isFirst());
+    assertFalse(rs.isLast());
     rs.close();
     stmt.close();
   }
@@ -710,51 +710,51 @@ public class ResultSetTest {
     ResultSet rs = stmt.executeQuery("SELECT datname FROM pg_database WHERE datname='template1'");
 
     assertTrue(rs.isBeforeFirst());
-    assertTrue(!rs.isAfterLast());
-    assertTrue(!rs.isFirst());
-    assertTrue(!rs.isLast());
+    assertFalse(rs.isAfterLast());
+    assertFalse(rs.isFirst());
+    assertFalse(rs.isLast());
 
     assertTrue(rs.next());
 
-    assertTrue(!rs.isBeforeFirst());
-    assertTrue(!rs.isAfterLast());
+    assertFalse(rs.isBeforeFirst());
+    assertFalse(rs.isAfterLast());
     assertTrue(rs.isFirst());
     assertTrue(rs.isLast());
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
 
-    assertTrue(!rs.isBeforeFirst());
+    assertFalse(rs.isBeforeFirst());
     assertTrue(rs.isAfterLast());
-    assertTrue(!rs.isFirst());
-    assertTrue(!rs.isLast());
+    assertFalse(rs.isFirst());
+    assertFalse(rs.isLast());
 
     assertTrue(rs.previous());
 
-    assertTrue(!rs.isBeforeFirst());
-    assertTrue(!rs.isAfterLast());
+    assertFalse(rs.isBeforeFirst());
+    assertFalse(rs.isAfterLast());
     assertTrue(rs.isFirst());
     assertTrue(rs.isLast());
 
     assertTrue(rs.absolute(1));
 
-    assertTrue(!rs.isBeforeFirst());
-    assertTrue(!rs.isAfterLast());
+    assertFalse(rs.isBeforeFirst());
+    assertFalse(rs.isAfterLast());
     assertTrue(rs.isFirst());
     assertTrue(rs.isLast());
 
-    assertTrue(!rs.absolute(0));
+    assertFalse(rs.absolute(0));
 
     assertTrue(rs.isBeforeFirst());
-    assertTrue(!rs.isAfterLast());
-    assertTrue(!rs.isFirst());
-    assertTrue(!rs.isLast());
+    assertFalse(rs.isAfterLast());
+    assertFalse(rs.isFirst());
+    assertFalse(rs.isLast());
 
-    assertTrue(!rs.absolute(2));
+    assertFalse(rs.absolute(2));
 
-    assertTrue(!rs.isBeforeFirst());
+    assertFalse(rs.isBeforeFirst());
     assertTrue(rs.isAfterLast());
-    assertTrue(!rs.isFirst());
-    assertTrue(!rs.isLast());
+    assertFalse(rs.isFirst());
+    assertFalse(rs.isLast());
 
     rs.close();
     stmt.close();
@@ -1069,14 +1069,14 @@ public class ResultSetTest {
 
       try (ResultSet resultSet = (ResultSet) statement.getObject(1)) {
         assertTrue(resultSet.next());
-        assertEquals(resultSet.getString("usename"), "test");
-        assertEquals(resultSet.getString("passwd"), "********");
+        assertEquals("test", resultSet.getString("usename"));
+        assertEquals("********", resultSet.getString("passwd"));
       }
 
       try (ResultSet resultSet = (ResultSet) statement.getObject(2)) {
         assertTrue(resultSet.next());
-        assertEquals(resultSet.getString("usename"), "test");
-        assertEquals(resultSet.getString("passwd"), "********");
+        assertEquals("test", resultSet.getString("usename"));
+        assertEquals("********", resultSet.getString("passwd"));
       }
     }
 

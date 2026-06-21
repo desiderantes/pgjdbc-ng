@@ -75,7 +75,7 @@ public class WrapperTest {
    *
    */
   private interface PrivateInterface {
-  };
+  }
 
   @Test
   public void testConnectionIsWrapperForPrivate() throws SQLException {

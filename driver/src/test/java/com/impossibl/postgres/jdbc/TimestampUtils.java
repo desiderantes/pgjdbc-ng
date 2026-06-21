@@ -149,9 +149,7 @@ public class TimestampUtils {
     // early years, like 2, don't get misinterpreted
     //
     int l_yearlen = String.valueOf(l_year).length();
-    for (int i = 4; i > l_yearlen; i--) {
-      sb.append("0");
-    }
+    sb.append("0".repeat(Math.max(0, 4 - l_yearlen)));
 
     sb.append(l_year);
     sb.append('-');

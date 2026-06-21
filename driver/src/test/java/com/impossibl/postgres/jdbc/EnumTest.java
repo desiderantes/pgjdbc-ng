@@ -67,7 +67,7 @@ public class EnumTest {
 
     try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO testtable VALUES (?)")) {
       stmt.setString(1, "A");
-      assertEquals(stmt.executeUpdate(), 1);
+      assertEquals(1, stmt.executeUpdate());
     }
 
     checkValue("A");
@@ -80,7 +80,7 @@ public class EnumTest {
 
     try (PreparedStatement stmt = conn.prepareStatement("UPDATE testtable SET val = ?")) {
       stmt.setString(1, "B");
-      assertEquals(stmt.executeUpdate(), 1);
+      assertEquals(1, stmt.executeUpdate());
     }
 
     checkValue("B");

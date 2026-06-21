@@ -58,6 +58,7 @@ import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -214,12 +215,12 @@ public class UpdatableResultTest {
 
     rs.beforeFirst();
     assertTrue(rs.next());
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     checkPositioning(rs);
 
     rs.afterLast();
     assertTrue(rs.previous());
-    assertTrue(!rs.previous());
+    assertFalse(rs.previous());
     checkPositioning(rs);
 
     rs.close();
@@ -316,7 +317,7 @@ public class UpdatableResultTest {
   public void testZeroRowResult() throws SQLException {
     Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
     ResultSet rs = st.executeQuery("select * from updatable WHERE 0 > 1");
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
     rs.moveToInsertRow();
     rs.moveToCurrentRow();
     rs.close();

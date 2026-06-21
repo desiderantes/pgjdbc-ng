@@ -47,18 +47,18 @@ public class PGTypeTableTest {
 
   @Test
   public void testGetSQLVersionEqual() {
-    assertEquals(INSTANCE.getSQL(Version.parse("9.2.0")), SQL[1]);
+    assertEquals(SQL[1], INSTANCE.getSQL(Version.parse("9.2.0")));
     assertNotEquals(INSTANCE.getSQL(Version.parse("9.1.0")), INSTANCE.getSQL(Version.parse("9.2.0")));
   }
 
   @Test
   public void testGetSQLVersionGreater() {
-    assertEquals(INSTANCE.getSQL(Version.parse("9.4.5")), SQL[1]);
+    assertEquals(SQL[1], INSTANCE.getSQL(Version.parse("9.4.5")));
   }
 
   @Test
   public void testGetSQLVersionLess() {
-    assertEquals(INSTANCE.getSQL(Version.parse("9.1.9")), SQL[3]);
+    assertEquals(SQL[3], INSTANCE.getSQL(Version.parse("9.1.9")));
   }
 
   @Test

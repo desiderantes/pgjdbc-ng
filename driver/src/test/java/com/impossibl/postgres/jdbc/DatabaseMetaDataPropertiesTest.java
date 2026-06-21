@@ -48,6 +48,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -94,7 +95,7 @@ public class DatabaseMetaDataPropertiesTest {
     assertTrue(dbmd.allTablesAreSelectable()); // not true all the time
 
     // This should always be false for postgresql (at least for 7.x)
-    assertTrue(!dbmd.isReadOnly());
+    assertFalse(dbmd.isReadOnly());
 
     // we support multiple resultsets via multiple statements in one execute()
     // now
@@ -105,10 +106,10 @@ public class DatabaseMetaDataPropertiesTest {
 
     assertTrue(dbmd.supportsMinimumSQLGrammar());
     assertTrue(dbmd.supportsCoreSQLGrammar());
-    assertTrue(!dbmd.supportsExtendedSQLGrammar());
+    assertFalse(dbmd.supportsExtendedSQLGrammar());
     assertTrue(dbmd.supportsANSI92EntryLevelSQL());
-    assertTrue(!dbmd.supportsANSI92IntermediateSQL());
-    assertTrue(!dbmd.supportsANSI92FullSQL());
+    assertFalse(dbmd.supportsANSI92IntermediateSQL());
+    assertFalse(dbmd.supportsANSI92FullSQL());
 
     assertTrue(dbmd.supportsIntegrityEnhancementFacility());
 
@@ -147,10 +148,10 @@ public class DatabaseMetaDataPropertiesTest {
     DatabaseMetaData dbmd = con.getMetaData();
     assertNotNull(dbmd);
 
-    assertTrue(!dbmd.nullsAreSortedAtStart());
-    assertTrue(!dbmd.nullsAreSortedAtEnd());
+    assertFalse(dbmd.nullsAreSortedAtStart());
+    assertFalse(dbmd.nullsAreSortedAtEnd());
     assertTrue(dbmd.nullsAreSortedHigh());
-    assertTrue(!dbmd.nullsAreSortedLow());
+    assertFalse(dbmd.nullsAreSortedLow());
 
     assertTrue(dbmd.nullPlusNonNullIsNull());
 
@@ -162,8 +163,8 @@ public class DatabaseMetaDataPropertiesTest {
     DatabaseMetaData dbmd = con.getMetaData();
     assertNotNull(dbmd);
 
-    assertTrue(!dbmd.usesLocalFilePerTable());
-    assertTrue(!dbmd.usesLocalFiles());
+    assertFalse(dbmd.usesLocalFilePerTable());
+    assertFalse(dbmd.usesLocalFiles());
   }
 
   @Test
@@ -171,16 +172,16 @@ public class DatabaseMetaDataPropertiesTest {
     DatabaseMetaData dbmd = con.getMetaData();
     assertNotNull(dbmd);
 
-    assertTrue(!dbmd.supportsMixedCaseIdentifiers()); // always false
+    assertFalse(dbmd.supportsMixedCaseIdentifiers()); // always false
     assertTrue(dbmd.supportsMixedCaseQuotedIdentifiers()); // always true
 
-    assertTrue(!dbmd.storesUpperCaseIdentifiers()); // always false
+    assertFalse(dbmd.storesUpperCaseIdentifiers()); // always false
     assertTrue(dbmd.storesLowerCaseIdentifiers()); // always true
-    assertTrue(!dbmd.storesUpperCaseQuotedIdentifiers()); // always false
-    assertTrue(!dbmd.storesLowerCaseQuotedIdentifiers()); // always false
-    assertTrue(!dbmd.storesMixedCaseQuotedIdentifiers()); // always false
+    assertFalse(dbmd.storesUpperCaseQuotedIdentifiers()); // always false
+    assertFalse(dbmd.storesLowerCaseQuotedIdentifiers()); // always false
+    assertFalse(dbmd.storesMixedCaseQuotedIdentifiers()); // always false
 
-    assertTrue(dbmd.getIdentifierQuoteString().equals("\""));
+    assertEquals("\"", dbmd.getIdentifierQuoteString());
 
   }
 
@@ -221,8 +222,8 @@ public class DatabaseMetaDataPropertiesTest {
     DatabaseMetaData dbmd = con.getMetaData();
     assertNotNull(dbmd);
 
-    assertTrue(dbmd.getURL().equals(TestUtil.getURL()));
-    assertTrue(dbmd.getUserName().equals(TestUtil.getUser()));
+    assertEquals(dbmd.getURL(), TestUtil.getURL());
+    assertEquals(dbmd.getUserName(), TestUtil.getUser());
   }
 
   @Test
@@ -232,7 +233,7 @@ public class DatabaseMetaDataPropertiesTest {
     DatabaseMetaData dbmd = con.getMetaData();
     assertNotNull(dbmd);
 
-    assertTrue(dbmd.getDatabaseProductName().equals("PostgreSQL"));
+    assertEquals("PostgreSQL", dbmd.getDatabaseProductName());
   }
 
   @Test
@@ -240,8 +241,8 @@ public class DatabaseMetaDataPropertiesTest {
     DatabaseMetaData dbmd = con.getMetaData();
     assertNotNull(dbmd);
 
-    assertTrue(dbmd.getDriverVersion().equals(PGDriver.VERSION.toString()));
-    assertTrue(dbmd.getDriverMajorVersion() == PGDriver.VERSION.getMajor());
-    assertTrue(dbmd.getDriverMinorVersion() == PGDriver.VERSION.getMinor());
+    assertEquals(dbmd.getDriverVersion(), PGDriver.VERSION.toString());
+    assertEquals(dbmd.getDriverMajorVersion(), PGDriver.VERSION.getMajor());
+    assertEquals(dbmd.getDriverMinorVersion(), (int) PGDriver.VERSION.getMinor());
   }
 }

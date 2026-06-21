@@ -55,6 +55,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
@@ -223,7 +224,7 @@ public class ResultSetMetaDataTest {
     ResultSet rs = stmt.executeQuery("SELECT c,b,a FROM serialtest");
     ResultSetMetaData rsmd = rs.getMetaData();
 
-    assertTrue(!rsmd.isAutoIncrement(1));
+    assertFalse(rsmd.isAutoIncrement(1));
     assertTrue(rsmd.isAutoIncrement(2));
     assertTrue(rsmd.isAutoIncrement(3));
     assertEquals("bigserial", rsmd.getColumnTypeName(2));

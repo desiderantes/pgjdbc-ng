@@ -97,14 +97,14 @@ public class CiTextTest {
 
             stmt.setObject(1, new String[] {"test"}, JDBCType.ARRAY);
 
-            assertEquals(stmt.executeUpdate(), 1);
+            assertEquals(1, stmt.executeUpdate());
           }
 
           try (Statement stmt = conn2.createStatement()) {
             try (ResultSet rs = stmt.executeQuery("SELECT * FROM citester.test")) {
 
               assertTrue(rs.next());
-              assertArrayEquals(rs.getObject("names", String[].class), new String[] {"test"});
+              assertArrayEquals(new String[] {"test"}, rs.getObject("names", String[].class));
 
             }
           }

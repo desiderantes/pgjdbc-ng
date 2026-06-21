@@ -279,16 +279,12 @@ public class StructTest {
     ResultSet rs = st.executeQuery("SELECT * FROM struct_test; SELECT 1;");
     assertTrue(rs.next());
 
-    try {
+    try (st; rs) {
       @SuppressWarnings("unused") TestStruct ts2 = (TestStruct) rs.getObject(1);
       Assert.fail("Cast should have failed");
     }
     catch (ClassCastException e) {
       //Should fail
-    }
-    finally {
-      rs.close();
-      st.close();
     }
 
   }
@@ -435,11 +431,11 @@ public class StructTest {
 
         // Expect our custom type mapping to be used
         assertEquals(1, resultWithTypeMap.length);
-        assertEquals(resultWithTypeMap[0].getClass(), OffsetDateTime.class);
+        assertEquals(OffsetDateTime.class, resultWithTypeMap[0].getClass());
 
         // Expect the JDBC default type mapping to be used
         assertEquals(1, resultWithoutTypeMap.length);
-        assertEquals(resultWithoutTypeMap[0].getClass(), Timestamp.class);
+        assertEquals(Timestamp.class, resultWithoutTypeMap[0].getClass());
       }
     }
   }
@@ -457,11 +453,11 @@ public class StructTest {
 
         // Per spec, we should never use the connection's type map if we provide our own in the getAttributes call
         assertEquals(1, resultWithTypeMap.length);
-        assertEquals(resultWithTypeMap[0].getClass(), Timestamp.class);
+        assertEquals(Timestamp.class, resultWithTypeMap[0].getClass());
 
         // ...but we should use the connection's type map if we didn't
         assertEquals(1, resultWithoutTypeMap.length);
-        assertEquals(resultWithoutTypeMap[0].getClass(), OffsetDateTime.class);
+        assertEquals(OffsetDateTime.class, resultWithoutTypeMap[0].getClass());
       }
     }
     finally {

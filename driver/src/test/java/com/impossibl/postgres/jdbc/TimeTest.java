@@ -52,6 +52,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -310,7 +311,7 @@ public class TimeTest {
       assertEquals(makeTime(tmpTime.getHours(), tmpTime.getMinutes(), tmpTime.getSeconds()), t);
     }
 
-    assertTrue(!rs.next());
+    assertFalse(rs.next());
 
     rs.close();
     st.close();
