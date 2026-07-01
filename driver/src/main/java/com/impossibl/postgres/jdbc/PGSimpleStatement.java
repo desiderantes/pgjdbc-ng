@@ -30,7 +30,6 @@ package com.impossibl.postgres.jdbc;
 
 import com.impossibl.postgres.protocol.ResultBatch;
 import com.impossibl.postgres.protocol.ResultBatches;
-
 import static com.impossibl.postgres.jdbc.Exceptions.INVALID_COMMAND_FOR_GENERATED_KEYS;
 import static com.impossibl.postgres.jdbc.Exceptions.NOT_SUPPORTED;
 import static com.impossibl.postgres.jdbc.Exceptions.NO_RESULT_COUNT_AVAILABLE;
@@ -41,7 +40,6 @@ import static com.impossibl.postgres.jdbc.SQLTextUtils.prependCursorDeclaration;
 import java.sql.BatchUpdateException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import static java.lang.Long.max;
 import static java.lang.Long.min;
 import static java.util.Arrays.asList;

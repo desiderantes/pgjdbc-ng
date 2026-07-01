@@ -29,7 +29,6 @@
 package com.impossibl.postgres.system.procs;
 
 import com.impossibl.postgres.types.Modifiers;
-
 import static com.impossibl.postgres.types.Modifiers.PRECISION;
 import static com.impossibl.postgres.types.Modifiers.SCALE;
 

@@ -29,7 +29,6 @@
 package com.impossibl.postgres.utils;
 
 import java.util.concurrent.TimeUnit;
-
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class Await {

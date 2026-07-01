@@ -61,7 +61,6 @@ import com.impossibl.postgres.types.Type;
 import com.impossibl.postgres.utils.ByteBufs;
 import com.impossibl.postgres.utils.Locales;
 import com.impossibl.postgres.utils.Timer;
-
 import static com.impossibl.postgres.system.Empty.EMPTY_BUFFERS;
 import static com.impossibl.postgres.system.Empty.EMPTY_FORMATS;
 import static com.impossibl.postgres.system.Empty.EMPTY_TYPES;
@@ -88,7 +87,6 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;

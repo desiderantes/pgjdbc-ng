@@ -36,7 +36,6 @@ import com.impossibl.postgres.protocol.ResultField;
 import com.impossibl.postgres.protocol.TransactionStatus;
 import com.impossibl.postgres.protocol.TypeOid;
 import com.impossibl.postgres.protocol.TypeRef;
-
 import static com.impossibl.postgres.protocol.TransactionStatus.Active;
 import static com.impossibl.postgres.protocol.TransactionStatus.Failed;
 import static com.impossibl.postgres.protocol.TransactionStatus.Idle;
@@ -51,7 +50,6 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.charset.Charset;
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
-
 import static java.util.Arrays.asList;
 
 import io.netty.buffer.ByteBuf;

@@ -31,7 +31,6 @@ package com.impossibl.postgres.jdbc;
 import com.impossibl.postgres.protocol.FieldFormatRef;
 import com.impossibl.postgres.protocol.ResultBatch;
 import com.impossibl.postgres.protocol.ResultField;
-
 import static com.impossibl.postgres.system.Empty.EMPTY_BUFFERS;
 import static com.impossibl.postgres.system.Empty.EMPTY_FORMATS;
 

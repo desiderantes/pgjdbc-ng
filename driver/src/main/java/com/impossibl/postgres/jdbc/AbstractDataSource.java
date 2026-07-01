@@ -32,7 +32,6 @@ import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.system.Setting;
 import com.impossibl.postgres.system.Settings;
 import com.impossibl.postgres.types.SharedRegistry;
-
 import static com.impossibl.postgres.jdbc.DataSourceSettings.DATABASE_NAME;
 import static com.impossibl.postgres.jdbc.DataSourceSettings.DATASOURCE_NAME;
 import static com.impossibl.postgres.jdbc.DataSourceSettings.DS;

@@ -34,7 +34,6 @@ import static com.impossibl.postgres.utils.StringTransforms.toLowerCamelCase;
 import static com.impossibl.postgres.utils.StringTransforms.toUpperCamelCase;
 
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StringTransformsTest {

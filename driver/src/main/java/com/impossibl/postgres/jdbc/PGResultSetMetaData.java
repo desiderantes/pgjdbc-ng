@@ -32,7 +32,6 @@ import com.impossibl.postgres.protocol.ResultField;
 import com.impossibl.postgres.types.CompositeType;
 import com.impossibl.postgres.types.Registry;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 import static com.impossibl.postgres.jdbc.Exceptions.COLUMN_INDEX_OUT_OF_BOUNDS;
 import static com.impossibl.postgres.jdbc.Exceptions.UNWRAP_ERROR;
@@ -46,7 +45,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 

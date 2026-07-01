@@ -35,7 +35,6 @@ import com.impossibl.postgres.protocol.v30.ProtocolHandler.CommandComplete;
 import com.impossibl.postgres.protocol.v30.ProtocolHandler.CommandError;
 import com.impossibl.postgres.protocol.v30.ProtocolHandler.ReadyForQuery;
 import com.impossibl.postgres.protocol.v30.ProtocolHandler.ReportNotice;
-
 import static com.impossibl.postgres.protocol.FieldFormats.REQUEST_ALL_TEXT;
 import static com.impossibl.postgres.system.Empty.EMPTY_BUFFERS;
 import static com.impossibl.postgres.system.Empty.EMPTY_FORMATS;

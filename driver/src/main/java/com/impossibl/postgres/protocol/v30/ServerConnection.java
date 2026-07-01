@@ -36,7 +36,6 @@ import com.impossibl.postgres.protocol.TypeRef;
 import com.impossibl.postgres.system.Configuration;
 import com.impossibl.postgres.system.ServerInfo;
 import com.impossibl.postgres.system.Version;
-
 import static com.impossibl.postgres.system.SystemSettings.SQL_TRACE;
 import static com.impossibl.postgres.system.SystemSettings.SQL_TRACE_FILE;
 

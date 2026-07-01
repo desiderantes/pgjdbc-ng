@@ -31,7 +31,6 @@ package com.impossibl.postgres.system.procs;
 import java.time.ZoneId;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 

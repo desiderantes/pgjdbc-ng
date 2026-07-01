@@ -41,7 +41,6 @@ import com.impossibl.postgres.system.TypeMapContext;
 import com.impossibl.postgres.types.Type;
 import com.impossibl.postgres.utils.guava.ByteStreams;
 import com.impossibl.postgres.utils.guava.CharStreams;
-
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 import static com.impossibl.postgres.jdbc.Exceptions.CLOSED_RESULT_SET;
 import static com.impossibl.postgres.jdbc.Exceptions.COLUMN_INDEX_OUT_OF_BOUNDS;
@@ -88,14 +87,12 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import io.netty.buffer.ByteBuf;
-
 import static io.netty.util.ReferenceCountUtil.release;
 
 
@@ -2452,7 +2449,7 @@ class CursorScroller extends Scroller {
       }
     }
 
-    sb.append("WHERE CURRENT OF ");
+    sb.append(" WHERE CURRENT OF ");
     sb.append(cursorName);
 
     ByteBuf[] paramBuffers = rowData.getFieldBuffers();

@@ -34,11 +34,9 @@ import com.impossibl.postgres.protocol.RowData;
 import com.impossibl.postgres.protocol.UpdatableRowData;
 import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.utils.ByteBufs.lengthEncode;
 
 import java.io.IOException;
-
 import static java.lang.Math.max;
 import static java.nio.charset.StandardCharsets.UTF_8;
 

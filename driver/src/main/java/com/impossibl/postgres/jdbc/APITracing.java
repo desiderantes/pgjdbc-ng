@@ -33,7 +33,6 @@ import com.impossibl.jdbc.spy.ConnectionTracer;
 import com.impossibl.jdbc.spy.SimpleTraceOutput;
 import com.impossibl.postgres.system.Configuration;
 import com.impossibl.postgres.system.Settings;
-
 import static com.impossibl.postgres.jdbc.JDBCSettings.API_TRACE;
 import static com.impossibl.postgres.jdbc.JDBCSettings.API_TRACE_FILE;
 

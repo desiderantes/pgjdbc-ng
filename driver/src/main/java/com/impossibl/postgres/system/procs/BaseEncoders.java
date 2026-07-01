@@ -31,7 +31,6 @@ package com.impossibl.postgres.system.procs;
 import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.system.ConversionException;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.utils.guava.Preconditions.checkNotNull;
 
 import java.io.IOException;

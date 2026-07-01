@@ -33,7 +33,6 @@ import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.types.Type;
 import com.impossibl.postgres.utils.guava.ByteStreams;
 import com.impossibl.postgres.utils.guava.CharStreams;
-
 import static com.impossibl.postgres.jdbc.Exceptions.NOT_IMPLEMENTED;
 import static com.impossibl.postgres.jdbc.Exceptions.NOT_SUPPORTED;
 import static com.impossibl.postgres.system.Empty.EMPTY_TYPES;

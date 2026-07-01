@@ -32,7 +32,6 @@ import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.system.JavaTypeMapping;
 import com.impossibl.postgres.types.Modifiers;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.system.SystemSettings.FIELD_LENGTH_MAX;
 import static com.impossibl.postgres.types.Modifiers.LENGTH;
 
@@ -43,7 +42,6 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
-
 import static java.lang.Integer.min;
 
 import io.netty.buffer.ByteBuf;

@@ -29,7 +29,6 @@
 package com.impossibl.postgres.types;
 
 import com.impossibl.postgres.protocol.TypeRef;
-
 import static com.impossibl.postgres.types.Type.CATALOG_NAMESPACE;
 
 import java.io.IOException;

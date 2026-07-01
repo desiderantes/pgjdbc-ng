@@ -1,7 +1,6 @@
 plugins {
   base
   id("com.gradleup.shadow") apply false
-  alias(libs.plugins.docker.compose) apply false
   alias(libs.plugins.benmanes.versions)
 }
 

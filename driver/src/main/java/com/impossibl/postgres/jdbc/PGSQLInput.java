@@ -30,7 +30,6 @@ package com.impossibl.postgres.jdbc;
 
 import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.jdbc.Exceptions.NOT_IMPLEMENTED;
 import static com.impossibl.postgres.jdbc.Exceptions.NOT_SUPPORTED;
 
@@ -53,7 +52,6 @@ import java.sql.SQLInput;
 import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
-
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import io.netty.buffer.ByteBuf;

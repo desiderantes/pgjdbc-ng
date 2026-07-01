@@ -34,14 +34,14 @@ import java.text.ParseException;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ACLItemTest {
 
   @Test
-  public void testRightsParsing() throws ParseException {
+  public void testRightsParsing() {
 
     ACLItem.Right[] allRightsWithOptions =
         ACLItem.ALL_PRIVILEGES.chars()
@@ -53,30 +53,37 @@ public class ACLItemTest {
             .mapToObj(p -> (char)p + "*")
             .collect(Collectors.joining());
 
-    assertArrayEquals(allRightsWithOptions, ACLItem.rightsOf(allRightsWithOptionsStr));
+    ACLItem.Right[] allRightsWithOptionsResult = assertDoesNotThrow(() -> ACLItem.rightsOf(allRightsWithOptionsStr));
+    assertArrayEquals(allRightsWithOptions, allRightsWithOptionsResult);
 
     ACLItem.Right[] allRightsWithoutOptions =
         ACLItem.ALL_PRIVILEGES.chars()
             .mapToObj(p -> new ACLItem.Right((char)p, false))
             .toArray(ACLItem.Right[]::new);
 
-    assertArrayEquals(allRightsWithoutOptions, ACLItem.rightsOf(ACLItem.ALL_PRIVILEGES));
+    ACLItem.Right[] allRightsWithoutOptionsResult = assertDoesNotThrow(() -> ACLItem.rightsOf(ACLItem.ALL_PRIVILEGES));
+    assertArrayEquals(allRightsWithoutOptions, allRightsWithoutOptionsResult);
 
     ACLItem.Right[] singleRight = new ACLItem.Right[]{new ACLItem.Right('a', false)};
-    assertArrayEquals(singleRight, ACLItem.rightsOf("a"));
+    ACLItem.Right[] singleRightResult = assertDoesNotThrow(() -> ACLItem.rightsOf("a"));
+    assertArrayEquals(singleRight, singleRightResult);
 
     ACLItem.Right[] singleRightWithOption = new ACLItem.Right[]{new ACLItem.Right('a', true)};
-    assertArrayEquals(singleRightWithOption, ACLItem.rightsOf("a*"));
+    ACLItem.Right[] singleRightWithOptionResult = assertDoesNotThrow(() -> ACLItem.rightsOf("a*"));
+    assertArrayEquals(singleRightWithOption, singleRightWithOptionResult);
 
     ACLItem.Right[] multipleRightsNoOptions = new ACLItem.Right[]{
         new ACLItem.Right('a', false), new ACLItem.Right('D', false)
     };
-    assertArrayEquals(multipleRightsNoOptions, ACLItem.rightsOf("aD"));
+    ACLItem.Right[] multipleRightsNoOptionsResult = assertDoesNotThrow(() -> ACLItem.rightsOf("aD"));
+    assertArrayEquals(multipleRightsNoOptions, multipleRightsNoOptionsResult);
 
     ACLItem.Right[] noRights = new ACLItem.Right[0];
-    assertArrayEquals(noRights, ACLItem.rightsOf(""));
+    ACLItem.Right[] noRightsResult = assertDoesNotThrow(() -> ACLItem.rightsOf(""));
+    assertArrayEquals(noRights, noRightsResult);
 
-    assertArrayEquals(null, ACLItem.rightsOf(null));
+    ACLItem.Right[] nullResult = assertDoesNotThrow(() -> ACLItem.rightsOf(null));
+    assertArrayEquals(null, nullResult);
   }
 
   @Test

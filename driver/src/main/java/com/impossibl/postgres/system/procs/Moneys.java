@@ -31,14 +31,12 @@ package com.impossibl.postgres.system.procs;
 import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.system.ConversionException;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.system.SystemSettings.MONEY_FRACTIONAL_DIGITS;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
-
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.ZERO;
 import static java.math.RoundingMode.HALF_UP;

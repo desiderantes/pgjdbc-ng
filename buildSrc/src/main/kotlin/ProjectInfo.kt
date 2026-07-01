@@ -5,11 +5,14 @@ object ProjectInfo {
         const val URL = "https://github.com/$NAME"
     }
 
+    val NAME = "pgjdbc-ng"
+
     val URL = "${Organization.URL}/pgjdbc-ng"
 
     val ISSUES_URL = "$URL/issues"
     val SCM_URL = "scm:$URL.git"
     val SCM_GIT_URL = "scm:git@github.com:${Organization.NAME}/pgjdbc-ng.git"
+    val GROUP_ID = "com.impossibl"
 
     val DEVELOPERS = listOf (
         Developer (

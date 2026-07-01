@@ -33,7 +33,6 @@ import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 
 import java.sql.BatchUpdateException;
 import java.util.Arrays;
-
 import static java.lang.Long.min;
 import static java.sql.Statement.EXECUTE_FAILED;
 import static java.sql.Statement.SUCCESS_NO_INFO;

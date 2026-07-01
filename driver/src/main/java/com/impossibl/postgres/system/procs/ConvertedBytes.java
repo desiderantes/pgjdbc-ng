@@ -30,11 +30,9 @@ package com.impossibl.postgres.system.procs;
 
 import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.system.SystemSettings.FIELD_LENGTH_MAX;
 
 import java.io.IOException;
-
 import static java.lang.Math.min;
 
 import io.netty.buffer.ByteBuf;

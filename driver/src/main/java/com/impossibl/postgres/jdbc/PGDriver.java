@@ -31,7 +31,6 @@ package com.impossibl.postgres.jdbc;
 import com.impossibl.postgres.protocol.v30.ServerConnectionShared;
 import com.impossibl.postgres.system.Version;
 import com.impossibl.postgres.types.SharedRegistry;
-
 import static com.impossibl.postgres.jdbc.JDBCSettings.JDBC;
 import static com.impossibl.postgres.jdbc.JDBCSettings.REGISTRY_SHARING;
 import static com.impossibl.postgres.system.SystemSettings.PROTO;

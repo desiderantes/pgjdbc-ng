@@ -48,7 +48,6 @@ import com.impossibl.postgres.system.ParameterNames;
 import com.impossibl.postgres.system.ServerInfo;
 import com.impossibl.postgres.system.SystemSettings;
 import com.impossibl.postgres.system.Version;
-
 import static com.impossibl.postgres.protocol.ServerConnection.KeyData;
 import static com.impossibl.postgres.protocol.v30.HostNameVerifier.verifyHostName;
 import static com.impossibl.postgres.system.SystemSettings.APPLICATION_NAME;
@@ -88,7 +87,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import javax.net.ssl.SSLEngine;

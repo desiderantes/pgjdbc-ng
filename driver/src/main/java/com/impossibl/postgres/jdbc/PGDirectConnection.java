@@ -55,7 +55,6 @@ import com.impossibl.postgres.types.Type;
 import com.impossibl.postgres.utils.Await;
 import com.impossibl.postgres.utils.BlockingReadTimeoutException;
 import com.impossibl.postgres.utils.CacheMap;
-
 import static com.impossibl.postgres.jdbc.ErrorUtils.chainWarnings;
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLWarningChain;
@@ -143,7 +142,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-
 import static java.lang.String.format;
 import static java.sql.ClientInfoStatus.REASON_UNKNOWN;
 import static java.sql.ClientInfoStatus.REASON_UNKNOWN_PROPERTY;
@@ -159,7 +157,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
-
 import static io.netty.util.ReferenceCountUtil.release;
 
 

@@ -31,7 +31,6 @@ package com.impossibl.postgres.jdbc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
-
 import static java.lang.Math.min;
 
 public class BlobInputStream extends InputStream {

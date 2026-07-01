@@ -33,7 +33,6 @@ import com.impossibl.postgres.protocol.RowDataSet;
 import com.impossibl.postgres.protocol.v30.BufferRowData;
 import com.impossibl.postgres.types.Registry;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 import static com.impossibl.postgres.jdbc.Exceptions.SERVER_VERSION_NOT_SUPPORTED;
 import static com.impossibl.postgres.utils.Nulls.firstNonNull;

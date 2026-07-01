@@ -36,7 +36,6 @@ import com.impossibl.postgres.types.DomainType;
 import com.impossibl.postgres.types.Registry;
 import com.impossibl.postgres.types.Type;
 import com.impossibl.postgres.utils.guava.Joiner;
-
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 import static com.impossibl.postgres.jdbc.Exceptions.NOT_IMPLEMENTED;
 import static com.impossibl.postgres.jdbc.Exceptions.UNWRAP_ERROR;
@@ -60,7 +59,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import static java.util.Comparator.comparing;
 
 class PGDatabaseMetaData extends PGMetaData implements DatabaseMetaData {
@@ -883,6 +881,10 @@ class PGDatabaseMetaData extends PGMetaData implements DatabaseMetaData {
           else {
             argType = reg.loadType(argTypeIds[i].intValue());
           }
+          if (argType == null) {
+            // Workaround for unknown/unsupported types (e.g. multiranges in Postgres 14+)
+            continue;
+          }
 
           row[5] = JDBCTypeMapping.getJDBCTypeCode(argType);
           row[6] = argType.getQualifiedName().toString();
@@ -908,6 +910,10 @@ class PGDatabaseMetaData extends PGMetaData implements DatabaseMetaData {
             try (ResultSet columnrs = stmt.executeQuery(columnsql)) {
               while (columnrs.next()) {
                 Type columnType = reg.loadType(columnrs.getInt("atttypid"));
+                if (columnType == null) {
+                  // Workaround for unknown/unsupported types (e.g. multiranges in Postgres 14+)
+                  continue;
+                }
 
                 Object[] row = new Object[resultFields.length];
                 row[0] = null;
@@ -1799,6 +1805,10 @@ class PGDatabaseMetaData extends PGMetaData implements DatabaseMetaData {
         Object[] row = new Object[18];
         int typeOid = rs.getInt(2);
         Type type = registry.loadType(typeOid);
+        if (type == null) {
+          // Workaround for unknown/unsupported types (e.g. multiranges in Postgres 14+)
+          continue;
+        }
 
         row[0] = JDBCTypeMetaData.getTypeName(type, null);
         row[1] = JDBCTypeMapping.getJDBCTypeCode(type);
@@ -2168,6 +2178,10 @@ class PGDatabaseMetaData extends PGMetaData implements DatabaseMetaData {
         row[5] = rs.getObject(6);
 
         Type type = reg.loadType(rs.getInt(7));
+        if (type == null && rs.getInt(7) != 0) {
+          // Workaround for unknown/unsupported types (e.g. multiranges in Postgres 14+)
+          continue;
+        }
         if (type != null) {
           row[6] = JDBCTypeMapping.getJDBCTypeCode(type);
         }
@@ -2241,7 +2255,12 @@ class PGDatabaseMetaData extends PGMetaData implements DatabaseMetaData {
         attrData.relationId = rs.getInt("attrelid");
         attrData.relationAttrNum = rs.getInt("attnum");
         attrData.attributeName = rs.getString("attname");
-        attrData.type = registry.loadType(rs.getInt("atttypid"));
+        Type type = registry.loadType(rs.getInt("atttypid"));
+        if (type == null) {
+          // Workaround for unknown/unsupported types (e.g. multiranges in Postgres 14+)
+          continue;
+        }
+        attrData.type = type;
         attrData.typeModifier = rs.getInt("atttypmod");
         attrData.typeLength = rs.getInt("attlen");
         attrData.nullable = !rs.getBoolean("attnotnull");

@@ -29,7 +29,6 @@
 package com.impossibl.postgres.protocol.ssl;
 
 import com.impossibl.postgres.system.Configuration;
-
 import static com.impossibl.postgres.system.SystemSettings.SSL_CA_CRT_FILE;
 import static com.impossibl.postgres.system.SystemSettings.SSL_CRT_FILE;
 import static com.impossibl.postgres.system.SystemSettings.SSL_HOME_DIR;

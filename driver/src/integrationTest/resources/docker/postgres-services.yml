@@ -1,0 +1,53 @@
+version: "3"
+services:
+  postgres:
+    image: "postgres:${PG_VERSION}-alpine"
+    ports:
+      - "5432"
+    healthcheck:
+      test: psql -c 'SELECT 1' -U test -d test
+      interval: 1s
+      timeout: 3s
+      retries: 20
+    entrypoint: >
+      sh -c '
+      mkdir -p /var/lib/postgresql/certs &&
+      cp /certs-mount/* /var/lib/postgresql/certs/ &&
+      chown -R postgres:postgres /var/lib/postgresql/certs &&
+      chmod 600 /var/lib/postgresql/certs/server.key &&
+      exec docker-entrypoint.sh "$$@"
+      ' --
+    volumes:
+      - ../certdir/server:/certs-mount:Z
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
+      TZ: America/Los_Angeles
+      PGTZ: America/Los_Angeles
+    command: >-
+      --hba_file=/var/lib/postgresql/certs/pg_hba.conf
+      --max-prepared-transactions=10
+      --ssl=on
+      --ssl_ca_file=/var/lib/postgresql/certs/root.crt
+      --ssl_cert_file=/var/lib/postgresql/certs/server.crt
+      --ssl_key_file=/var/lib/postgresql/certs/server.key
+
+  postgres-nossl:
+    image: "postgres:${PG_VERSION}-alpine"
+    ports:
+      - "5432"
+    healthcheck:
+      test: psql -c 'SELECT 1' -U test -d test
+      interval: 1s
+      timeout: 3s
+      retries: 20
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
+      TZ: America/Los_Angeles
+      PGTZ: America/Los_Angeles
+    command: >-
+      --max-prepared-transactions=10
+

@@ -32,7 +32,6 @@ import com.impossibl.postgres.protocol.FieldFormat;
 import com.impossibl.postgres.protocol.FieldFormatRef;
 import com.impossibl.postgres.protocol.ServerObjectType;
 import com.impossibl.postgres.protocol.TypeRef;
-
 import static com.impossibl.postgres.protocol.FieldFormat.Text;
 import static com.impossibl.postgres.utils.ByteBufs.lengthEncode;
 import static com.impossibl.postgres.utils.ByteBufs.writeCString;

@@ -41,7 +41,6 @@ import com.impossibl.postgres.protocol.v30.ProtocolHandler.ReadyForQuery;
 import com.impossibl.postgres.protocol.v30.ProtocolHandler.ReportNotice;
 import com.impossibl.postgres.protocol.v30.ProtocolHandler.RowDescription;
 import com.impossibl.postgres.system.NoticeException;
-
 import static com.impossibl.postgres.system.Empty.EMPTY_FIELDS;
 import static com.impossibl.postgres.system.Empty.EMPTY_TYPES;
 
@@ -50,7 +49,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
-
 import static io.netty.util.ReferenceCountUtil.release;
 
 public class QueryRequest implements ServerRequest {

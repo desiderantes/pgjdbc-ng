@@ -38,7 +38,6 @@ import com.impossibl.postgres.protocol.v30.ProtocolHandler.ReadyForQuery;
 import com.impossibl.postgres.system.NoticeException;
 
 import java.io.IOException;
-
 import static java.util.Collections.emptyList;
 
 

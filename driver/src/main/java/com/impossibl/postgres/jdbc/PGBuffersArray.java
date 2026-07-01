@@ -37,7 +37,6 @@ import com.impossibl.postgres.types.ArrayType;
 import com.impossibl.postgres.types.NestedArrayType;
 import com.impossibl.postgres.types.Registry;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.jdbc.ArrayUtils.getDimensions;
 import static com.impossibl.postgres.jdbc.ArrayUtils.getElementType;
 import static com.impossibl.postgres.system.CustomTypes.lookupCustomType;
@@ -51,7 +50,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.copyOfRange;
 

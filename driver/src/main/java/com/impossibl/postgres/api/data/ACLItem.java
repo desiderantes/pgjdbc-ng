@@ -29,7 +29,6 @@
 package com.impossibl.postgres.api.data;
 
 import com.impossibl.postgres.utils.guava.Preconditions;
-
 import static com.impossibl.postgres.utils.guava.Strings.isNullOrEmpty;
 
 import java.text.ParseException;

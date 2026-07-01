@@ -35,7 +35,6 @@ import com.impossibl.postgres.protocol.RowData;
 import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.system.TypeMapContext;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.jdbc.Exceptions.NOT_IMPLEMENTED;
 import static com.impossibl.postgres.jdbc.Exceptions.NOT_SUPPORTED;
 import static com.impossibl.postgres.jdbc.Exceptions.PARAMETER_INDEX_OUT_OF_BOUNDS;
@@ -73,7 +72,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import static java.util.Arrays.copyOf;
 import static java.util.Arrays.fill;
 import static java.util.Collections.nCopies;

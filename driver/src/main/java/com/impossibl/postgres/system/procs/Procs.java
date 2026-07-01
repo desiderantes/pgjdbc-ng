@@ -32,7 +32,6 @@ import com.impossibl.postgres.system.ServerInfo;
 import com.impossibl.postgres.types.Modifiers;
 import com.impossibl.postgres.types.Type;
 import com.impossibl.postgres.types.Type.Codec;
-
 import static com.impossibl.postgres.utils.guava.Strings.isNullOrEmpty;
 
 import java.util.ArrayList;

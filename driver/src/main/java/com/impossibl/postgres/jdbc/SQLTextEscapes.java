@@ -39,7 +39,6 @@ import com.impossibl.postgres.jdbc.SQLTextTree.StringLiteralPiece;
 import com.impossibl.postgres.jdbc.SQLTextTree.UnquotedIdentifierPiece;
 import com.impossibl.postgres.jdbc.SQLTextTree.WhitespacePiece;
 import com.impossibl.postgres.system.Context;
-
 import static com.impossibl.postgres.jdbc.SQLTextEscapeFunctions.concat;
 import static com.impossibl.postgres.jdbc.SQLTextEscapeFunctions.getEscapeMethod;
 import static com.impossibl.postgres.jdbc.SQLTextEscapeFunctions.grammar;

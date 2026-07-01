@@ -39,7 +39,6 @@ import com.impossibl.postgres.protocol.v30.ProtocolHandler.ParseComplete;
 import com.impossibl.postgres.protocol.v30.ProtocolHandler.ReportNotice;
 import com.impossibl.postgres.protocol.v30.ProtocolHandler.RowDescription;
 import com.impossibl.postgres.system.NoticeException;
-
 import static com.impossibl.postgres.protocol.ServerObjectType.Statement;
 import static com.impossibl.postgres.system.Empty.EMPTY_FIELDS;
 

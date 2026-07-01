@@ -35,7 +35,6 @@ import com.impossibl.postgres.types.Type;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 

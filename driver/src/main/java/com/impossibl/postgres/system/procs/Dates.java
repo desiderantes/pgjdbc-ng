@@ -31,7 +31,6 @@ package com.impossibl.postgres.system.procs;
 import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.system.ConversionException;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.system.procs.DatesTimes.JAVA_DATE_NEGATIVE_INFINITY_MSECS;
 import static com.impossibl.postgres.system.procs.DatesTimes.JAVA_DATE_POSITIVE_INFINITY_MSECS;
 import static com.impossibl.postgres.system.procs.DatesTimes.NEG_INFINITY;
@@ -45,7 +44,6 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
-
 import static java.util.concurrent.TimeUnit.DAYS;
 
 import io.netty.buffer.ByteBuf;

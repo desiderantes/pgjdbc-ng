@@ -29,7 +29,6 @@
 package com.impossibl.postgres.types;
 
 import com.impossibl.postgres.protocol.FieldFormat;
-
 import static com.impossibl.postgres.system.procs.NestedArrays.BINARY_DECODER;
 import static com.impossibl.postgres.system.procs.NestedArrays.TEXT_DECODER;
 

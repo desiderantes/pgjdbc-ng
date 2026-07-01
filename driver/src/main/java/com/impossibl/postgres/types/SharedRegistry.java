@@ -35,7 +35,6 @@ import com.impossibl.postgres.system.Version;
 import com.impossibl.postgres.system.procs.Procs;
 import com.impossibl.postgres.types.Type.Category;
 import com.impossibl.postgres.types.Type.Codec;
-
 import static com.impossibl.postgres.protocol.FieldFormat.Binary;
 import static com.impossibl.postgres.system.procs.Procs.DEFAULT_BINARY_DECODER;
 import static com.impossibl.postgres.system.procs.Procs.DEFAULT_BINARY_ENCODER;

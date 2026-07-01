@@ -39,7 +39,6 @@ import com.impossibl.postgres.protocol.v30.ProtocolHandler.ReadyForQuery;
 import com.impossibl.postgres.system.NoticeException;
 import com.impossibl.postgres.system.Version;
 import com.impossibl.postgres.utils.ByteBufs;
-
 import static com.impossibl.postgres.utils.guava.Preconditions.checkArgument;
 
 import java.io.IOException;
@@ -47,7 +46,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import io.netty.buffer.ByteBuf;

@@ -31,7 +31,6 @@ package com.impossibl.postgres.system.procs;
 import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.types.Type;
 import com.impossibl.postgres.utils.TypeLiteral;
-
 import static com.impossibl.postgres.utils.ByteBufs.lengthDecodeBinary;
 import static com.impossibl.postgres.utils.ByteBufs.lengthEncodeBinary;
 

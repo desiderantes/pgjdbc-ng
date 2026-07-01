@@ -36,7 +36,6 @@ import com.impossibl.postgres.protocol.RequestExecutorHandlers.ExecuteResult;
 import com.impossibl.postgres.protocol.RequestExecutorHandlers.QueryResult;
 import com.impossibl.postgres.protocol.ResultBatch;
 import com.impossibl.postgres.protocol.ResultField;
-
 import static com.impossibl.postgres.jdbc.ErrorUtils.chainWarnings;
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 import static com.impossibl.postgres.protocol.ResultBatches.transformFieldTypes;
@@ -47,7 +46,6 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.util.ArrayList;
 import java.util.List;
-
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 

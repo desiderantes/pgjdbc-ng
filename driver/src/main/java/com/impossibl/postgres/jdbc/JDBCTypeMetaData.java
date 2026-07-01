@@ -30,7 +30,6 @@ package com.impossibl.postgres.jdbc;
 
 import com.impossibl.postgres.api.jdbc.PGType;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.types.Modifiers.LENGTH;
 import static com.impossibl.postgres.types.Modifiers.PRECISION;
 import static com.impossibl.postgres.types.Modifiers.SCALE;
@@ -48,6 +47,10 @@ import java.util.Map;
 class JDBCTypeMetaData {
 
   static boolean requiresQuoting(Type type) {
+
+    if (type == null) {
+      return true;
+    }
 
     int sqlType = JDBCTypeMapping.getJDBCTypeCode(type);
     switch (sqlType) {
@@ -70,12 +73,26 @@ class JDBCTypeMetaData {
 
   static boolean isCurrency(Type type) {
 
-    return PGType.valueOf(type.unwrap()) == PGType.MONEY;
+    if (type == null) {
+      return false;
+    }
+    Type unwrapped = type.unwrap();
+    if (unwrapped == null) {
+      return false;
+    }
+    return PGType.valueOf(unwrapped) == PGType.MONEY;
   }
 
   static boolean isCaseSensitive(Type type) {
 
-    switch (type.getCategory()) {
+    if (type == null) {
+      return false;
+    }
+    Type.Category category = type.getCategory();
+    if (category == null) {
+      return false;
+    }
+    switch (category) {
       case Enumeration:
       case String:
         return true;
@@ -87,7 +104,14 @@ class JDBCTypeMetaData {
 
   static boolean isSigned(Type type) {
 
-    return type.unwrap().getCategory() == Type.Category.Numeric;
+    if (type == null) {
+      return false;
+    }
+    Type unwrapped = type.unwrap();
+    if (unwrapped == null) {
+      return false;
+    }
+    return unwrapped.getCategory() == Type.Category.Numeric;
   }
 
   static String getTypeName(Type type, String attributeDefaultValue) {
@@ -110,7 +134,14 @@ class JDBCTypeMetaData {
 
   static int getPrecisionRadix(Type type) {
 
-    switch (type.unwrap().getCategory()) {
+    if (type == null) {
+      return 0;
+    }
+    Type unwrapped = type.unwrap();
+    if (unwrapped == null || unwrapped.getCategory() == null) {
+      return 0;
+    }
+    switch (unwrapped.getCategory()) {
       case Numeric:
         return 10;
 
@@ -125,7 +156,13 @@ class JDBCTypeMetaData {
 
   static int getMaxPrecision(Type type) {
 
+    if (type == null) {
+      return 0;
+    }
     type = type.unwrap();
+    if (type == null) {
+      return 0;
+    }
 
     PGType pgType = PGType.valueOf(type);
     if (pgType == null) {
@@ -154,7 +191,13 @@ class JDBCTypeMetaData {
 
   static int getPrecision(Type type, int typeLength, int typeModifier) {
 
+    if (type == null) {
+      return typeLength;
+    }
     type = type.unwrap();
+    if (type == null) {
+      return typeLength;
+    }
     Map<String, Object> mods = type.getModifierParser().parse(typeModifier);
 
     //Lookup prec & length (if the mods have them)
@@ -254,7 +297,14 @@ class JDBCTypeMetaData {
 
   static int getMinScale(Type type) {
 
-    PGType pgType = PGType.valueOf(type.unwrap());
+    if (type == null) {
+      return 0;
+    }
+    Type unwrapped = type.unwrap();
+    if (unwrapped == null) {
+      return 0;
+    }
+    PGType pgType = PGType.valueOf(unwrapped);
     if (pgType == null) {
       return 0;
     }
@@ -268,7 +318,14 @@ class JDBCTypeMetaData {
 
   static int getMaxScale(Type type) {
 
-    PGType pgType = PGType.valueOf(type.unwrap());
+    if (type == null) {
+      return 0;
+    }
+    Type unwrapped = type.unwrap();
+    if (unwrapped == null) {
+      return 0;
+    }
+    PGType pgType = PGType.valueOf(unwrapped);
     if (pgType == null) {
       return 0;
     }
@@ -282,7 +339,14 @@ class JDBCTypeMetaData {
 
   static int getScale(Type type, int typeModifier) {
 
-    PGType pgType = PGType.valueOf(type.unwrap());
+    if (type == null) {
+      return 0;
+    }
+    type = type.unwrap();
+    if (type == null) {
+      return 0;
+    }
+    PGType pgType = PGType.valueOf(type);
     if (pgType == null) {
       return 0;
     }
@@ -341,7 +405,13 @@ class JDBCTypeMetaData {
 
   static int getDisplaySize(Type type, int typeLength, int typeModifier) {
 
+    if (type == null) {
+      return typeLength != -1 ? typeLength : 0;
+    }
     type = type.unwrap();
+    if (type == null) {
+      return typeLength != -1 ? typeLength : 0;
+    }
     Map<String, Object> mods = type.getModifierParser().parse(typeModifier);
 
     int precMod = -1;
@@ -359,42 +429,48 @@ class JDBCTypeMetaData {
 
     int size;
 
-    switch (type.getCategory()) {
-      case Numeric:
-        if (precMod == -1) {
-          size = 131089;
-        }
-        else {
-          int prec = getPrecision(type, typeLength, typeModifier);
-          int scale = getScale(type, typeModifier);
-          size = prec + (scale != 0 ? 1 : 0) + 1;
-        }
-        break;
+    Type.Category category = type.getCategory();
+    if (category == null) {
+      size = lenMod != -1 ? lenMod : Integer.MAX_VALUE;
+    }
+    else {
+      switch (category) {
+        case Numeric:
+          if (precMod == -1) {
+            size = 131089;
+          }
+          else {
+            int prec = getPrecision(type, typeLength, typeModifier);
+            int scale = getScale(type, typeModifier);
+            size = prec + (scale != 0 ? 1 : 0) + 1;
+          }
+          break;
 
-      case Boolean:
-        size = 5; // true/false, yes/no, on/off, 1/0
-        break;
+        case Boolean:
+          size = 5; // true/false, yes/no, on/off, 1/0
+          break;
 
-      case String:
-      case Enumeration:
-      case BitString:
-        if (lenMod == -1)
+        case String:
+        case Enumeration:
+        case BitString:
+          if (lenMod == -1)
+            size = Integer.MAX_VALUE;
+          else
+            size = lenMod;
+          break;
+
+        case DateTime:
+          size = calculateDateTimeDisplaySize(PGType.valueOf(type), precMod);
+          break;
+
+        case Timespan:
+          size = 49;
+          break;
+
+        default:
           size = Integer.MAX_VALUE;
-        else
-          size = lenMod;
-        break;
-
-      case DateTime:
-        size = calculateDateTimeDisplaySize(PGType.valueOf(type), precMod);
-        break;
-
-      case Timespan:
-        size = 49;
-        break;
-
-      default:
-        size = Integer.MAX_VALUE;
-        break;
+          break;
+      }
     }
 
     return size;

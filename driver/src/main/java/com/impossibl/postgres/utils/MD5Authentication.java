@@ -32,7 +32,6 @@ import static com.impossibl.postgres.system.procs.Bytes.encodeHex;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.charset.StandardCharsets.UTF_8;
 

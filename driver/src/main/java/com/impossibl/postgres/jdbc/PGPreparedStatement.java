@@ -41,7 +41,6 @@ import com.impossibl.postgres.types.Type;
 import com.impossibl.postgres.utils.ByteBufs;
 import com.impossibl.postgres.utils.guava.ByteStreams;
 import com.impossibl.postgres.utils.guava.CharStreams;
-
 import static com.impossibl.postgres.jdbc.ErrorUtils.chainWarnings;
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 import static com.impossibl.postgres.jdbc.Exceptions.NOT_ALLOWED_ON_PREP_STMT;
@@ -91,7 +90,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import static java.lang.Integer.toHexString;
 import static java.lang.Long.min;
 import static java.nio.charset.StandardCharsets.US_ASCII;
@@ -100,7 +98,6 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.util.ReferenceCountUtil;
-
 import static io.netty.buffer.ByteBufUtil.writeUtf8;
 
 class PGPreparedStatement extends PGStatement implements PreparedStatement {

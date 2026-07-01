@@ -30,14 +30,12 @@ package com.impossibl.postgres.jdbc;
 
 import com.impossibl.postgres.jdbc.SQLTextTree.GrammarPiece;
 import com.impossibl.postgres.jdbc.SQLTextTree.StatementNode;
-
 import static com.impossibl.postgres.system.Identifier.quoteIfNeeded;
 
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Iterator;
 import java.util.List;
-
 import static java.sql.Connection.TRANSACTION_READ_COMMITTED;
 import static java.sql.Connection.TRANSACTION_READ_UNCOMMITTED;
 import static java.sql.Connection.TRANSACTION_REPEATABLE_READ;

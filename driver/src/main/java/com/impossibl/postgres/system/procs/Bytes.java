@@ -34,14 +34,12 @@ import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.system.ConversionException;
 import com.impossibl.postgres.types.Type;
 import com.impossibl.postgres.utils.guava.ByteStreams;
-
 import static com.impossibl.postgres.system.SystemSettings.FIELD_LENGTH_MAX;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
-
 import static java.lang.Math.min;
 
 import io.netty.buffer.ByteBuf;

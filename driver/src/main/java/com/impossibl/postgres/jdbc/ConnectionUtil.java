@@ -31,7 +31,6 @@ package com.impossibl.postgres.jdbc;
 import com.impossibl.postgres.system.Settings;
 import com.impossibl.postgres.system.SystemSettings;
 import com.impossibl.postgres.types.SharedRegistry;
-
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 import static com.impossibl.postgres.jdbc.JDBCSettings.HOUSEKEEPER;
 import static com.impossibl.postgres.jdbc.JDBCSettings.JDBC;
@@ -61,7 +60,6 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import static java.util.Comparator.comparing;
 
 import io.netty.channel.unix.DomainSocketAddress;

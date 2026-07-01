@@ -4,10 +4,13 @@ import com.google.testing.compile.Compilation
 import com.google.testing.compile.Compiler.javac
 import com.google.testing.compile.JavaFileObjects
 import com.impossibl.postgres.tools.UDTGenerator
-import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.CoreMatchers.hasItems
-import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.testcontainers.containers.ComposeContainer
+import org.testcontainers.containers.ContainerState
 import java.io.File
 import java.sql.DriverManager
 import java.util.*
@@ -18,12 +21,69 @@ class UDTGeneratorTest {
 
   companion object {
 
-    private val server = System.getProperty("pgjbdc.test.server", "localhost")
-    private val port = System.getProperty("pgjdbc.test.port", "5432")
-    private val db = System.getProperty("pgjdbc.test.db", "test")
-    private val url = "jdbc:pgsql://$server:$port/$db"
+    private val container = ComposeContainer(File("src/test/docker/postgres-services.yml"))
+      .apply {
+      val pgVersion = (System.getProperty("postgresVersions") ?: System.getenv("POSTGRES_VERSIONS") ?: "14")
+        .split(",")
+        .first()
+        .trim()
+      withEnv("PG_VERSION", pgVersion)
+      withServices("postgres")
+    }
 
-    private val props = Properties().apply {
+    @JvmStatic
+    @BeforeAll
+    fun beforeAll() {
+      container.start()
+      val pgContainer: ContainerState = container.getContainerByServiceName("postgres")
+        .orElseThrow { RuntimeException("Could not find container for service: postgres") }
+      val containerId = pgContainer.containerId
+      val client = org.testcontainers.DockerClientFactory.instance().client()
+      val inspect = client.inspectContainerCmd(containerId).exec()
+      val binding = inspect.networkSettings.ports.bindings[com.github.dockerjava.api.model.ExposedPort.tcp(5432)]
+      if (binding.isNullOrEmpty()) {
+        throw RuntimeException("PostgreSQL container port 5432 not mapped to host")
+      }
+      val host = pgContainer.host
+      val port = binding[0].hostPortSpec
+      System.setProperty("pgjdbc.test.server", host)
+      System.setProperty("pgjdbc.test.port", port)
+
+      // Wait for port to be open and accepting connection
+      var connected = false
+      val start = System.currentTimeMillis()
+      val url = "jdbc:pgsql://$host:$port/test"
+      val props = Properties().apply {
+        setProperty("user", "test")
+        setProperty("password", "test")
+      }
+      while (System.currentTimeMillis() - start < 30000) {
+        try {
+          DriverManager.getConnection(url, props).use {
+            connected = true
+          }
+          break
+        } catch (e: Exception) {
+          Thread.sleep(500)
+        }
+      }
+      if (!connected) {
+        throw RuntimeException("Database did not become ready in 30 seconds")
+      }
+    }
+
+    @JvmStatic
+    @AfterAll
+    fun afterAll() {
+      container.stop()
+    }
+
+    private val server get() = System.getProperty("pgjdbc.test.server", "localhost")
+    private val port get() = System.getProperty("pgjdbc.test.port", "5432")
+    private val db get() = System.getProperty("pgjdbc.test.db", "test")
+    private val url get() = "jdbc:pgsql://$server:$port/$db"
+
+    private val props get() = Properties().apply {
       setProperty("user", System.getProperty("pgjdbc.test.user", "test"))
       setProperty("password", System.getProperty("pgjdbc.test.password", "test"))
     }
@@ -56,8 +116,8 @@ class UDTGeneratorTest {
         val result = javac()
            .compile(files + JavaFileObjects.forResource("VCardTest.java"))
 
-        assertThat(result.errors(), equalTo(emptyList<Diagnostic<*>>()))
-        assertThat(result.status(), equalTo(Compilation.Status.SUCCESS))
+        assertEquals(result.errors(), emptyList<Diagnostic<*>>())
+        assertEquals(result.status(), Compilation.Status.SUCCESS)
 
       }
       finally {
@@ -98,8 +158,8 @@ class UDTGeneratorTest {
            .listFiles()!!
            .map { it.name }
 
-        assertThat(pkgFileNames.size, equalTo(3))
-        assertThat(pkgFileNames, hasItems("Title.java", "Address.java", "VCard.java"))
+        assertEquals(pkgFileNames.size, 3)
+        assertTrue(pkgFileNames.containsAll(listOf("Title.java", "Address.java", "VCard.java")))
 
       }
       finally {

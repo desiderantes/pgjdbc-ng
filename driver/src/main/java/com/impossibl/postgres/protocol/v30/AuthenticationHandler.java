@@ -35,7 +35,6 @@ import com.impossibl.postgres.protocol.sasl.scram.stringprep.StringPreparations;
 import com.impossibl.postgres.system.Configuration;
 import com.impossibl.postgres.utils.ByteBufs;
 import com.impossibl.postgres.utils.MD5Authentication;
-
 import static com.impossibl.postgres.system.SystemSettings.CREDENTIALS_PASSWORD;
 import static com.impossibl.postgres.system.SystemSettings.CREDENTIALS_USERNAME;
 import static com.impossibl.postgres.system.SystemSettings.SSL_MODE;
@@ -44,7 +43,6 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.cert.X509Certificate;
 import java.util.List;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import io.netty.buffer.ByteBuf;

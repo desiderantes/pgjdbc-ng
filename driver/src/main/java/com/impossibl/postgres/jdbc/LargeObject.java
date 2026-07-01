@@ -29,7 +29,6 @@
 package com.impossibl.postgres.jdbc;
 
 import com.impossibl.postgres.utils.guava.ByteStreams;
-
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 
 import java.io.ByteArrayInputStream;

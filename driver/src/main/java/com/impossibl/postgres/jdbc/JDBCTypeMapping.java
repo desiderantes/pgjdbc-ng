@@ -42,7 +42,6 @@ import com.impossibl.postgres.types.DomainType;
 import com.impossibl.postgres.types.RangeType;
 import com.impossibl.postgres.types.Registry;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.jdbc.ErrorUtils.makeSQLException;
 
 import java.io.IOException;
@@ -243,6 +242,10 @@ class JDBCTypeMapping {
   }
 
   static JDBCType getJDBCType(Type type) {
+
+    if (type == null) {
+      return JDBCType.OTHER;
+    }
 
     PGType pgType = PGType.valueOf(type);
     if (pgType != null) {

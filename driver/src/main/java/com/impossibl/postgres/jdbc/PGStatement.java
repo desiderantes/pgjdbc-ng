@@ -35,7 +35,6 @@ import com.impossibl.postgres.protocol.ResultBatch;
 import com.impossibl.postgres.protocol.ResultBatches;
 import com.impossibl.postgres.protocol.ResultField;
 import com.impossibl.postgres.protocol.RowDataSet;
-
 import static com.impossibl.postgres.jdbc.Exceptions.CLOSED_STATEMENT;
 import static com.impossibl.postgres.jdbc.Exceptions.ILLEGAL_ARGUMENT;
 import static com.impossibl.postgres.jdbc.Exceptions.NOT_IMPLEMENTED;
@@ -54,7 +53,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
 import static java.lang.Long.min;
 import static java.util.concurrent.TimeUnit.SECONDS;
 

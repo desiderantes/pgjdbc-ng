@@ -33,7 +33,6 @@ import com.impossibl.postgres.protocol.TransactionStatus;
 import com.impossibl.postgres.protocol.v30.ProtocolHandler.ReadyForQuery;
 
 import java.io.IOException;
-
 import static java.util.Collections.emptyList;
 
 

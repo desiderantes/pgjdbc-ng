@@ -32,7 +32,6 @@ import com.impossibl.postgres.protocol.FieldFormat;
 import com.impossibl.postgres.protocol.TypeRef;
 import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.system.tables.PGTypeTable;
-
 import static com.impossibl.postgres.system.SystemSettings.FIELD_FORMAT_PREF;
 import static com.impossibl.postgres.system.SystemSettings.PARAM_FORMAT_PREF;
 import static com.impossibl.postgres.system.procs.Procs.isDefaultDecoder;

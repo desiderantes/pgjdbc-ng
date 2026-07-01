@@ -16,12 +16,11 @@ junit = "6.1.0"
 hamcrest = "2.2"
 guava = "33.6.0-jre"
 compilerTesting = "0.23.0"
-checkstyle = "13.6.0"
+checkstyle = "12.3.1"
 testcontainers = "2.0.5"
 
 # Plugin dependencies
 shadowPlugin = "9.3.0"
-dockerComposePlugin = "0.17.21"
 asciiDoctorPlugin = "4.0.5"
 gitPublishPlugin = "6.0.0"
 testLoggerPlugin = "4.0.0"
@@ -41,6 +40,7 @@ netty-handler = { group = "io.netty", name = "netty-handler", version.ref = "net
 netty-transport-native-unix-common = { group = "io.netty", name = "netty-transport-native-unix-common", version.ref = "netty" }
 netty-transport-native-kqueue = { group = "io.netty", name = "netty-transport-native-kqueue", version.ref = "netty" }
 netty-transport-native-epoll = { group = "io.netty", name = "netty-transport-native-epoll", version.ref = "netty" }
+jspecify = {group= "org.jspecify", name= "jspecify", version = "1.0.0"}
 
 # Tooling Libraries
 javapoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
@@ -52,7 +52,6 @@ junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engi
 junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junit" }
 junit-platform-suite-api = { group = "org.junit.platform", name = "junit-platform-suite-api", version.ref = "junit" }
-hamcrest = { group = "org.hamcrest", name = "hamcrest", version.ref = "hamcrest" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 compiler-testing = { group = "com.google.testing.compile", name = "compile-testing", version.ref = "compilerTesting" }
 checkstyle = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyle" }
@@ -67,7 +66,6 @@ javaparser-core = { group = "com.github.javaparser", name = "javaparser-symbol-s
 # Plugin dependencies
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadowPlugin" }
-docker-compose = { id = "com.avast.gradle.docker-compose", version.ref = "dockerComposePlugin" }
 asciidoctor-convert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciiDoctorPlugin" }
 git-publish = { id = "org.ajoberstar.git-publish", version.ref = "gitPublishPlugin" }
 test-logger = { id = "com.adarshr.test-logger", version.ref = "testLoggerPlugin" }

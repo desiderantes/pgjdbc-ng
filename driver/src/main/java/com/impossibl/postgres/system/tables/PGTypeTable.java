@@ -31,7 +31,6 @@ package com.impossibl.postgres.system.tables;
 import com.impossibl.postgres.protocol.ResultBatch;
 import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.system.Version;
-
 import static com.impossibl.postgres.system.tables.Table.getFieldOfRow;
 
 import java.io.IOException;

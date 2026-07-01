@@ -31,12 +31,10 @@ package com.impossibl.postgres.system.tables;
 import com.impossibl.postgres.system.UnsupportedServerVersion;
 import com.impossibl.postgres.system.Version;
 
-import static com.impossibl.postgres.jdbc.util.Asserts.assertThrows;
-
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**

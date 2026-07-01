@@ -35,7 +35,6 @@ import com.impossibl.postgres.system.Context;
 import com.impossibl.postgres.system.ConversionException;
 import com.impossibl.postgres.types.ArrayType;
 import com.impossibl.postgres.types.Type;
-
 import static com.impossibl.postgres.utils.ByteBufs.lengthEncodeBinary;
 
 import java.io.IOException;
@@ -44,7 +43,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
 import static java.lang.Character.isWhitespace;
 import static java.util.Arrays.copyOf;
 

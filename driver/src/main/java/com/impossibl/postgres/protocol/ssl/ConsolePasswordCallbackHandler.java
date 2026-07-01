@@ -29,7 +29,6 @@
 package com.impossibl.postgres.protocol.ssl;
 
 import com.impossibl.postgres.system.Configuration;
-
 import static com.impossibl.postgres.system.SystemSettings.SSL_KEY_PASSWORD;
 
 import java.io.Console;
